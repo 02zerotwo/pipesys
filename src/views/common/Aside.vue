@@ -1,10 +1,11 @@
 <template>
   <div>
-    <el-menu default-active="2"
+    <el-menu :default-active="this.$router.path"
              class="el-menu-vertical-demo"
+             :router="true"
              @open="handleOpen"
              @close="handleClose">
-      <el-sub-menu index="1">
+      <el-sub-menu>
         <template #title>
           <el-icon>
             <location />
@@ -12,23 +13,24 @@
           <span>系统管理</span>
         </template>
         <el-menu-item-group title="">
-          <el-menu-item index="1-1">权限管理</el-menu-item>
-          <el-menu-item index="1-2">用户管理</el-menu-item>
+          <el-menu-item index="/user">用户管理</el-menu-item>
+          <el-menu-item>权限管理</el-menu-item>
+
         </el-menu-item-group>
       </el-sub-menu>
-      <el-menu-item index="2">
+      <el-menu-item>
         <el-icon>
           <icon-menu />
         </el-icon>
         <span>项目管理</span>
       </el-menu-item>
-      <el-menu-item index="3">
+      <el-menu-item>
         <el-icon>
           <document />
         </el-icon>
         <span>模型管理</span>
       </el-menu-item>
-      <el-menu-item index="4">
+      <el-menu-item>
         <el-icon>
           <setting />
         </el-icon>

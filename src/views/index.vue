@@ -9,7 +9,10 @@
           <Aside></Aside>
         </el-aside>
         <el-container>
-          <el-main>Main</el-main>
+          <el-main>
+            <Main>
+            </Main>
+          </el-main>
         </el-container>
       </el-container>
     </el-container>
@@ -19,10 +22,12 @@
 <script>
 import Header from './common/header.vue'
 import Aside from './common/Aside.vue'
+import Main from './common/Main.vue'
 export default {
   components: {
     Header,
-    Aside
+    Aside,
+    Main
   },
 
   data () {
@@ -62,6 +67,5 @@ export default {
   background-color: #e9eef3;
   color: var(--el-text-color-primary);
   text-align: center;
-  line-height: 160px;
 }
 </style>
