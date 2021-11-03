@@ -13,8 +13,8 @@
           <span>系统管理</span>
         </template>
         <el-menu-item-group title="">
-          <el-menu-item index="/user">用户管理</el-menu-item>
-          <el-menu-item>权限管理</el-menu-item>
+          <el-menu-item index="/index/user">用户管理</el-menu-item>
+          <el-menu-item index="/index/role">权限管理</el-menu-item>
 
         </el-menu-item-group>
       </el-sub-menu>

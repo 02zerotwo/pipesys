@@ -12,14 +12,15 @@ const routes = [
     component: () => import('@/views/index'),
     children: [
       {
-        path: '/user',
+        path: 'user',
         name: 'user',
         component: () => import('@/views/user/UserList')
+      }, {
+        path: 'role',
+        name: 'role',
+        component: () => import('@/views/role/RoleList')
       }
     ]
-  },
-  {
-
   }
 ]
 

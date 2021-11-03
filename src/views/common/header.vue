@@ -21,7 +21,6 @@
       </el-col>
       <el-col :span="2">
         <label class="logo_label">
-
           <el-button size="medium">
             <el-icon>
               <i-switch-button />
