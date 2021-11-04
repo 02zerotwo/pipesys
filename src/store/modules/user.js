@@ -1,4 +1,4 @@
-import { login } from '@/api/login'
+import { login, logout } from '@/api/login'
 import { USER_INFO } from '@/store/mutation-types'
 
 const user = {
@@ -25,6 +25,7 @@ const user = {
     Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
+          debugger
           if (response.status === 200) {
             const userInfo1 = response.data
             sessionStorage.setItem(USER_INFO, JSON.stringify(userInfo1))// 将用户信息存储到sessionStorage
@@ -49,8 +50,13 @@ const user = {
 
     // 登出
     Logout ({ commit, state }) {
-      return new Promise((resolve) => {
-        resolve()
+      return new Promise((resolve, reject) => {
+        sessionStorage.clear()
+        logout().then(res => {
+          resolve(res)
+        }).catch(err => {
+          reject(err)
+        })
       })
     }
 
