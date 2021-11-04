@@ -10,10 +10,10 @@
       <el-col :span="2">
         <label class="logo_label">管理系统</label>
       </el-col>
-      <el-col :span="17">
+      <el-col :span="16">
         <!-- 占位 -->
       </el-col>
-      <el-col :span="2">
+      <el-col :span="3">
         <img src=""
              alt="">
         <label class="logo_label">欢迎您,管理员</label>

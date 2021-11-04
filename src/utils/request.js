@@ -6,7 +6,7 @@ import { VueAxios } from './axios'
  * 则映射后端域名，通过 vue.config.js
  * @type {*|string}
  */
-const apiBaseUrl = 'http://localhost:8080' // 连接后端的链接
+const apiBaseUrl = 'http://localhost:8001' // 连接后端的链接
 console.log('apiBaseUrl= ', apiBaseUrl)
 // 创建 axios 实例
 const service = axios.create({
