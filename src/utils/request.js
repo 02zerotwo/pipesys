@@ -19,12 +19,13 @@ const err = (error) => {
     const data = error.response
     console.log(data)
     switch (data.status) {
-      case 403:
+      case 400:
         ElNotification({
           title: '系统提示',
-          message: '拒绝访问',
+          message: '尚未登录,请登录账号!',
           type: 'error'
         })
+        this.$router.push({ path: '/' })
         break
       case 500:
         ElNotification({

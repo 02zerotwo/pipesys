@@ -25,7 +25,6 @@ const user = {
     Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
-          debugger
           if (response.status === 200) {
             const userInfo1 = response.data
             sessionStorage.setItem(USER_INFO, JSON.stringify(userInfo1))// 将用户信息存储到sessionStorage
@@ -41,14 +40,17 @@ const user = {
       })
     },
     // 获取用户信息
-    GetPermissionList ({ commit }) {
-
+    GetPermissionList () {
+      return new Promise((resolve) => {
+        const userinfo = JSON.parse(sessionStorage.getItem('Login_Userinfo'))
+        resolve(userinfo)
+      })
     },
 
     // 登出
     Logout ({ commit, state }) {
       return new Promise((resolve) => {
-
+        resolve()
       })
     }
 

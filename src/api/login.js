@@ -17,23 +17,10 @@ export function login (parameter) {
   })
 }
 
-export function getInfo () {
-  return axios({
-    url: '/api/user/info',
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
-  })
-}
-
 export function logout (logoutToken) {
   return axios({
     url: '/sys/logout',
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8',
-      'X-Access-Token': logoutToken
-    }
+    method: 'post'
+
   })
 }
