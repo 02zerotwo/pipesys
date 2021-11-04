@@ -17,10 +17,9 @@ export function login (parameter) {
   })
 }
 
-export function logout (logoutToken) {
+export function logout () {
   return axios({
     url: '/sys/logout',
-    method: 'post'
-
+    method: 'get'
   })
 }

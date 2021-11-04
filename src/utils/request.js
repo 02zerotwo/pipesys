@@ -7,11 +7,14 @@ import { ElNotification } from 'element-plus'
  * 则映射后端域名，通过 vue.config.js
  * @type {*|string}
  */
+
+axios.defaults.withCredentials = true
 const apiBaseUrl = 'http://localhost:8001' // 连接后端的链接
 // 创建 axios 实例
 const service = axios.create({
   baseURL: apiBaseUrl, // api base_url
   timeout: 90000 // 请求超时时间
+
 })
 
 const err = (error) => {
@@ -23,7 +26,8 @@ const err = (error) => {
         ElNotification({
           title: '系统提示',
           message: '尚未登录,请登录账号!',
-          type: 'error'
+          type: 'error',
+          duration: 1600
         })
         this.$router.push({ path: '/' })
         break
@@ -31,35 +35,40 @@ const err = (error) => {
         ElNotification({
           title: '系统提示',
           message: '身份验证失败,账号或者密码不正确!',
-          type: 'error'
+          type: 'error',
+          duration: 1600
         })
         break
       case 404:
         ElNotification({
           title: '系统提示',
           message: '很抱歉，资源未找到!',
-          type: 'error'
+          type: 'error',
+          duration: 1600
         })
         break
       case 504:
         ElNotification({
           title: '系统提示',
           message: '网络超时',
-          type: 'error'
+          type: 'error',
+          duration: 1600
         })
         break
       case 401:
         ElNotification({
           title: '系统提示',
           message: '网络未授权，请重新登录超时',
-          type: 'error'
+          type: 'error',
+          duration: 1600
         })
         break
       default:
         ElNotification({
           title: '系统提示',
           message: data.msg,
-          type: 'info'
+          type: 'info',
+          duration: 1600
         })
         break
     }
@@ -78,7 +87,6 @@ service.interceptors.request.use(config => {
 // response interceptor
 service.interceptors.response.use((response) => {
   // 接收结果拦截器
-
   return response.data
 }, err)
 

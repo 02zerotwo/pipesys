@@ -65,7 +65,8 @@ export default {
               ElNotification({
                 title: '系统提示',
                 message: '登录成功!',
-                type: 'success'
+                type: 'success',
+                duration: 1600
               })
               this.$router.push({ path: '/index' })
             }

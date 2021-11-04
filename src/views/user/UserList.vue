@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { getAction } from '@/api/manage'
 export default {
   components: {},
 
@@ -13,7 +14,11 @@ export default {
   },
 
   computed: {},
-
+  created () {
+    getAction('/sys/perm').then(res => {
+      console.log(res)
+    })
+  },
   methods: {}
 }
 </script>

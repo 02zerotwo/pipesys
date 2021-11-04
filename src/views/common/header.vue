@@ -56,11 +56,11 @@ export default {
       this.$store.dispatch('Logout').then(res => {
         ElNotification({
           title: '系统提示',
-          message: '账户已退出!',
-          type: 'success'
+          message: res.msg,
+          type: 'success',
+          duration: 1600
         })
         this.$router.push({ path: '/' })
-        sessionStorage.clear()
       })
     }
   }
