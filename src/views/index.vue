@@ -1,21 +1,20 @@
 <template>
   <div class="homeWarp">
     <el-container class="main_container">
-      <el-header>
-        <Header></Header>
-      </el-header>
+      <el-aside>
+        <Aside></Aside>
+      </el-aside>
       <el-container>
-        <el-aside>
-          <Aside></Aside>
-        </el-aside>
-        <el-container>
-          <el-main>
-            <Main>
-            </Main>
-          </el-main>
-        </el-container>
+        <el-header>
+          <Header></Header>
+        </el-header>
+        <el-main>
+          <Main>
+          </Main>
+        </el-main>
       </el-container>
     </el-container>
+
   </div>
 </template>
 
@@ -52,19 +51,24 @@ export default {
 }
 .el-header {
   height: 50px;
-  border-bottom: 1px solid var(--el-border-color-base);
+  overflow: hidden;
+  position: relative;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 21, 41, 0.08);
+  z-index: 10;
 }
 
 .el-aside {
+  background-color: #304156;
   color: var(--el-text-color-primary);
   text-align: center;
   line-height: 200px;
   height: 100%;
-  width: 180px;
+  width: 200px;
 }
 
 .el-main {
-  background-color: #e9eef3;
+  background-color: #fff;
   color: var(--el-text-color-primary);
   text-align: center;
 }

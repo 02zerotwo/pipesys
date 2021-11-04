@@ -1,6 +1,9 @@
 <template>
   <div>
     <el-menu :default-active="this.$router.path"
+             active-text-color="#5094FF"
+             background-color="#304156"
+             text-color="#bfcbd9"
              class="el-menu-vertical-demo"
              :router="true"
              @open="handleOpen"
