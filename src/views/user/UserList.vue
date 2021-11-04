@@ -2,12 +2,9 @@
   <div class="header">
     用户管理
   </div>
-<<<<<<< HEAD
-=======
   <div class="user-select">
     <user-select />
   </div>
->>>>>>> e73cb036d74be76f006c9827f7dab222a100ce8b
   <div class="addU">
     <add-user />
   </div>

@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import { axios } from '@/utils/request'
 
 /**
@@ -40,4 +38,3 @@ export function deleteU (params) {
     data: params
   })
 }
->>>>>>> 18466bae91146a1d12cdbe1a67184870db3eab9a
