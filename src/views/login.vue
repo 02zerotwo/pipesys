@@ -33,14 +33,15 @@
 </template>
 
 <script>
-import { postAction } from '@/api/manage'
+// import { postAction } from '@/api/manage'
+import { ElNotification } from 'element-plus'
 export default {
   data () {
     return {
       logining: false,
       ruleForm2: {
         username: 'admin',
-        password: '123456'
+        password: '123'
       },
       rules2: {
         username: [{ required: true, message: '请你输入账号!', trigger: 'blur' }],
@@ -58,20 +59,17 @@ export default {
             username: this.ruleForm2.username,
             password: this.ruleForm2.password
           }
-          postAction('/sys/login', params).then((res) => {
-            if (res.data.msg === 'success') {
-              console.log(res)
+          this.$store.dispatch('Login', params).then((res) => {
+            if (res.msg === 'success') {
               this.logining = false
+              ElNotification({
+                title: '系统提示',
+                message: '登录成功!',
+                type: 'success'
+              })
               this.$router.push({ path: '/index' })
             }
           })
-          // this.logining = false
-          // this.$alert('username or password wrong!', 'info', {
-          //   confirmButtonText: 'ok'
-          // })
-        } else {
-          console.log('error submit!')
-          return false
         }
       })
     }
