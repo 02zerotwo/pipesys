@@ -2,9 +2,12 @@
   <div class="header">
     用户管理
   </div>
+<<<<<<< HEAD
+=======
   <div class="user-select">
     <user-select />
   </div>
+>>>>>>> e73cb036d74be76f006c9827f7dab222a100ce8b
   <div class="addU">
     <add-user />
   </div>
@@ -14,36 +17,29 @@
 
 </template>
 
-<script >
+<script scope>
 import AddUser from './AddUser.vue'
 import UserInfo from './UserInfo.vue'
-import UserSelect from './UserSelect.vue'
 export default {
   components: {
     AddUser,
-    UserInfo,
-    UserSelect
+    UserInfo
   },
   data () {
-    return {
-    }
+    return {}
   },
 
-  computed: {},
-
   methods: {
+    confirmEvent () {
+      alert('删除!')
+    },
+    cancelEvent () {
+      console.log('cancel!')
+    }
   }
 }
 </script>
 <style lang='less'>
-.user-select {
-  width: auto;
-  height: 60px;
-  background-color: rgb(167, 212, 212);
-  text-align: center;
-  line-height: 60px;
-  border-radius: 5px;
-}
 .el-input {
   width: 400px;
 }
