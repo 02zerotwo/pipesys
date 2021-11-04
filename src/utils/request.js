@@ -7,7 +7,7 @@ import { ElNotification } from 'element-plus'
  * 则映射后端域名，通过 vue.config.js
  * @type {*|string}
  */
-const apiBaseUrl = 'http://localhost:8001' // 连接后端的链接
+const apiBaseUrl = '/api' // 连接后端的链接
 // 创建 axios 实例
 const service = axios.create({
   baseURL: apiBaseUrl, // api base_url
