@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import getters from './getters'
+import user from './modules/user'
 export default createStore({
   state: {// 放置状态相关的信息，vue是使用单一状态树的，也就是单一数据源，也就是说我们的state只能有一个
   },
@@ -9,6 +10,7 @@ export default createStore({
   },
   modules: {
     // 需要用到的在modules文件夹下面建文件导入进来
+    user
   },
   getters// getters其实就是相当于vue里面的计算属性
 })

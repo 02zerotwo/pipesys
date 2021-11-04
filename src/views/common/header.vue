@@ -16,7 +16,7 @@
       <el-col :span="3">
         <img src=""
              alt="">
-        <label class="logo_label">欢迎您,管理员</label>
+        <label class="logo_label">欢迎您,{{$store.state.user.username}}</label>
 
       </el-col>
       <el-col :span="2">
@@ -43,7 +43,9 @@ export default {
   },
 
   computed: {},
+  created () {
 
+  },
   methods: {}
 }
 </script>

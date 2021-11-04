@@ -12,6 +12,7 @@ const app = createApp(App)
 for (const iconName in ElIconModules) {
   app.component(transElIconName(iconName), ElIconModules[iconName])
 }
+
 app.use(store)
 app.use(router)
 app.use(ElementPlus)
