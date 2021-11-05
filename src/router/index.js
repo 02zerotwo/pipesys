@@ -9,15 +9,24 @@ const routes = [
   {
     path: '/index',
     name: 'index',
+    redirect: '/index/dashboard',
     component: () => import('@/views/index'),
     children: [
       {
         path: 'user',
         name: 'user',
+        meta: { title: '用户管理' },
         component: () => import('@/views/user/UserList')
+      },
+      {
+        path: 'dashboard',
+        name: 'dashboard',
+        meta: { title: '首页' },
+        component: () => import('@/views/dashboard/index')
       }, {
         path: 'role',
         name: 'role',
+        meta: { title: '权限管理' },
         component: () => import('@/views/role/RoleList')
       }
     ]

@@ -1,12 +1,9 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="1">
 
-      </el-col>
-      <el-col :span="2">
-      </el-col>
-      <el-col :span="18">
+      <el-col :span="21">
+        <Breadcrumb />
         <!-- 占位 -->
       </el-col>
       <el-col :span="3">
@@ -34,9 +31,12 @@
 </template>
 
 <script>
+import Breadcrumb from './Breadcrumb.vue'
 import { ElNotification } from 'element-plus'
 export default {
-  components: {},
+  components: {
+    Breadcrumb
+  },
 
   data () {
     return {
