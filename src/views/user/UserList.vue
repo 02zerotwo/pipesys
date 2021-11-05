@@ -1,12 +1,5 @@
 <template>
   <div class="header">
-    用户管理
-  </div>
-  <div class="user-select">
-    <user-select />
-  </div>
-  <div class="addU">
-    <add-user />
   </div>
   <div class="userinfo">
     <user-info />
@@ -15,11 +8,9 @@
 </template>
 
 <script scope>
-import AddUser from './AddUser.vue'
 import UserInfo from './UserInfo.vue'
 export default {
   components: {
-    AddUser,
     UserInfo
   },
   data () {
@@ -39,10 +30,5 @@ export default {
 <style lang='less'>
 .el-input {
   width: 400px;
-}
-.addU {
-  float: left;
-  margin-top: 10px;
-  margin-bottom: 20px;
 }
 </style>
