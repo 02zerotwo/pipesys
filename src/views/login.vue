@@ -87,7 +87,7 @@ export default {
   -webkit-border-radius: 5px;
   border-radius: 5px;
   margin: 180px auto;
-  width: 350px;
+  width: 400px;
   padding: 35px 35px 15px;
   background: #fff;
   border: 1px solid #eaeaea;
