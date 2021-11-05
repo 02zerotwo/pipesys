@@ -9,7 +9,7 @@ import { ElNotification } from 'element-plus'
  */
 
 axios.defaults.withCredentials = true
-const apiBaseUrl = 'http://localhost:8001' // 连接后端的链接
+const apiBaseUrl = 'http://localhost:8002' // 连接后端的链接
 // 创建 axios 实例
 const service = axios.create({
   baseURL: apiBaseUrl, // api base_url
