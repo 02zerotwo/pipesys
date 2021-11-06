@@ -14,7 +14,6 @@ for (const iconName in ElIconModules) {
 }
 // 这里通过修改dialog的props里的width默认值,达到统一修改的目的
 // 想要修改其他默认值,同理修改对应的默认值即可
-ElementPlus.Dialog.props.width.default = '32%'
 app.use(store)
 app.use(router)
 app.use(ElementPlus)

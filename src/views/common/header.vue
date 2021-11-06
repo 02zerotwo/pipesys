@@ -75,6 +75,7 @@ export default {
   width: 46px;
   height: 46px;
   border-radius: 22px;
+  margin-top: 3px;
   vertical-align: middle;
 }
 .user-info-arrow {
