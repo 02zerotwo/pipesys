@@ -95,18 +95,13 @@
           </template>
         </el-table-column>
       </el-table>
-      <!-- 分页 -->
-      <!-- <div class="block">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="paginations.currentPage"
-          :page-sizes="paginations.pageSizes"
-          :page-size="paginations.PageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="tableData.length">
-        </el-pagination>
-      </div> -->
+      <!-- 分页  -->
+      <div class="block">
+        <Pagination :pageSize="paginations.pageSize"
+                    :pageTotal="paginations.total"
+                    @pageFunc="pageFunc"></Pagination>
+
+      </div>
 
     </div>
     <addUser ref="addUser"
@@ -119,9 +114,11 @@
 import { getAllUsers, deleteUser } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 import addUser from './components/addUser.vue'
+import Pagination from '@/components/Pagination'
 export default {
   components: {
-    addUser
+    addUser,
+    Pagination
   },
   data () {
     return {
@@ -141,7 +138,7 @@ export default {
         // 默认显示第几页
         pageNo: 1,
         // 默认每页显示的条数（可修改）
-        pageSize: 12
+        pageSize: 10
       }
     }
   },
@@ -160,6 +157,7 @@ export default {
       getAllUsers(params).then(res => {
         if (res.status === 200) {
           this.userList = res.data.list
+          this.paginations.total = res.data.total
         }
       })
     },
@@ -178,6 +176,7 @@ export default {
       getAllUsers(params).then(res => {
         if (res.status === 200) {
           this.userList = res.data.list
+          this.paginations.total = res.data.total
         }
       })
     },
@@ -205,7 +204,13 @@ export default {
     modalFormOk () { // 添加完用户的回调函数
       this.getUserList()
       this.$refs.addUser.close()
+    },
+    pageFunc (data) {
+      this.paginations.pageSize = data.pageSize
+      this.paginations.pageNo = data.pageNum
+      this.getUserList()// 请求数据的函数
     }
+
   }
 }
 </script>
