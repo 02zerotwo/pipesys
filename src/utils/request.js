@@ -10,7 +10,7 @@ import router from '@/router/index'
  */
 
 axios.defaults.withCredentials = true
-const apiBaseUrl = 'http://localhost:8001' // 连接后端的链接
+const apiBaseUrl = 'http://8.142.74.249:9000' // 连接后端的链接
 // 创建 axios 实例
 const service = axios.create({
   baseURL: apiBaseUrl, // api base_url
