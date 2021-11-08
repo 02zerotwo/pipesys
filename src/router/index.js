@@ -2,14 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { ElNotification } from 'element-plus'
 const routes = [
   {
-    path: '/',
+    path: '/login',
     name: 'login',
     component: () => import('@/views/login')
   },
   {
-    path: '/index',
+    path: '/',
     name: 'index',
-    redirect: '/index/dashboard',
+    redirect: '/dashboard',
     component: () => import('@/views/index'),
     children: [
       {
@@ -17,7 +17,16 @@ const routes = [
         name: 'dashboard',
         meta: { title: '首页' },
         component: () => import('@/views/dashboard/index')
-      },
+      }
+    ]
+  },
+  {
+    path: '/sys',
+    name: 'sys',
+    meta: { title: '系统管理' },
+    redirect: '/sys/user',
+    component: () => import('@/views/index'),
+    children: [
       {
         path: 'user',
         name: 'user',
@@ -30,6 +39,7 @@ const routes = [
         meta: { title: '权限管理' },
         component: () => import('@/views/role/RoleList')
       }
+
     ]
   }
 ]
@@ -39,7 +49,7 @@ const router = createRouter({
   routes
 })
 router.beforeEach((to, from, next) => {
-  if (to.path === '/') return next()
+  if (to.path === '/login') return next()
   const userinfo = JSON.parse(sessionStorage.getItem('Login_Userinfo'))
   if (!userinfo) {
     ElNotification({
@@ -48,7 +58,7 @@ router.beforeEach((to, from, next) => {
       type: 'warning',
       duration: 2000
     })
-    return next('/')
+    return next('/login')
   }
   next()
 })

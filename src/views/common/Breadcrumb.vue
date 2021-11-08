@@ -1,13 +1,15 @@
 <template>
   <el-breadcrumb class="app-breadcrumb"
                  separator="/">
-    <el-breadcrumb-item v-for="(item,index) in levelList"
-                        :key="item.path">
-      <span v-if="item.redirect==='noRedirect'||index==levelList.length-1"
-            class="no-redirect">{{ item.meta.title }}</span>
-      <a v-else
-         @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
-    </el-breadcrumb-item>
+    <transition-group name="breadcrumb">
+      <el-breadcrumb-item v-for="(item,index) in levelList"
+                          :key="item.path">
+        <span v-if="item.redirect!=null||index==levelList.length-1"
+              class="no-redirect">{{ item.meta.title }}</span>
+        <a v-else
+           @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
+      </el-breadcrumb-item>
+    </transition-group>
   </el-breadcrumb>
 </template>
 
@@ -21,7 +23,7 @@ export default {
   },
   watch: {
     $route (route) {
-      // if you go to the redirect page, do not update the breadcrumbs
+      // 如果是重定向页面就放行
       if (route.path.startsWith('/redirect/')) {
         return
       }
@@ -33,12 +35,10 @@ export default {
   },
   methods: {
     getBreadcrumb () {
-      // only show routes with meta.title
       let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
       const first = matched[0]
-
       if (!this.isDashboard(first)) {
-        matched = [{ path: '/index/dashboard', meta: { title: '首页' } }].concat(matched)
+        matched = [{ path: '/dashboard', meta: { title: '首页' } }].concat(matched)
       }
 
       this.levelList = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false)
@@ -74,5 +74,24 @@ export default {
     color: #97a8be;
     cursor: text;
   }
+}
+/* breadcrumb transition */
+.breadcrumb-enter-active,
+.breadcrumb-leave-active {
+  transition: all 0.5s;
+}
+
+.breadcrumb-enter,
+.breadcrumb-leave-active {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.breadcrumb-move {
+  transition: all 0.5s;
+}
+
+.breadcrumb-leave-active {
+  position: absolute;
 }
 </style>

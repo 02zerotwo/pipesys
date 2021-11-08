@@ -30,7 +30,7 @@ const err = (error) => {
           type: 'error',
           duration: 1600
         })
-        router.push({ path: '/' })
+        router.push({ path: '/login' })
         break
       case 500:
         ElNotification({

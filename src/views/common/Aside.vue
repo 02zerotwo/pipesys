@@ -8,7 +8,7 @@
              :router="true"
              @open="handleOpen"
              @close="handleClose">
-      <el-menu-item index="/index/dashboard">
+      <el-menu-item index="/dashboard">
         <el-icon>
           <i-wind-power />
         </el-icon>
@@ -22,12 +22,12 @@
           <span>系统管理</span>
         </template>
         <el-menu-item-group title="">
-          <el-menu-item index="/index/user">
+          <el-menu-item index="/sys/user">
             <el-icon>
               <i-avatar />
             </el-icon>用户管理
           </el-menu-item>
-          <el-menu-item index="/index/role">
+          <el-menu-item index="/sys/role">
             <el-icon>
               <i-sunset />
             </el-icon>权限管理

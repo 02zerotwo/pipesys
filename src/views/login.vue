@@ -68,7 +68,7 @@ export default {
                 type: 'success',
                 duration: 1600
               })
-              this.$router.push({ path: '/index' })
+              this.$router.push({ path: '/' })
             }
           })
         }

@@ -59,7 +59,7 @@ export default {
           type: 'success',
           duration: 1600
         })
-        this.$router.push({ path: '/' })
+        this.$router.push({ path: '/login' })
       })
     }
   }
