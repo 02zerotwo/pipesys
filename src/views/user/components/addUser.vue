@@ -33,7 +33,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <!-- <el-col :span="11">
+          <el-col :span="11">
             <el-form-item label="密 码:"
                           prop="password">
               <el-input v-model="ruleForm.password"
@@ -41,7 +41,7 @@
                         placeholder="请输入用户密码"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="2"></el-col> -->
+          <el-col :span="2"></el-col>
           <el-col :span="11">
             <el-form-item label="手机号:"
                           prop="phone">
@@ -142,7 +142,7 @@ export default {
       this.visible = true
       this.$nextTick(() => { // 待dom生成以后再来获取dom对象
         // 用来编辑给输入框赋予初始值
-        this.$refs.ruleForm.resetFields() // 对整个表单进行重置，将所有字段值重置为初始值并移除校验结果
+        this.$refs.ruleForm.resetFields() // 对整个表单进行重置,将所有字段值重置为初始值并移除校验结果
         this.ruleForm = Object.assign({}, record)
         if (record) {
           this.ruleForm.roles.forEach((value, index) => {
@@ -155,7 +155,8 @@ export default {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           const params = this.ruleForm
-          debugger
+          console.log(params)
+          // debugger
           if (!params.id) { // 判断是否执行添加方法
             addUser(params).then(res => {
               ElMessage({
