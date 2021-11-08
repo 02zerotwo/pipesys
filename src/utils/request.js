@@ -2,6 +2,7 @@
 import axios from 'axios'
 import { VueAxios } from './axios'
 import { ElNotification } from 'element-plus'
+import router from '@/router/index'
 /**
  * 【指定 axios的 baseURL】
  * 则映射后端域名，通过 vue.config.js
@@ -29,7 +30,7 @@ const err = (error) => {
           type: 'error',
           duration: 1600
         })
-        this.$router.push({ path: '/' })
+        router.push({ path: '/' })
         break
       case 500:
         ElNotification({

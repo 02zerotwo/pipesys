@@ -39,6 +39,7 @@ export default {
 }
 </script>
 <style lang='less'>
+@import "/src/styles/less/element-ui.less";
 .homeWarp {
   position: absolute;
   top: 0;
