@@ -104,19 +104,21 @@
       </div>
 
     </div>
-    <add-user ref="addUser"
-             @ok="modalFormOk"></add-user>
+    <addUser ref="addUser"
+             @ok="modalFormOk"></addUser>
   </el-card>
 
 </template>
 
 <script scope>
-import { getUserById, getAllUsers, deleteUser } from '@/api/api.js'
+import { getAllUsers, deleteUser } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
-import AddUser from './components/AddUser'
+import addUser from './components/addUser.vue'
+import Pagination from '@/components/Pagination'
 export default {
   components: {
-    AddUser
+    addUser,
+    Pagination
   },
   data () {
     return {
@@ -136,7 +138,7 @@ export default {
         // 默认显示第几页
         pageNo: 1,
         // 默认每页显示的条数（可修改）
-        pageSize: 12
+        pageSize: 10
       }
     }
   },
@@ -152,9 +154,10 @@ export default {
         pageNo: this.paginations.pageNo,
         pageSize: this.paginations.pageSize
       }
-      getUserById(params).then(res => {
+      getAllUsers(params).then(res => {
         if (res.status === 200) {
           this.userList = res.data.list
+          this.paginations.total = res.data.total
         }
       })
     },
@@ -173,6 +176,7 @@ export default {
       getAllUsers(params).then(res => {
         if (res.status === 200) {
           this.userList = res.data.list
+          this.paginations.total = res.data.total
         }
       })
     },
@@ -206,6 +210,7 @@ export default {
       this.paginations.pageNo = data.pageNum
       this.getUserList()// 请求数据的函数
     }
+
   }
 }
 </script>
