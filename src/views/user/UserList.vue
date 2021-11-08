@@ -41,6 +41,7 @@
                 size="small"
                 :highlight-current-row="true"
                 :stripe="true"
+                :height="420"
                 border>
         <el-table-column label="序号"
                          type="index"
