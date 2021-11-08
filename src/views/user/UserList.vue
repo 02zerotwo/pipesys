@@ -113,11 +113,11 @@
 <script scope>
 import { getAllUsers, deleteUser } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
-import addUser from './components/addUser.vue'
+import AddUser from './components/AddUser'
 import Pagination from '@/components/Pagination'
 export default {
   components: {
-    addUser,
+    AddUser,
     Pagination
   },
   data () {
