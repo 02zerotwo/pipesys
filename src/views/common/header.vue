@@ -1,7 +1,6 @@
 <template>
   <div>
     <el-row>
-
       <el-col :span="21">
         <Breadcrumb />
         <!-- 占位 -->
@@ -18,8 +17,8 @@
             </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item>个人信息</el-dropdown-item>
-                <el-dropdown-item>修改密码</el-dropdown-item>
+                <el-dropdown-item @click="handleInfo">个人信息</el-dropdown-item>
+                <el-dropdown-item @click="handlePwd">修改密码</el-dropdown-item>
                 <el-dropdown-item @click="Logout">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -27,15 +26,21 @@
         </div>
       </el-col>
     </el-row>
+    <personal ref="modifyInfo" />
+    <password ref="modifyPwd" />
   </div>
 </template>
 
 <script>
 import Breadcrumb from './Breadcrumb.vue'
 import { ElNotification } from 'element-plus'
+import Personal from '../Personal.vue'
+import Password from '../Password.vue'
 export default {
   components: {
-    Breadcrumb
+    Breadcrumb,
+    Personal,
+    Password
   },
 
   data () {
@@ -61,6 +66,14 @@ export default {
         })
         this.$router.push({ path: '/' })
       })
+    },
+    handleInfo () {
+      this.$refs.modifyInfo.showInfo()
+      this.$refs.modifyInfo.title = '个人信息界面'
+    },
+    handlePwd () {
+      this.$refs.modifyPwd.showPwd()
+      this.$refs.modifyPwd.title = '修改密码界面'
     }
   }
 }
