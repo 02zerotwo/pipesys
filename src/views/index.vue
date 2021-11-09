@@ -9,7 +9,7 @@
           <Header></Header>
         </el-header>
         <el-main>
-          <router-view />
+          <Main></Main>
         </el-main>
       </el-container>
     </el-container>
@@ -20,11 +20,12 @@
 <script>
 import Header from './common/header.vue'
 import Aside from './common/Aside.vue'
-// import Main from './common/Main.vue'
+import Main from './common/Main.vue'
 export default {
   components: {
     Header,
-    Aside
+    Aside,
+    Main
   },
 
   data () {
