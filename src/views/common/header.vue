@@ -35,8 +35,8 @@
 <script>
 import Breadcrumb from './Breadcrumb.vue'
 import { ElNotification } from 'element-plus'
-import Personal from '../Personal.vue'
-import Password from '../Password.vue'
+import Personal from '../user/components/Personal.vue'
+import Password from '../user/components/Password.vue'
 export default {
   components: {
     Breadcrumb,
