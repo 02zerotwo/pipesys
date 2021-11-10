@@ -9,6 +9,10 @@ const deleteUser = (params) => deleteAction('/sys/user', params)
 const getAllRole = (params) => getAction('/sys/role', params)
 const getAllOrga = (params) => getAction('/sys/orga', params)
 
+// 权限模块api接口
+const addRole = (params) => postAction('/sys/role', params)
+const deleteRole = (params) => deleteAction('/sys/role', params)
+
 export {
   getAllUsers,
   getUserById,
@@ -16,5 +20,7 @@ export {
   deleteUser,
   eidtUser,
   getAllRole,
-  getAllOrga
+  getAllOrga,
+  addRole,
+  deleteRole
 }
