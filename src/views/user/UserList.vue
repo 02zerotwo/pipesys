@@ -8,12 +8,11 @@
                    :model="selectForm"
                    class="demo-form-inline">
 
-            <el-form-item label="用户名："
-                          prop="userName">
+            <el-form-item prop="userName">
               <el-input size="medium"
                         style="width:220px"
-                        v-model="selectForm.userName"
-                        placeholder="请输入用户名"></el-input>
+                        v-model="selectForm.key"
+                        placeholder="请输入关键词"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button size="medium"
@@ -67,7 +66,14 @@
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span>{{ scope.row.phone }}</span>
+            <span>{{scope.row.phone }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="所属部门"
+                         align="center"
+                         header-align="center">
+          <template #default="scope">
+            <span>{{ scope.row.o == null ? '' : scope.row.o.name}}</span>
           </template>
         </el-table-column>
         <el-table-column label="备注信息"
@@ -105,8 +111,10 @@
       </div>
 
     </div>
-    <addUser ref="addUser"
-             @ok="modalFormOk"></addUser>
+    <AddUser ref="addUser"
+             @ok="modalFormOk"></AddUser>
+    <EditUser ref="EditUser"
+              @ok="modalFormOk"></EditUser>
   </el-card>
 
 </template>
@@ -115,25 +123,31 @@
 import { getAllUsers, deleteUser } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 import AddUser from './components/AddUser'
+import EditUser from './components/EditUser.vue'
 import Pagination from '@/components/Pagination'
 export default {
   components: {
     AddUser,
-    Pagination
+    Pagination,
+    EditUser
   },
   data () {
     return {
       selectForm: {
-        userName: ''
+        key: ''
       },
       userList: [{
         id: '',
         username: '',
         phone: '',
         roleName: '',
-        roleExt: ''
+        roleExt: '',
+        o: {
+          name: ''
+        }
       }
       ],
+
       // 分页
       paginations: {
         // 默认显示第几页
@@ -143,15 +157,18 @@ export default {
       }
     }
   },
+  computed: {
+
+  },
   // 页面加载时就加载用户信息
-  mounted () {
+  created () {
     this.getUserList()
   },
 
   methods: {
     query () {
       const params = {
-        key: this.selectForm.userName,
+        key: this.selectForm.key,
         pageNo: this.paginations.pageNo,
         pageSize: this.paginations.pageSize
       }
@@ -159,12 +176,13 @@ export default {
         if (res.status === 200) {
           this.userList = res.data.list
           this.paginations.total = res.data.total
+
         }
       })
     },
     reset () {
       // 重置搜索关键词
-      this.selectForm.userName = ''
+      this.selectForm.key = ''
       this.getUserList()
     },
     // 获取用户列表数据
@@ -178,6 +196,7 @@ export default {
         if (res.status === 200) {
           this.userList = res.data.list
           this.paginations.total = res.data.total
+
         }
       })
     },
@@ -186,8 +205,7 @@ export default {
       this.$refs.addUser.title = '用户新增页面'
     },
     handleEdit (row) {
-      this.$refs.addUser.edit(row)
-      this.$refs.addUser.title = '用户编辑页面'
+      this.$refs.EditUser.edit(row)
     },
     // 删除的逻辑
     handleDel (row) {
@@ -204,7 +222,7 @@ export default {
     },
     modalFormOk () { // 添加完用户的回调函数
       this.getUserList()
-      this.$refs.addUser.close()
+
     },
     pageFunc (data) {
       this.paginations.pageSize = data.pageSize
