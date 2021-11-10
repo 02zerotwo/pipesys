@@ -26,8 +26,17 @@ const err = (error) => {
       case 400:
         ElNotification({
           title: '系统提示',
-          message: '尚未登录,请登录账号!',
+          message: '操作失败!',
           type: 'error',
+          duration: 1600
+        })
+        router.push({ path: '/login' })
+        break
+      case 402:
+        ElNotification({
+          title: '系统提示',
+          message: '登陆时间已过期,请重新登录!',
+          type: 'warning',
           duration: 1600
         })
         router.push({ path: '/login' })
