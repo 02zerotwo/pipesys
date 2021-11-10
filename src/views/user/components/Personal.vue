@@ -5,24 +5,16 @@
              :title="title"
              @close="close">
     <div class="demo-drawer__content">
-      <el-form ref="ruleForm"
-               :model="ruleForm"
+      <el-form ref="userForm"
+               :model="userForm"
                :rules="rules"
                label-width="120px">
         <el-row>
           <el-col :span="10">
             <el-form-item label="用户id:"
                           prop="id">
-              <el-input v-model="ruleForm.id"
+              <el-input v-model="userForm.id"
                         disabled></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="17">
-            <el-form-item label="角色名:">
-              <el-input v-model="roles[0].name"
-                        readonly></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -30,7 +22,7 @@
           <el-col :span="17">
             <el-form-item label="用户名:"
                           prop="username">
-              <el-input v-model="ruleForm.username"></el-input>
+              <el-input v-model="userForm.username"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -38,15 +30,35 @@
           <el-col :span="17">
             <el-form-item label="手机号:"
                           prop="phone">
-              <el-input v-model="ruleForm.phone"
+              <el-input v-model="userForm.phone"
                         placeholder="请输入手机号"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
-        <!-- 占位空白符 后续可以直接 在里面添加元素 -->
         <el-row>
-          <el-col :span="11">
+          <el-col>
+            <el-form-item label="角色名:">
+              <el-select >
+                <el-option v-for="(item,index) in userForm.roles" v-model="item.ext" :key="index">
+                  {{item.ext}}
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="17">
+            <el-form-item label="组织名:">
+              <el-input 
+                        placeholder="请输入组织号"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <!-- <el-row>
+          <el-col :span="17">
             <el-form-item label="权限级别:">
+              <el-input v-model="perms"></el-input>
               <el-select v-model="perms"
                          multiple>
                 <el-option v-for="item in perms"
@@ -57,7 +69,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="11">
+          <el-col :span="17">
             <el-form-item label="部门信息:">
               <el-select v-model="depts"
                          multiple
@@ -70,14 +82,16 @@
               </el-select>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
+        <!-- 占位空白符 后续可以直接 在里面添加元素 -->
         <el-row>&nbsp; </el-row>
         <el-row>&nbsp; </el-row>
         <el-row>&nbsp; </el-row>
       </el-form>
       <div class="demo-drawer__footer">
-        <el-button type="primary" @click="handleOk">确认</el-button>
-        <el-button  @click="close">取消</el-button>
+        <el-button type="primary"
+                   @click="handleOk">确认</el-button>
+        <el-button @click="close">取消</el-button>
       </div>
     </div>
 
@@ -87,24 +101,31 @@
 <script>
 export default {
   components: {},
-
+  props: {
+    userInfo: {
+      type: Object,
+      default() {
+        return {
+          id: '',
+          username: '',
+          phone: '',
+          o: {name: ''},
+          roles: [{ name: '', perms: [] }],
+        }
+      },
+    },
+  },
   data() {
     return {
       visible: false,
       title: '',
-      ruleForm: {
-        // 表单的属性要对应数据的字段,目前没有进行驼峰转换处理
-        id: '1',
+      userForm: {
+        id: '',
         username: '',
-        password: '',
         phone: '',
-        roles: [],
-        perms: [],
-        depts: [],
+        o: {name: ''},
+        roles: [{ name: '', perms: [] }],
       },
-      roles: [{ name: '超级管理员' }],
-      perms: [],
-      depts: [],
       d_options: [
         {
           value: 1,
@@ -145,7 +166,7 @@ export default {
       this.visible = true
     },
     handleOk() {
-      this.$refs.ruleForm.validate((valid) => {
+      this.$refs.userForm.validate((valid) => {
         if (valid) {
           // 发送请求修改个人信息
           this.visible = false
@@ -157,6 +178,14 @@ export default {
     close() {
       this.visible = false
       this.roles = []
+    },
+  },
+  watch: {
+    userInfo: function (newData, oldData) {
+      console.log(newData) //newData就是userInfo
+      this.userForm = newData
+      //	methods的函数在这里调用可以获取到userForm的值
+      // this.handleOk()
     },
   },
 }

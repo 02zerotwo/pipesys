@@ -27,7 +27,7 @@
         </div>
       </el-col>
     </el-row>
-    <personal ref="modifyInfo" />
+    <personal ref="modifyInfo" :userInfo="userinfo"/>
     <password ref="modifyPwd" />
   </div>
 </template>
@@ -46,6 +46,13 @@ export default {
 
   data () {
     return {
+      userinfo: {
+        id: '',
+        username: '',
+        phone: '',
+        o: {name: ''},
+        roles: [{name: '',perms: []}]
+      }
     }
   },
 
@@ -53,7 +60,8 @@ export default {
   created () {
     // 取用户信息测试
     this.$store.dispatch('GetPermissionList').then(userinfo => {
-      console.log(userinfo.username)
+      this.userinfo = userinfo
+      console.log(this.userinfo);
     })
   },
   methods: {
