@@ -11,7 +11,7 @@
                label-width="120px">
         <el-row>
           <el-col :span="10">
-            <el-form-item label="用户id:"
+            <el-form-item label="用户编号:"
                           prop="id">
               <el-input v-model="userForm.id"
                         disabled></el-input>
@@ -38,51 +38,33 @@
         <el-row>
           <el-col>
             <el-form-item label="角色名:">
-              <el-select >
-                <el-option v-for="(item,index) in userForm.roles" v-model="item.ext" :key="index">
-                  {{item.ext}}
+              <el-select v-model="roles"
+                         multiple
+                         placeholder="请选择角色名"
+                         disabled>
+                <el-option v-for="item in r_options"
+                           :key="item.id"
+                           :label="item.ext"
+                           :value="item.id">
                 </el-option>
               </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="17">
-            <el-form-item label="组织名:">
-              <el-input 
-                        placeholder="请输入组织号"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
 
-        <!-- <el-row>
-          <el-col :span="17">
-            <el-form-item label="权限级别:">
-              <el-input v-model="perms"></el-input>
-              <el-select v-model="perms"
-                         multiple>
-                <el-option v-for="item in perms"
-                           :key="item.value"
-                           :label="item.label"
-                           :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="17">
-            <el-form-item label="部门信息:">
-              <el-select v-model="depts"
-                         multiple
-                         placeholder="请选择部门:">
-                <el-option v-for="item in d_options"
-                           :key="item.value"
-                           :label="item.label"
-                           :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row> -->
+        <el-row>
+          <el-form-item label="机构:">
+            <el-select v-model="o"
+                       placeholder="请选择机构">
+              <el-option v-for="item in org"
+                         :key="item.id"
+                         :label="item.name"
+                         :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+        </el-row>
         <!-- 占位空白符 后续可以直接 在里面添加元素 -->
         <el-row>&nbsp; </el-row>
         <el-row>&nbsp; </el-row>
@@ -99,6 +81,7 @@
 
 </template>
 <script>
+import { getAllRole, getAllOrga } from '@/api/api.js'
 export default {
   components: {},
   props: {
@@ -109,8 +92,8 @@ export default {
           id: '',
           username: '',
           phone: '',
-          o: {name: ''},
-          roles: [{ name: '', perms: [] }],
+          o: '',
+          roles: [],
         }
       },
     },
@@ -123,21 +106,37 @@ export default {
         id: '',
         username: '',
         phone: '',
-        o: {name: ''},
-        roles: [{ name: '', perms: [] }],
+        o: '',
+        roles: [],
       },
-      d_options: [
+      roles: [],
+      o: '',
+      org: [
         {
-          value: 1,
-          label: '研发',
+          id: 1,
+          name: '南京煤业有限公司',
+        },
+        {
+          id: 2,
+          name: '南京煤业有限公司1',
+        },
+        {
+          id: 3,
+          name: '南京煤业有限公司2',
+        },
+      ],
+      r_options: [
+        {
+          id: 1,
+          ext: '超级管理员',
         },
         {
           value: 2,
-          label: '销售',
+          label: '普通管理员',
         },
         {
           value: 3,
-          label: '后勤',
+          label: '安装工人',
         },
       ],
       // 表单验证
@@ -162,8 +161,31 @@ export default {
     }
   },
   methods: {
-    showInfo() {
+    async showInfo(record) {
       this.visible = true
+      await getAllRole({ roleName: '', pageNo: 1, pageSize: 100 }).then(
+        (res) => {
+          this.r_options = res.data.list
+        }
+      )
+      await getAllOrga({ orgName: '', pageNo: 1, pageSize: 100 }).then(
+        (res) => {
+          this.org = res.data.list
+        }
+      )
+      this.$nextTick(() => {
+        // 待dom生成以后再来获取dom对象
+        this.$refs.userForm.resetFields()
+        this.userForm = Object.assign({}, record)
+        if (record) {
+          this.userForm.roles.forEach((value, index) => {
+            this.roles.push(value.id)
+          })
+        }
+        if (record.o) {
+          this.o = record.o.id
+        }
+      })
     },
     handleOk() {
       this.$refs.userForm.validate((valid) => {
@@ -178,14 +200,6 @@ export default {
     close() {
       this.visible = false
       this.roles = []
-    },
-  },
-  watch: {
-    userInfo: function (newData, oldData) {
-      console.log(newData) //newData就是userInfo
-      this.userForm = newData
-      //	methods的函数在这里调用可以获取到userForm的值
-      // this.handleOk()
     },
   },
 }

@@ -27,7 +27,8 @@
         </div>
       </el-col>
     </el-row>
-    <personal ref="modifyInfo" :userInfo="userinfo"/>
+    <personal ref="modifyInfo"
+              :userInfo="userinfo" />
     <password ref="modifyPwd" />
   </div>
 </template>
@@ -41,50 +42,50 @@ export default {
   components: {
     Breadcrumb,
     Personal,
-    Password
+    Password,
   },
 
-  data () {
+  data() {
     return {
       userinfo: {
         id: '',
         username: '',
         phone: '',
-        o: {name: ''},
-        roles: [{name: '',perms: []}]
-      }
+        o: '',
+        roles: [],
+      },
     }
   },
 
   computed: {},
-  created () {
+  created() {
     // 取用户信息测试
-    this.$store.dispatch('GetPermissionList').then(userinfo => {
+    this.$store.dispatch('GetPermissionList').then((userinfo) => {
+      console.log(userinfo)
       this.userinfo = userinfo
-      console.log(this.userinfo);
     })
   },
   methods: {
-    Logout () {
-      this.$store.dispatch('Logout').then(res => {
+    Logout() {
+      this.$store.dispatch('Logout').then((res) => {
         ElNotification({
           title: '系统提示',
           message: res.msg,
           type: 'success',
-          duration: 1600
+          duration: 1600,
         })
         this.$router.push({ path: '/login' })
       })
     },
-    handleInfo () {
-      this.$refs.modifyInfo.showInfo()
+    handleInfo() {
+      this.$refs.modifyInfo.showInfo(this.userinfo)
       this.$refs.modifyInfo.title = '个人信息界面'
     },
-    handlePwd () {
+    handlePwd() {
       this.$refs.modifyPwd.showPwd()
       this.$refs.modifyPwd.title = '修改密码界面'
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang='less'>
