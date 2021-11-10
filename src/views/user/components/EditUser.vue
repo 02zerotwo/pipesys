@@ -170,6 +170,7 @@ export default {
         if (valid) {
           let params = this.ruleForm
           params.roleIdArrays = this.roles
+          params.orgaId = this.o
           eidtUser(params).then(res => {
             ElMessage({
               message: '用户修改成功!',

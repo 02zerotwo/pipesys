@@ -173,6 +173,7 @@ export default {
         if (valid) {
           let params = this.ruleForm
           params.roleIdArrays = this.roles
+          params.orgaId = this.o
           // if (!params.id) {  //判断是否执行添加方法 已经分离
           addUser(params).then(res => {
             ElMessage({

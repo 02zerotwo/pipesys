@@ -66,7 +66,14 @@
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span>{{ scope.row.phone }}</span>
+            <span>{{scope.row.phone }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="所属部门"
+                         align="center"
+                         header-align="center">
+          <template #default="scope">
+            <span>{{ scope.row.o == null ? '' : scope.row.o.name}}</span>
           </template>
         </el-table-column>
         <el-table-column label="备注信息"
@@ -134,7 +141,10 @@ export default {
         username: '',
         phone: '',
         roleName: '',
-        roleExt: ''
+        roleExt: '',
+        o: {
+          name: ''
+        }
       }
       ],
 
@@ -146,6 +156,9 @@ export default {
         pageSize: 10
       }
     }
+  },
+  computed: {
+
   },
   // 页面加载时就加载用户信息
   created () {
@@ -163,6 +176,7 @@ export default {
         if (res.status === 200) {
           this.userList = res.data.list
           this.paginations.total = res.data.total
+
         }
       })
     },
