@@ -55,9 +55,9 @@
         <el-row>
           <el-form-item label="机构:">
             <el-select v-model="o"
-                       placeholder="请选择机构">
+                       placeholder="请选择机构" disabled>
               <el-option v-for="item in org"
-                         :key="item.id"
+                         :key="item.name"
                          :label="item.name"
                          :value="item.id">
               </el-option>
@@ -183,7 +183,7 @@ export default {
           })
         }
         if (record.o) {
-          this.o = record.o.id
+          this.o = record.o.name
         }
       })
     },

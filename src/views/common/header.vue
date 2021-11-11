@@ -29,7 +29,7 @@
     </el-row>
     <personal ref="modifyInfo"
               :userInfo="userinfo" />
-    <password ref="modifyPwd" />
+    <password ref="modifyPwd" :oldPwd="userinfo.password"/>
   </div>
 </template>
 
@@ -50,6 +50,7 @@ export default {
       userinfo: {
         id: '',
         username: '',
+        password: '',
         phone: '',
         o: '',
         roles: [],
@@ -82,7 +83,7 @@ export default {
       this.$refs.modifyInfo.title = '个人信息界面'
     },
     handlePwd() {
-      this.$refs.modifyPwd.showPwd()
+      this.$refs.modifyPwd.showPwd(this.userinfo.password)
       this.$refs.modifyPwd.title = '修改密码界面'
     },
   },
