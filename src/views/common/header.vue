@@ -27,9 +27,8 @@
         </div>
       </el-col>
     </el-row>
-    <personal ref="modifyInfo"
-              :userInfo="userinfo" />
-    <password ref="modifyPwd" />
+    <personal ref="modifyI" />
+    <password ref="modifyP" />
   </div>
 </template>
 
@@ -50,6 +49,7 @@ export default {
       userinfo: {
         id: '',
         username: '',
+        password: '',
         phone: '',
         o: '',
         roles: [],
@@ -57,7 +57,8 @@ export default {
     }
   },
 
-  computed: {},
+  computed: {
+  },
   created() {
     // 取用户信息测试
     this.$store.dispatch('GetPermissionList').then((userinfo) => {
@@ -78,13 +79,13 @@ export default {
       })
     },
     handleInfo() {
-      this.$refs.modifyInfo.showInfo(this.userinfo)
-      this.$refs.modifyInfo.title = '个人信息界面'
+      this.$refs.modifyI.showInfo(this.userinfo)
+      this.$refs.modifyI.title = '个人信息界面'
     },
     handlePwd() {
-      this.$refs.modifyPwd.showPwd()
-      this.$refs.modifyPwd.title = '修改密码界面'
-    },
+      this.$refs.modifyP.showPwd(this.userinfo)
+      this.$refs.modifyP.title = '修改密码界面'
+    }
   },
 }
 </script>

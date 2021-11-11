@@ -8,6 +8,8 @@ const eidtUser = (params) => putAction('/sys/user/modify', params)
 const deleteUser = (params) => deleteAction('/sys/user', params)
 const getAllRole = (params) => getAction('/sys/role', params)
 const getAllOrga = (params) => getAction('/sys/orga', params)
+const modifyPwd = (params) => putAction('sys/user/password',params)
+const modifyInfo = (params) => putAction('sys/user/modify',params)
 const getAllUserByName = (params) => getAction('/sys/user/name', params)
 // 角色模块api接口
 const addRole = (params) => postAction('/sys/role', params)
@@ -28,6 +30,8 @@ export {
   eidtUser,
   getAllRole,
   getAllOrga,
+  modifyPwd,
+  modifyInfo,
   addRole,
   deleteRole,
   getAllPerm,
