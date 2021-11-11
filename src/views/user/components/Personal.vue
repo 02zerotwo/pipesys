@@ -55,7 +55,7 @@
         <el-row>
           <el-form-item label="机构:">
             <el-select v-model="o"
-                       placeholder="请选择机构" disabled>
+                       placeholder="请选择机构">
               <el-option v-for="item in org"
                          :key="item.name"
                          :label="item.name"
@@ -81,23 +81,11 @@
 
 </template>
 <script>
-import { getAllRole, getAllOrga } from '@/api/api.js'
+import { getAllRole, getAllOrga,modifyInfo } from '@/api/api.js'
+import { ElMessage } from 'element-plus'
 export default {
   components: {},
-  props: {
-    userInfo: {
-      type: Object,
-      default() {
-        return {
-          id: '',
-          username: '',
-          phone: '',
-          o: '',
-          roles: [],
-        }
-      },
-    },
-  },
+
   data() {
     return {
       visible: false,
@@ -183,7 +171,7 @@ export default {
           })
         }
         if (record.o) {
-          this.o = record.o.name
+          this.o = record.o.id
         }
       })
     },
@@ -191,7 +179,21 @@ export default {
       this.$refs.userForm.validate((valid) => {
         if (valid) {
           // 发送请求修改个人信息
-          this.visible = false
+          const params = this.userForm
+          params.roleIdArrays = this.roles
+          params.orgaId = this.o
+          modifyInfo(params).then(res => {
+            ElMessage({
+              message: '个人信息修改成功!',
+              type: 'success'
+            })
+            if(this.userForm.username !== res.data.username){
+              this.$router.push({path: '/login'})
+            }else {
+              this.$emit('ok')
+              this.close()
+            }
+          })
         } else {
           return false
         }

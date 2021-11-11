@@ -27,9 +27,8 @@
         </div>
       </el-col>
     </el-row>
-    <personal ref="modifyInfo"
-              :userInfo="userinfo" />
-    <password ref="modifyPwd" :oldPwd="userinfo.password"/>
+    <personal ref="modifyI" @ok="modifyOK"/>
+    <password ref="modifyP" />
   </div>
 </template>
 
@@ -79,13 +78,16 @@ export default {
       })
     },
     handleInfo() {
-      this.$refs.modifyInfo.showInfo(this.userinfo)
-      this.$refs.modifyInfo.title = '个人信息界面'
+      this.$refs.modifyI.showInfo(this.userinfo)
+      this.$refs.modifyI.title = '个人信息界面'
     },
     handlePwd() {
-      this.$refs.modifyPwd.showPwd(this.userinfo.password)
-      this.$refs.modifyPwd.title = '修改密码界面'
+      this.$refs.modifyP.showPwd(this.userinfo)
+      this.$refs.modifyP.title = '修改密码界面'
     },
+    modifyOK () {
+      this.handleInfo()
+    }
   },
 }
 </script>
