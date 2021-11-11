@@ -121,7 +121,7 @@ export default {
     async edit (record) {
       this.visible = true
       await getAllPerm().then(res => {
-        this.treeList = res.data.list
+        this.treeList = res.data
       })
       this.$nextTick(() => {
 
@@ -132,19 +132,26 @@ export default {
         if (record) {
           if (record.parentId === 0) {
             // 一级菜单不显示
+            digui(record.parentId, true, children)
           } else {
-            this.treeList.filter(element => {
-              if (element.id === record.parentId) {
-                this.$refs.TreeSelect.valueTitle = element.ext
-                return true
-              }
 
-            });
           }
           this.valueId = record.parentId
         }
       })
       this.addoreditFlag = record
+    },
+    digui (parentId, flag, children) {
+      if (flag) {
+        children.filter(element => {
+          if (element.id === parentId) {
+            this.$refs.TreeSelect.valueTitle = element.ext
+            return true
+          } else {
+            digui(parentId, false, element.children)
+          }
+        });
+      }
     },
     handleOk () {
       this.$refs.ruleForm.validate((valid) => {

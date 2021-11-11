@@ -83,7 +83,7 @@ export default {
     loadData () {
       getAllPerm().then(res => {
         if (res.status === 200) {
-          this.dataList = res.data.list
+          this.dataList = res.data
           debugger
         }
       })
