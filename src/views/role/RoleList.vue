@@ -67,7 +67,7 @@
           <template #default="scope">
             <el-button type="primary"
                        size="mini"
-                       @click="handleEdit(scope.row)">编辑</el-button>
+                       @click="handleEdit(scope.row)">授权</el-button>
             <el-popconfirm confirm-button-text="确定"
                            cancel-button-text="取消"
                            icon-color="red"

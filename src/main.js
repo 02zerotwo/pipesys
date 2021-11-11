@@ -7,8 +7,12 @@ import * as ElIconModules from '@element-plus/icons'
 import 'element-plus/dist/index.css'
 import { transElIconName } from './utils/icons'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
-const app = createApp(App)
 
+
+
+
+
+const app = createApp(App)
 // 统一注册el-icon图标
 for (const iconName in ElIconModules) {
   app.component(transElIconName(iconName), ElIconModules[iconName])

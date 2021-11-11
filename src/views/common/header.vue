@@ -74,7 +74,7 @@ export default {
           type: 'success',
           duration: 1600,
         })
-        this.$router.push({ path: '/login' })
+        window.location.href = '/login'
       })
     },
     handleInfo() {

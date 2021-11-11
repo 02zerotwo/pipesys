@@ -4,10 +4,12 @@
                title="用户权限配置"
                :direction="rtl"
                :before-close="handleClose">
-      <el-tree :props="props"
-               :load="loadNode"
-               lazy
-               show-checkbox />
+      <el-tree ref="tree"
+               :data="data"
+               show-checkbox
+               node-key="id"
+               default-expand-all
+               :props="defaultProps" />
       <span class="drawe-footer">
         <el-button @click="handleClose">取消</el-button>
         <el-button type="primary"
@@ -18,7 +20,7 @@
 </template>
 
 <script>
-import { } from '@/api/api.js'
+import { getAllPerm, editPerm } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 
 export default {
@@ -27,53 +29,48 @@ export default {
   data () {
     return {
       visible: false,
-      props: {
-        label: 'name',
-        children: 'zones',
-        isLeaf: 'leaf',
+      data: [],
+      defaultProps: {
+        children: 'children',
+        label: 'ext',
       },
-
+      currentnodekey: [],
+      roelId: ''
     }
   },
 
   computed: {},
 
   methods: {
-    edit (record) {
+    async edit (record) {
       this.visible = true
+      await getAllPerm().then(res => {
+        this.data = res.data.list
+      })
       this.$nextTick(() => { // 待dom生成以后再来获取dom对象
         // 用来编辑给输入框赋予初始值
-        this.$refs.ruleForm.resetFields() // 对整个表单进行重置，将所有字段值重置为初始值并移除校验结果
-
+        this.$refs.tree.setCheckedNodes(record.perms)
+        this.roelId = record.id
 
       })
     },
-    loadNode (node, resolve) {
-      if (node.level === 0) {
-        return resolve([{ name: 'region' }])
-      }
-      if (node.level > 1) return resolve([])
-
-      setTimeout(() => {
-        const data = [
-          {
-            name: 'leaf',
-            leaf: true,
-          },
-          {
-            name: 'zone',
-          },
-        ]
-
-        resolve(data)
-      }, 500)
-    },
     handleOk () {
-
+      let params = {
+        roleId: this.roelId,
+        permIdArrays: this.$refs.tree.getCheckedKeys()
+      }
+      editPerm(params).then(res => {
+        ElMessage({
+          message: '权限分配成功!',
+          type: 'success'
+        })
+        this.$emit('ok')
+        this.handleClose()
+      })
     },
     handleClose () {
       this.visible = false
-
+      this.roelId = ''
     }
   }
 }
