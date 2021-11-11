@@ -12,6 +12,9 @@ const getAllOrga = (params) => getAction('/sys/orga', params)
 // 权限模块api接口
 const addRole = (params) => postAction('/sys/role', params)
 const deleteRole = (params) => deleteAction('/sys/role', params)
+const getAllPerm = (params) => getAction('/sys/perm', params)
+const editPerm = (params) => postAction('/sys/role/perm', params)
+
 
 export {
   getAllUsers,
@@ -22,5 +25,7 @@ export {
   getAllRole,
   getAllOrga,
   addRole,
-  deleteRole
+  deleteRole,
+  getAllPerm,
+  editPerm
 }

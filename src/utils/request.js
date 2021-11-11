@@ -30,7 +30,8 @@ const err = (error) => {
           type: 'error',
           duration: 1600
         })
-        router.push({ path: '/login' })
+        sessionStorage.clear()
+        window.location.href = '/login'
         break
       case 402:
         ElNotification({
@@ -39,7 +40,8 @@ const err = (error) => {
           type: 'warning',
           duration: 1600
         })
-        router.push({ path: '/login' })
+        sessionStorage.clear()
+        window.location.href = '/login'
         break
       case 500:
         ElNotification({
