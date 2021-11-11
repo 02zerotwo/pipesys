@@ -52,6 +52,16 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row>
+          <el-col :span="11">
+            <el-form-item label="密码:"
+                          prop="password">
+              <el-input v-model="ruleForm.password"
+                        type="password"
+                        placeholder="请输入密码"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <!-- 占位空白符 后续可以直接 在里面添加元素 -->
         <el-row>&nbsp; </el-row>
         <el-row>&nbsp; </el-row>
@@ -77,49 +87,48 @@ import { ElMessage } from 'element-plus'
 export default {
   components: {},
 
-  data () {
+  data() {
     return {
       visible: false,
       disabled: false,
       title: '',
-      ruleForm: { // 表单的属性要对应数据的字段,目前没有进行驼峰转换处理
+      ruleForm: {
+        // 表单的属性要对应数据的字段,目前没有进行驼峰转换处理
         id: '',
         username: '',
         roles: [],
         password: '',
-        phone: ''
+        phone: '',
       },
       roles: [],
       o: '',
       options: [
         {
           id: 1,
-          ext: '超级管理员'
+          ext: '超级管理员',
         },
         {
           id: 2,
-          ext: '普通管理员'
+          ext: '普通管理员',
         },
         {
           id: 3,
-          ext: '安装工人'
-        }
-
+          ext: '安装工人',
+        },
       ],
       org: [
         {
           id: 1,
-          name: '南京煤业有限公司'
+          name: '南京煤业有限公司',
         },
         {
           id: 2,
-          name: '南京煤业有限公司1'
+          name: '南京煤业有限公司1',
         },
         {
           id: 3,
-          name: '南京煤业有限公司2'
-        }
-
+          name: '南京煤业有限公司2',
+        },
       ],
       // 表单验证
       rules: {
@@ -127,61 +136,78 @@ export default {
           {
             required: true,
             message: '用户名不能为空',
-            trigger: 'blur'
+            trigger: 'blur',
           },
           {
             validator: this.validateUsername,
-          }
+          },
+        ],
+        password: [
+          {
+            required: true,
+            message: '密码不可为空',
+            trigger: 'blur',
+          },
+          {
+            pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,18}$/,
+            message: '密码须包含数字、字母两种元素，且密码位数为6-16位',
+          },
         ],
         phone: [
           { required: true, message: '请输入手机号码', trigger: 'blur' },
           { min: 11, max: 11, message: '请输入11位手机号码', trigger: 'blur' },
           {
-            pattern: /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/,
-            message: '请输入正确的手机号码'
-          }
-        ]
-      }
+            pattern:
+              /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/,
+            message: '请输入正确的手机号码',
+          },
+        ],
+      },
     }
   },
 
   computed: {},
 
   methods: {
-    add () {
+    add() {
       this.edit({})
     },
-    async edit (record) {
+    async edit(record) {
       this.visible = true
-      await getAllRole({ roleName: '', pageNo: 1, pageSize: 100 }).then(res => {
-        this.options = res.data.list
-      })
-      await getAllOrga({ orgName: '', pageNo: 1, pageSize: 100 }).then(res => {
-        this.org = res.data.list
-      })
-      this.$nextTick(() => { // 待dom生成以后再来获取dom对象
+      await getAllRole({ roleName: '', pageNo: 1, pageSize: 100 }).then(
+        (res) => {
+          this.options = res.data.list
+        }
+      )
+      await getAllOrga({ orgName: '', pageNo: 1, pageSize: 100 }).then(
+        (res) => {
+          this.org = res.data.list
+        }
+      )
+      this.$nextTick(() => {
+        // 待dom生成以后再来获取dom对象
         // 用来编辑给输入框赋予初始值
         this.$refs.ruleForm.resetFields() // 对整个表单进行重置，将所有字段值重置为初始值并移除校验结果
 
-        // this.ruleForm = Object.assign({}, record)
-        // if (record) {
-        //   this.ruleForm.roles.forEach((value, index) => {
-        //     this.roles.push(value.id)
-        //   })
-        // }
+        this.ruleForm = Object.assign({}, record)
+        if (record) {
+          this.ruleForm.roles.forEach((value, index) => {
+            this.roles.push(value.id)
+          })
+        }
       })
     },
-    handleOk () {
+    handleOk() {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           let params = this.ruleForm
           params.roleIdArrays = this.roles
           params.orgaId = this.o
           // if (!params.id) {  //判断是否执行添加方法 已经分离
-          addUser(params).then(res => {
+          addUser(params).then((res) => {
             ElMessage({
               message: '用户添加成功!',
-              type: 'success'
+              type: 'success',
             })
             this.$emit('ok')
             this.close()
@@ -201,24 +227,25 @@ export default {
         }
       })
     },
-    validateUsername (rule, value, callback) {
+    validateUsername(rule, value, callback) {
       let params = {
-        name: value
+        name: value,
       }
 
-      getAllUserByName(params).then(res => {
+      getAllUserByName(params).then((res) => {
         if (res.data) {
           callback()
         }
         callback('用户已存在')
       })
+      callback()
     },
-    close () {
+    close() {
       this.visible = false
       this.roles = []
       this.o = ''
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang='less'>
