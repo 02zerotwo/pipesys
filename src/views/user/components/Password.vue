@@ -65,29 +65,9 @@
 </template>
 <script>
 import { modifyPwd } from '@/api/api.js'
+import { ElMessage } from 'element-plus'
 export default {
   data() {
-    const verifyOldPwd = (rule,value,callback) => {
-      if (this.ruleForm.old_pwd !== this.userInfo.oPwd) {
-        callback(new Error('旧密码不正确'))
-      }else{
-        callback()
-      }
-    }
-    const verifyNewPwd = (rule,value,callback) => {
-      if (this.ruleForm.new_pwd === this.ruleForm.old_pwd) {
-        callback(new Error('新旧密码不能重复'))
-      }else{
-        callback()
-      }
-    }
-    const verifyConfirmPwd = (rule,value,callback) => {
-      if (this.ruleForm.confirm_pwd !== this.ruleForm.new_pwd) {
-        callback(new Error('两次密码不一致'))
-      }else{
-        callback()
-      }
-    }
     return {
       visible: false,
       userInfo: { id: '', Pwd: '' },
@@ -104,22 +84,20 @@ export default {
           {
             required: true,
             message: '旧密码不可为空',
-
             trigger: 'blur',
           },
           {
-            validator: verifyOldPwd,
+            validator: this.verifyOldPwd,
           },
         ],
         new_pwd: [
           {
             required: true,
             message: '新密码不可为空',
-
             trigger: 'blur',
           },
           {
-            validator: verifyNewPwd,
+            validator: this.verifyNewPwd,
           },
           {
             pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,18}$/,
@@ -130,17 +108,40 @@ export default {
           {
             required: true,
             message: '确认密码不可为空',
-
             trigger: 'blur',
           },
           {
-            validator: verifyConfirmPwd,
+            validator: this.verifyConfirmPwd,
           },
         ],
       },
     }
   },
   methods: {
+    // 验证旧密码
+    verifyOldPwd(rule,value,callback) {
+      if (this.ruleForm.old_pwd !== this.userInfo.oPwd) {
+        callback(new Error('旧密码不正确'))
+      }else{
+        callback()
+      }
+    },
+    // 验证新密码
+    verifyNewPwd(rule,value,callback) {
+      if (this.ruleForm.new_pwd === this.ruleForm.old_pwd) {
+        callback(new Error('新旧密码不能重复'))
+      }else{
+        callback()
+      }
+    },
+    // 验证两次密码是否一致
+    verifyConfirmPwd(rule,value,callback) {
+      if (this.ruleForm.confirm_pwd !== this.ruleForm.new_pwd) {
+        callback(new Error('两次密码不一致'))
+      }else{
+        callback()
+      }
+    },
     async showPwd(record) {
       console.log(record)
       this.visible = true
@@ -160,10 +161,13 @@ export default {
             id: this.userInfo.id,
             password: this.ruleForm.new_pwd,
           }
-          modifyPwd(params).then((res) => {
-            if(res.status === 200){
-              this.$router.push({path: '/login'})
-            }
+          modifyPwd(params).then(res => {
+            ElMessage({
+              message: '密码修改成功!请重新登录',
+              type: 'success',
+              duration: 2000
+            })
+            this.$router.push({path: '/login'})
           })
         } else {
           return false

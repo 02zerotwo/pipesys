@@ -8,7 +8,7 @@
       <el-form ref="userForm"
                :model="userForm"
                :rules="rules"
-               label-width="120px">
+               label-width="120px" :key="userForm">
         <el-row>
           <el-col :span="10">
             <el-form-item label="用户编号:"
@@ -81,13 +81,14 @@
 
 </template>
 <script>
-import { getAllRole, getAllOrga,modifyInfo } from '@/api/api.js'
+import { getAllRole, getAllOrga,modifyInfo,getAllUserByName } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 export default {
   components: {},
 
   data() {
     return {
+      timer: '',
       visible: false,
       title: '',
       userForm: {
@@ -99,6 +100,7 @@ export default {
       },
       roles: [],
       o: '',
+      rulesUserName: '',
       org: [
         {
           id: 1,
@@ -135,6 +137,9 @@ export default {
             message: '用户名不能为空',
             trigger: 'blur',
           },
+          {
+            validator: this.verifyName,
+          }
         ],
         phone: [
           { required: true, message: '请输入手机号码', trigger: 'blur' },
@@ -149,8 +154,24 @@ export default {
     }
   },
   methods: {
+    verifyName(rule, value, callback) {
+      if (value != this.rulesUserName) {
+        let params = {
+          name: value
+        }
+        getAllUserByName(params).then(res => {
+          if (res.data) {
+            console.log(res)
+            callback()
+          }
+          callback('用户已存在')
+        })
+      }
+      callback()
+    },
     async showInfo(record) {
       this.visible = true
+      this.timer = new Date().getTime();
       await getAllRole({ roleName: '', pageNo: 1, pageSize: 100 }).then(
         (res) => {
           this.r_options = res.data.list
@@ -173,6 +194,7 @@ export default {
         if (record.o) {
           this.o = record.o.id
         }
+        this.rulesUserName = record.username
       })
     },
     handleOk() {
@@ -184,15 +206,11 @@ export default {
           params.orgaId = this.o
           modifyInfo(params).then(res => {
             ElMessage({
-              message: '个人信息修改成功!',
-              type: 'success'
+              message: '个人信息修改成功!请重新登录',
+              type: 'success',
+              duration: 1600
             })
-            if(this.userForm.username !== res.data.username){
               this.$router.push({path: '/login'})
-            }else {
-              this.$emit('ok')
-              this.close()
-            }
           })
         } else {
           return false
@@ -203,7 +221,7 @@ export default {
       this.visible = false
       this.roles = []
     },
-  },
+  }
 }
 </script>
 <style scoped>

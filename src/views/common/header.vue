@@ -27,7 +27,7 @@
         </div>
       </el-col>
     </el-row>
-    <personal ref="modifyI" @ok="modifyOK"/>
+    <personal ref="modifyI" />
     <password ref="modifyP" />
   </div>
 </template>
@@ -57,7 +57,8 @@ export default {
     }
   },
 
-  computed: {},
+  computed: {
+  },
   created() {
     // 取用户信息测试
     this.$store.dispatch('GetPermissionList').then((userinfo) => {
@@ -84,9 +85,6 @@ export default {
     handlePwd() {
       this.$refs.modifyP.showPwd(this.userinfo)
       this.$refs.modifyP.title = '修改密码界面'
-    },
-    modifyOK () {
-      this.handleInfo()
     }
   },
 }
