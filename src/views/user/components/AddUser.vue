@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { addUser, getAllRole, getAllOrga } from '@/api/api.js'
+import { addUser, getAllRole, getAllOrga, getAllUserByName } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 export default {
   components: {},
@@ -128,6 +128,9 @@ export default {
             required: true,
             message: '用户名不能为空',
             trigger: 'blur'
+          },
+          {
+            validator: this.validateUsername,
           }
         ],
         phone: [
@@ -196,6 +199,18 @@ export default {
         } else {
           return false
         }
+      })
+    },
+    validateUsername (rule, value, callback) {
+      let params = {
+        name: value
+      }
+
+      getAllUserByName(params).then(res => {
+        if (res.data) {
+          callback()
+        }
+        callback('用户已存在')
       })
     },
     close () {
