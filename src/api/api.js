@@ -10,7 +10,7 @@ const getAllRole = (params) => getAction('/sys/role', params)
 const getAllOrga = (params) => getAction('/sys/orga', params)
 const modifyPwd = (params) => putAction('sys/user/password',params)
 const modifyInfo = (params) => putAction('sys/user/modify',params)
-
+const getAllUserByName = (params) => getAction('/sys/user/name', params)
 // 权限模块api接口
 const addRole = (params) => postAction('/sys/role', params)
 const deleteRole = (params) => deleteAction('/sys/role', params)
@@ -21,6 +21,7 @@ const editPerm = (params) => postAction('/sys/role/perm', params)
 export {
   getAllUsers,
   getUserById,
+  getAllUserByName,
   addUser,
   deleteUser,
   eidtUser,

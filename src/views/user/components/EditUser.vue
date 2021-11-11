@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { eidtUser, getAllRole, getAllOrga } from '@/api/api.js'
+import { eidtUser, getAllRole, getAllOrga, getAllUserByName } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 
 export default {
@@ -84,6 +84,7 @@ export default {
         phone: '',
 
       },
+      rulesUserName: '',
       url: '',
       roles: [],
       o: '',
@@ -124,6 +125,9 @@ export default {
             required: true,
             message: '用户名不能为空',
             trigger: 'blur'
+          },
+          {
+            validator: this.validateUsername,
           }
         ],
         phone: [
@@ -161,9 +165,25 @@ export default {
         if (record.o) {
           this.o = record.o.id
         }
-
+        this.rulesUserName = record.username
 
       })
+    },
+    validateUsername (rule, value, callback) {
+      if (value != this.rulesUserName) {
+
+        let params = {
+          name: value
+        }
+        getAllUserByName(params).then(res => {
+          if (res.data) {
+            callback()
+          }
+          callback('用户已存在')
+        })
+
+      }
+
     },
     handleOk () {
       this.$refs.ruleForm.validate((valid) => {
