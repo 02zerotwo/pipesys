@@ -38,7 +38,14 @@ const routes = [
         name: 'role',
         meta: { title: '权限管理' },
         component: () => import('@/views/role/RoleList')
-      }
+      },
+      {
+        path: 'perm',
+        name: 'perm',
+        meta: { title: '菜单管理' },
+        component: () => import('@/views/perm/PermTree')
+      },
+
 
     ]
   }

@@ -32,7 +32,11 @@
               <i-sunset />
             </el-icon>权限管理
           </el-menu-item>
-
+          <el-menu-item index="/sys/perm">
+            <el-icon>
+              <i-grid />
+            </el-icon>菜单管理
+          </el-menu-item>
         </el-menu-item-group>
       </el-sub-menu>
       <el-menu-item>
