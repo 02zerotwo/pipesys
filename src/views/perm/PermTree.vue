@@ -22,7 +22,13 @@
       <el-table-column prop="name"
                        label="权限名称" />
       <el-table-column prop="icon"
-                       label="图标" />
+                       label="图标">
+        <template #default="scope">
+          <el-icon :class="scope.row.icon">
+          </el-icon>
+          <span style="margin-left: 10px">{{ scope.row.icon }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="path"
                        label="路径" />
       <el-table-column label="操作"
@@ -54,10 +60,10 @@
 import { getAllPerm, deletePerm } from '@/api/api.js'
 import PermModel from './components/PermModel.vue'
 import { ElMessage } from 'element-plus'
-
 export default {
   components: {
-    PermModel
+    PermModel,
+
   },
   data () {
     return {
@@ -65,6 +71,7 @@ export default {
         id: '',
         name: '',
         ext: '',
+        icon: '',
         perms: [],
       }
       ],
@@ -84,7 +91,6 @@ export default {
       getAllPerm().then(res => {
         if (res.status === 200) {
           this.dataList = res.data
-          debugger
         }
       })
     },
@@ -98,7 +104,7 @@ export default {
     },
     // 删除的逻辑
     handleDel (row) {
-      debugger
+
       let params = {
         id: row.id
       }
@@ -121,5 +127,8 @@ export default {
   }
 }
 </script>
-<style >
+<style lang='less' scoped>
+@import "~e-icon-picker/lib/index.css";
+@import "~font-awesome/css/font-awesome.min.css";
+@import "~e-icon-picker/lib/ele/icon.css";
 </style>

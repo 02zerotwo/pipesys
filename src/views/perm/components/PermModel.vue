@@ -42,8 +42,8 @@
         </el-row>
         <el-row>
           <el-form-item label="菜单图标:">
-            <el-input v-model="ruleForm.icon"
-                      placeholder="请选择菜单图标"></el-input>
+            <e-icon-picker v-model="ruleForm.icon"
+                           :options="options" />
           </el-form-item>
         </el-row>
       </el-form>
@@ -60,9 +60,11 @@
 import { ElMessage } from 'element-plus'
 import { getAllPerm, addPerm, eidtPerm } from '@/api/api.js'
 import TreeSelect from '@/components/TreeSelect'
+import { EIconPicker } from 'e-icon-picker';
 export default {
   components: {
-    TreeSelect
+    TreeSelect,
+    EIconPicker
   },
 
   data () {
@@ -82,6 +84,11 @@ export default {
         value: 'id',
         label: 'ext',
         children: 'children'
+      },
+      options: {
+        FontAwesome: true,
+        eIcon: true,
+        zIndex: 3100
       },
       isClearable: true,      // 可清空（可选）
       isAccordion: true,      // 可收起（可选）
@@ -129,12 +136,12 @@ export default {
         // this.$refs.ruleForm.resetFields()
         this.ruleForm = Object.assign({}, record)
 
-        if (record) {
+        if (Object.keys(record).length != 0) {
           if (record.parentId === 0) {
             // 一级菜单不显示
-            digui(record.parentId, true, children)
-          } else {
 
+          } else {
+            this.digui(record.parentId, true, this.treeList)
           }
           this.valueId = record.parentId
         }
@@ -148,7 +155,7 @@ export default {
             this.$refs.TreeSelect.valueTitle = element.ext
             return true
           } else {
-            digui(parentId, false, element.children)
+            this.digui(parentId, false, element.children)
           }
         });
       }
@@ -198,7 +205,10 @@ export default {
   }
 }
 </script>
-<style lang='less'>
+<style lang='less' scoped>
+@import "~e-icon-picker/lib/index.css";
+@import "~font-awesome/css/font-awesome.min.css";
+@import "~e-icon-picker/lib/ele/icon.css";
 .perm_model .el-input {
   width: 226.4px;
 }
