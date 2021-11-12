@@ -14,63 +14,37 @@
         </el-icon>
         <span>首页</span>
       </el-menu-item>
-      <el-sub-menu>
-        <template #title>
-          <el-icon>
-            <i-location />
-          </el-icon>
-          <span>系统管理</span>
-        </template>
-        <el-menu-item-group title="">
-          <el-menu-item index="/sys/user">
-            <el-icon>
-              <i-avatar />
-            </el-icon>用户管理
-          </el-menu-item>
-          <el-menu-item index="/sys/role">
-            <el-icon>
-              <i-sunset />
-            </el-icon>权限管理
-          </el-menu-item>
-          <el-menu-item index="/sys/perm">
-            <el-icon>
-              <i-grid />
-            </el-icon>菜单管理
-          </el-menu-item>
-        </el-menu-item-group>
-      </el-sub-menu>
-      <el-menu-item>
-        <el-icon>
-          <i-tickets />
-        </el-icon>
-        <span>项目管理</span>
-      </el-menu-item>
-      <el-menu-item>
-        <el-icon>
-          <i-document />
-        </el-icon>
-        <span>模型管理</span>
-      </el-menu-item>
-      <el-menu-item>
-        <el-icon>
-          <i-setting />
-        </el-icon>
-        <span>报警管理</span>
-      </el-menu-item>
+      <NavigationItem v-for="(menu,i) in permissionList"
+                      :key="i"
+                      :item="menu" />
     </el-menu>
   </div>
 </template>
 
 <script>
+import NavigationItem from './NavigationItem.vue'
 export default {
-  components: {},
+  components: {
+    NavigationItem
+  },
 
   data () {
-    return {}
+    return {
+      menu: [],
+      permissionList: []
+
+    }
   },
 
   computed: {},
+  created () {
+    //取权限菜单
+    this.$store.dispatch('GetPermissionList').then((permissionList) => {
+      console.log(permissionList)
+      this.permissionList = permissionList
 
+    })
+  },
   methods: {
     handleOpen (key, keyPath) {
       console.log(key, keyPath)
@@ -82,5 +56,5 @@ export default {
   }
 }
 </script>
-<style lang='less'>
+<style lang='less' scoped>
 </style>

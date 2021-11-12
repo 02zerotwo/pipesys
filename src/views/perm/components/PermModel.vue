@@ -205,10 +205,7 @@ export default {
   }
 }
 </script>
-<style lang='less' scoped>
-@import "~e-icon-picker/lib/index.css";
-@import "~font-awesome/css/font-awesome.min.css";
-@import "~e-icon-picker/lib/ele/icon.css";
+<style lang='less' >
 .perm_model .el-input {
   width: 226.4px;
 }

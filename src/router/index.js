@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { ElNotification } from 'element-plus'
+import { ElMessage } from 'element-plus'
 const routes = [
   {
     path: '/login',
@@ -59,7 +59,7 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/login') return next()
   const userinfo = JSON.parse(sessionStorage.getItem('Login_Userinfo'))
   if (!userinfo) {
-    ElNotification({
+    ElMessage({
       title: '系统提示',
       message: '您还没有登录,请先登录账号!',
       type: 'warning',
