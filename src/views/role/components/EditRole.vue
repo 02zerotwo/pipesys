@@ -45,7 +45,7 @@ export default {
     async edit (record) {
       this.visible = true
       await getAllPerm().then(res => {
-        this.data = res.data.list
+        this.data = res.data
       })
       this.$nextTick(() => { // 待dom生成以后再来获取dom对象
         // 用来编辑给输入框赋予初始值

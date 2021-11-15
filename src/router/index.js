@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { ElNotification } from 'element-plus'
+import { ElMessage } from 'element-plus'
 const routes = [
   {
     path: '/login',
@@ -38,7 +38,14 @@ const routes = [
         name: 'role',
         meta: { title: '权限管理' },
         component: () => import('@/views/role/RoleList')
-      }
+      },
+      {
+        path: 'perm',
+        name: 'perm',
+        meta: { title: '菜单管理' },
+        component: () => import('@/views/perm/PermTree')
+      },
+
 
     ]
   }
@@ -52,7 +59,7 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/login') return next()
   const userinfo = JSON.parse(sessionStorage.getItem('Login_Userinfo'))
   if (!userinfo) {
-    ElNotification({
+    ElMessage({
       title: '系统提示',
       message: '您还没有登录,请先登录账号!',
       type: 'warning',

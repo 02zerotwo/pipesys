@@ -34,7 +34,7 @@
 
 <script>
 import Breadcrumb from './Breadcrumb.vue'
-import { ElNotification } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import Personal from '../user/components/Personal.vue'
 import Password from '../user/components/Password.vue'
 export default {
@@ -44,7 +44,7 @@ export default {
     Password,
   },
 
-  data() {
+  data () {
     return {
       userinfo: {
         id: '',
@@ -59,17 +59,16 @@ export default {
 
   computed: {
   },
-  created() {
+  created () {
     // 取用户信息测试
     this.$store.dispatch('GetPermissionList').then((userinfo) => {
-      console.log(userinfo)
       this.userinfo = userinfo
     })
   },
   methods: {
-    Logout() {
+    Logout () {
       this.$store.dispatch('Logout').then((res) => {
-        ElNotification({
+        ElMessage({
           title: '系统提示',
           message: res.msg,
           type: 'success',
@@ -78,11 +77,11 @@ export default {
         window.location.href = '/login'
       })
     },
-    handleInfo() {
+    handleInfo () {
       this.$refs.modifyI.showInfo(this.userinfo)
       this.$refs.modifyI.title = '个人信息界面'
     },
-    handlePwd() {
+    handlePwd () {
       this.$refs.modifyP.showPwd(this.userinfo)
       this.$refs.modifyP.title = '修改密码界面'
     }

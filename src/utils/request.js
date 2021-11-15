@@ -1,7 +1,7 @@
 // import Vue from 'vue'
 import axios from 'axios'
 import { VueAxios } from './axios'
-import { ElNotification } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import router from '@/router/index'
 /**
  * 【指定 axios的 baseURL】
@@ -24,7 +24,7 @@ const err = (error) => {
     console.log(data)
     switch (data.status) {
       case 400:
-        ElNotification({
+        ElMessage({
           title: '系统提示',
           message: '操作失败!',
           type: 'error',
@@ -34,7 +34,7 @@ const err = (error) => {
         window.location.href = '/login'
         break
       case 402:
-        ElNotification({
+        ElMessage({
           title: '系统提示',
           message: '登陆时间已过期,请重新登录!',
           type: 'warning',
@@ -44,7 +44,7 @@ const err = (error) => {
         window.location.href = '/login'
         break
       case 500:
-        ElNotification({
+        ElMessage({
           title: '系统提示',
           message: '身份验证失败,账号或者密码不正确!',
           type: 'error',
@@ -52,7 +52,7 @@ const err = (error) => {
         })
         break
       case 404:
-        ElNotification({
+        ElMessage({
           title: '系统提示',
           message: '很抱歉，资源未找到!',
           type: 'error',
@@ -60,7 +60,7 @@ const err = (error) => {
         })
         break
       case 504:
-        ElNotification({
+        ElMessage({
           title: '系统提示',
           message: '网络超时',
           type: 'error',
@@ -68,7 +68,7 @@ const err = (error) => {
         })
         break
       case 401:
-        ElNotification({
+        ElMessage({
           title: '系统提示',
           message: '网络未授权，请重新登录超时',
           type: 'error',
@@ -76,7 +76,7 @@ const err = (error) => {
         })
         break
       default:
-        ElNotification({
+        ElMessage({
           title: '系统提示',
           message: data.msg,
           type: 'info',

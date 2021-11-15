@@ -183,7 +183,7 @@ export default {
         })
 
       }
-
+      callback()
     },
     handleOk () {
       this.$refs.ruleForm.validate((valid) => {
