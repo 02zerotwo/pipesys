@@ -88,7 +88,7 @@ export default {
       options: {
         FontAwesome: true,
         eIcon: true,
-        zIndex: 3100
+        zIndex: 5000
       },
       isClearable: true,      // 可清空（可选）
       isAccordion: true,      // 可收起（可选）

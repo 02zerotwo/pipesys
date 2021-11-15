@@ -28,7 +28,7 @@
                      size="small"
                      @click="handleAdd()">
             <el-icon>
-              <!-- <i-plus /> -->
+              <i-plus />
             </el-icon>新增用户
           </el-button>
         </el-row>
