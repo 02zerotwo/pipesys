@@ -163,12 +163,12 @@ export default {
         // 用来编辑给输入框赋予初始值
         this.$refs.ruleForm.resetFields() // 对整个表单进行重置，将所有字段值重置为初始值并移除校验结果
 
-        this.ruleForm = Object.assign({}, record)
-        if (record) {
-          this.ruleForm.roles.forEach((value, index) => {
-            this.roles.push(value.id)
-          })
-        }
+        // this.ruleForm = Object.assign({}, record)
+        // if (record) {
+        //   this.ruleForm.roles.forEach((value, index) => {
+        //     this.roles.push(value.id)
+        //   })
+        // }
       })
     },
     handleOk() {
@@ -205,14 +205,13 @@ export default {
       let params = {
         name: value,
       }
-
       getAllUserByName(params).then((res) => {
         if (res.data) {
           callback()
+        } else {
+          callback('用户已存在')
         }
-        callback('用户已存在')
       })
-      callback()
     },
     close() {
       this.visible = false

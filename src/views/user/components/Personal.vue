@@ -81,7 +81,7 @@
 
 </template>
 <script>
-import { getAllRole, getAllOrga,modifyInfo,getAllUserByName } from '@/api/api.js'
+import { getAllRole, getAllOrga,modifyInfo } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 export default {
   components: {},
@@ -100,35 +100,8 @@ export default {
       },
       roles: [],
       o: '',
-      rulesUserName: '',
-      org: [
-        {
-          id: 1,
-          name: '南京煤业有限公司',
-        },
-        {
-          id: 2,
-          name: '南京煤业有限公司1',
-        },
-        {
-          id: 3,
-          name: '南京煤业有限公司2',
-        },
-      ],
-      r_options: [
-        {
-          id: 1,
-          ext: '超级管理员',
-        },
-        {
-          value: 2,
-          label: '普通管理员',
-        },
-        {
-          value: 3,
-          label: '安装工人',
-        },
-      ],
+      org: [],
+      r_options: [],
       // 表单验证
       rules: {
         username: [
@@ -136,9 +109,6 @@ export default {
             required: true,
             message: '用户名不能为空',
             trigger: 'blur',
-          },
-          {
-            validator: this.verifyName,
           }
         ],
         phone: [
@@ -154,22 +124,8 @@ export default {
     }
   },
   methods: {
-    verifyName(rule, value, callback) {
-      if (value != this.rulesUserName) {
-        let params = {
-          name: value
-        }
-        getAllUserByName(params).then(res => {
-          if (res.data) {
-            console.log(res)
-            callback()
-          }
-          callback('用户已存在')
-        })
-      }
-      callback()
-    },
     async showInfo(record) {
+      console.log(record)
       this.visible = true
       this.timer = new Date().getTime();
       await getAllRole({ roleName: '', pageNo: 1, pageSize: 100 }).then(
@@ -194,7 +150,6 @@ export default {
         if (record.o) {
           this.o = record.o.id
         }
-        this.rulesUserName = record.username
       })
     },
     handleOk() {

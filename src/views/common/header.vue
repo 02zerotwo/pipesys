@@ -61,7 +61,7 @@ export default {
   },
   created () {
     // 取用户信息测试
-    this.$store.dispatch('GetPermissionList').then((userinfo) => {
+    this.$store.dispatch('GetInfoList').then((userinfo) => {
       this.userinfo = userinfo
     })
   },

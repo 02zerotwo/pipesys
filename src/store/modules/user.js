@@ -64,15 +64,15 @@ const user = {
         })
       })
     },
-    // 获取用户信息
+    // 获取权限菜单信息
     GetPermissionList () {
       return new Promise((resolve) => {
         const permissionList = JSON.parse(sessionStorage.getItem('Permission_List'))
         resolve(permissionList)
       })
     },
-    // 获取权限菜单
-    GetPermList () {
+    // 获取个人信息
+    GetInfoList () {
       return new Promise((resolve) => {
         const userinfo = JSON.parse(sessionStorage.getItem('Login_Userinfo'))
         resolve(userinfo)
