@@ -45,6 +45,13 @@ const routes = [
         meta: { title: '菜单管理' },
         component: () => import('@/views/perm/PermTree')
       },
+      {
+        path: 'org',
+        name: 'org',
+        meta: { title: '组织管理' },
+        component: () => import('@/views/org/OrgList')
+      },
+
 
 
     ]

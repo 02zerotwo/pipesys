@@ -16,10 +16,13 @@ const addRole = (params) => postAction('/sys/role', params)
 const deleteRole = (params) => deleteAction('/sys/role', params)
 const getAllPerm = (params) => getAction('/sys/perm', params)
 const editPerm = (params) => postAction('/sys/role/perm', params)
-//菜单模块api接口
+// 菜单模块api接口
 const addPerm = (params) => postAction('/sys/perm', params)
 const deletePerm = (params) => deleteAction('/sys/perm', params)
 const eidtPerm = (params) => putAction('/sys/perm', params)
+// 组织管理api接口
+const getAllOrgs = (params) => getAction('/sys/orga', params)
+const addOrg = (params) => postAction('/sys/orga', params)
 
 export {
   getAllUsers,
@@ -38,5 +41,7 @@ export {
   editPerm,
   addPerm,
   deletePerm,
-  eidtPerm
+  eidtPerm,
+  getAllOrgs,
+  addOrg
 }
