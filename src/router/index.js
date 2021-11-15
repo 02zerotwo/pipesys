@@ -48,6 +48,22 @@ const routes = [
 
 
     ]
+  },
+  {
+    path: '/model',
+    name: 'model',
+    meta: { title: '模型管理' },
+    redirect: '/model/pipemodel',
+    component: () => import('@/views/index'),
+    children: [
+      {
+        path: 'pipemodel',
+        name: 'pipemodel',
+        meta: { title: '管道管理' },
+        component: () => import('@/views/user/UserList')
+      }
+
+    ]
   }
 ]
 
