@@ -42,7 +42,8 @@
         </el-row>
         <el-row>
           <el-form-item label="菜单图标:">
-            <e-icon-picker v-model="ruleForm.icon" />
+            <e-icon-picker v-model="ruleForm.icon"
+                           :options="options" />
           </el-form-item>
         </el-row>
       </el-form>
@@ -59,11 +60,11 @@
 import { ElMessage } from 'element-plus'
 import { getAllPerm, addPerm, eidtPerm } from '@/api/api.js'
 import TreeSelect from '@/components/TreeSelect'
-// import { EIconPicker } from 'e-icon-picker';
+import { EIconPicker } from 'e-icon-picker';
 export default {
   components: {
     TreeSelect,
-
+    EIconPicker
   },
 
   data () {
@@ -84,11 +85,11 @@ export default {
         label: 'ext',
         children: 'children'
       },
-      // options: {
-      //   FontAwesome: true,
-      //   eIcon: true,
-      //   zIndex: 5000
-      // },
+      options: {
+        FontAwesome: true,
+        eIcon: true,
+        zIndex: 5000
+      },
       isClearable: true,      // 可清空（可选）
       isAccordion: true,      // 可收起（可选）
       valueId: '',
