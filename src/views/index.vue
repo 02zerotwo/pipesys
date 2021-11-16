@@ -9,8 +9,7 @@
           <Header></Header>
         </el-header>
         <el-main>
-          <Main>
-          </Main>
+          <Main></Main>
         </el-main>
       </el-container>
     </el-container>

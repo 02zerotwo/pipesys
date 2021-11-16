@@ -28,15 +28,15 @@
                      size="small"
                      @click="handleAdd()">
             <el-icon>
-              <i-plus />
-            </el-icon>新增用户
+              <!-- <i-plus /> -->
+            </el-icon>新增组织
           </el-button>
         </el-row>
       </div>
     </template>
     <div>
-      <!-- 用户信息 -->
-      <el-table :data="userList"
+      <!-- 组织信息 -->
+      <el-table :data="orgList"
                 size="small"
                 :highlight-current-row="true"
                 :stripe="true"
@@ -47,40 +47,32 @@
                          width="60"
                          align="center" />
 
-        <el-table-column label="用户名"
+        <el-table-column label="组织名"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span style="margin-left: 10px">{{ scope.row.username }}</span>
+            <span style="margin-left: 10px">{{ scope.row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="用户角色"
+        <el-table-column label="所属公司"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span v-for="(item) in scope.row.roles"
-                  v-bind:key="item"> {{item.ext+' '}}</span>
+            <span style="margin-left: 10px">{{ scope.row.parentName }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="手机号"
+        <el-table-column label="位置"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span>{{scope.row.phone }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="所属部门"
-                         align="center"
-                         header-align="center">
-          <template #default="scope">
-            <span>{{ scope.row.o == null ? '' : scope.row.o.name}}</span>
+            <span>{{scope.row.location }}</span>
           </template>
         </el-table-column>
         <el-table-column label="备注信息"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span>{{ scope.row.roleExt }}</span>
+            <span>{{ scope.row.ext }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作"
@@ -111,40 +103,29 @@
       </div>
 
     </div>
-    <AddUser ref="addUser"
-             @ok="modalFormOk"></AddUser>
-    <EditUser ref="EditUser"
-              @ok="modalFormOk"></EditUser>
   </el-card>
 
 </template>
 
 <script scope>
-import { getAllUsers, deleteUser } from '@/api/api.js'
+import { getAllOrgs} from '@/api/api.js'
 import { ElMessage } from 'element-plus'
-import AddUser from './components/AddUser'
-import EditUser from './components/EditUser.vue'
 import Pagination from '@/components/Pagination'
 export default {
   components: {
-    AddUser,
     Pagination,
-    EditUser
   },
   data () {
     return {
       selectForm: {
         key: ''
       },
-      userList: [{
+      orgList: [{
         id: '',
-        username: '',
-        phone: '',
-        roleName: '',
-        roleExt: '',
-        o: {
-          name: ''
-        }
+        name: '',
+        parentName: '',
+        location: '',
+        ext: '',
       }
       ],
 
@@ -160,9 +141,9 @@ export default {
   computed: {
 
   },
-  // 页面加载时就加载用户信息
+  // 页面加载时就加载组织信息
   created () {
-    this.getUserList()
+    this.getOrgList()
   },
 
   methods: {
@@ -172,9 +153,9 @@ export default {
         pageNo: this.paginations.pageNo,
         pageSize: this.paginations.pageSize
       }
-      getAllUsers(params).then(res => {
+      getAllOrgs(params).then(res => {
         if (res.status === 200) {
-          this.userList = res.data.list
+          this.orgList = res.data.list
           this.paginations.total = res.data.total
 
         }
@@ -183,18 +164,18 @@ export default {
     reset () {
       // 重置搜索关键词
       this.selectForm.key = ''
-      this.getUserList()
+      this.getOrgList()
     },
-    // 获取用户列表数据
-    getUserList () {
+    // 获取组织列表数据
+    getOrgList () {
       const params = {
-        key: '',
+        orgName: '',
         pageNo: this.paginations.pageNo,
         pageSize: this.paginations.pageSize
       }
-      getAllUsers(params).then(res => {
+      getAllOrgs(params).then(res => {
         if (res.status === 200) {
-          this.userList = res.data.list
+          this.orgList = res.data.list
           this.paginations.total = res.data.total
 
         }
@@ -217,17 +198,17 @@ export default {
           message: '用户删除成功!',
           type: 'success'
         })
-        this.getUserList()
+        this.getOrgList()
       })
     },
     modalFormOk () { // 添加完用户的回调函数
-      this.getUserList()
+      this.getOrgList()
 
     },
     pageFunc (data) {
       this.paginations.pageSize = data.pageSize
       this.paginations.pageNo = data.pageNum
-      this.getUserList()// 请求数据的函数
+      this.getOrgList()// 请求数据的函数
     }
 
   }

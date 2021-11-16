@@ -1,6 +1,6 @@
 <template>
 
-  <!-- 新增用户 -->
+  <!-- 新增组织 -->
   <el-dialog v-model="visible"
              :title="title"
              @close="close">
@@ -11,17 +11,17 @@
                label-width="120px">
         <el-row>
           <el-col :span="11">
-            <el-form-item label="用户名:"
-                          prop="username">
-              <el-input v-model="ruleForm.username"
-                        placeholder="请输入用户名称"></el-input>
+            <el-form-item label="组织名:"
+                          prop="name">
+              <el-input v-model="ruleForm.name"
+                        placeholder="请输入组织名称"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="11">
-            <el-form-item label="角色名:">
+            <el-form-item label="请选择所属公司:">
               <el-select v-model="roles"
                          multiple
-                         placeholder="请选择角色名">
+                         placeholder="请选择公司名">
                 <el-option v-for="item in options"
                            :key="item.id"
                            :label="item.ext"
@@ -37,18 +37,6 @@
                           prop="phone">
               <el-input v-model="ruleForm.phone"
                         placeholder="请输入手机号"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="11">
-            <el-form-item label="部门:">
-              <el-select v-model="o"
-                         placeholder="请选择部门">
-                <el-option v-for="item in org"
-                           :key="item.id"
-                           :label="item.name"
-                           :value="item.id">
-                </el-option>
-              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -163,12 +151,12 @@ export default {
         // 用来编辑给输入框赋予初始值
         this.$refs.ruleForm.resetFields() // 对整个表单进行重置，将所有字段值重置为初始值并移除校验结果
 
-        // this.ruleForm = Object.assign({}, record)
-        // if (record) {
-        //   this.ruleForm.roles.forEach((value, index) => {
-        //     this.roles.push(value.id)
-        //   })
-        // }
+        this.ruleForm = Object.assign({}, record)
+        if (record) {
+          this.ruleForm.roles.forEach((value, index) => {
+            this.roles.push(value.id)
+          })
+        }
       })
     },
     handleOk() {
@@ -205,13 +193,14 @@ export default {
       let params = {
         name: value,
       }
+
       getAllUserByName(params).then((res) => {
         if (res.data) {
           callback()
-        } else {
-          callback('用户已存在')
         }
+        callback('用户已存在')
       })
+      callback()
     },
     close() {
       this.visible = false

@@ -34,7 +34,7 @@
 
 <script>
 // import { postAction } from '@/api/manage'
-import { ElNotification } from 'element-plus'
+import { ElMessage } from 'element-plus'
 export default {
   data () {
     return {
@@ -62,13 +62,13 @@ export default {
           this.$store.dispatch('Login', params).then((res) => {
             if (res.msg === 'success') {
               this.logining = false
-              ElNotification({
+              ElMessage({
                 title: '系统提示',
                 message: '登录成功!',
                 type: 'success',
                 duration: 1600
               })
-              this.$router.push({ path: '/index' })
+              this.$router.push({ path: '/' })
             }
           })
         }

@@ -26,56 +26,65 @@
         </div>
       </el-col>
     </el-row>
-    <personal ref="modifyInfo" />
-    <password ref="modifyPwd" />
+    <personal ref="modifyI" />
+    <password ref="modifyP" />
   </div>
 </template>
 
 <script>
 import Breadcrumb from './Breadcrumb.vue'
-import { ElNotification } from 'element-plus'
-import Personal from '../Personal.vue'
-import Password from '../Password.vue'
+import { ElMessage } from 'element-plus'
+import Personal from '../user/components/Personal.vue'
+import Password from '../user/components/Password.vue'
 export default {
   components: {
     Breadcrumb,
     Personal,
-    Password
+    Password,
   },
 
   data () {
     return {
+      userinfo: {
+        id: '',
+        username: '',
+        password: '',
+        phone: '',
+        o: '',
+        roles: [],
+      },
     }
   },
 
-  computed: {},
+  computed: {
+  },
   created () {
     // 取用户信息测试
-    this.$store.dispatch('GetPermissionList').then(userinfo => {
-      console.log(userinfo.username)
+    this.$store.dispatch('GetInfoList').then((userinfo) => {
+      this.userinfo = userinfo
     })
   },
   methods: {
     Logout () {
-      this.$store.dispatch('Logout').then(res => {
-        ElNotification({
+      this.$store.dispatch('Logout').then((res) => {
+        ElMessage({
           title: '系统提示',
           message: res.msg,
           type: 'success',
-          duration: 1600
+          duration: 1600,
         })
-        this.$router.push({ path: '/' })
+        window.location.href = '/login'
       })
     },
     handleInfo () {
-      this.$refs.modifyInfo.showInfo()
-      this.$refs.modifyInfo.title = '个人信息界面'
+      this.$refs.modifyI.showInfo(this.userinfo)
+      this.$refs.modifyI.title = '个人信息界面'
     },
     handlePwd () {
-      this.$refs.modifyPwd.showPwd()
-      this.$refs.modifyPwd.title = '修改密码界面'
+      this.$refs.modifyP.showPwd(this.userinfo)
+      this.$refs.modifyP.title = '修改密码界面'
     }
-  }
+  },
 }
 </script>
 <style lang='less'>

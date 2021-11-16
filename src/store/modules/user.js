@@ -1,5 +1,5 @@
 import { login, logout } from '@/api/login'
-import { USER_INFO } from '@/store/mutation-types'
+import { USER_INFO, PERMISSIONLIST } from '@/store/mutation-types'
 
 const user = {
   state: {
@@ -17,7 +17,12 @@ const user = {
 
     SET_INFO: (state, info) => {
       state.info = info
+    },
+
+    SET_PERMISSIONLIST: (state, permissionList) => {
+      state.permissionList = permissionList
     }
+
   },
 
   actions: {
@@ -30,6 +35,26 @@ const user = {
             sessionStorage.setItem(USER_INFO, JSON.stringify(userInfo1))// 将用户信息存储到sessionStorage
             commit('SET_NAME', userInfo1.username)
             commit('SET_INFO', userInfo1)
+            let permissionList = []
+            if (userInfo1.roles && userInfo1.roles.length > 0) {
+              userInfo1.roles.forEach(element => {
+                if (element.perms && element.perms.length > 0) {
+                  element.perms.forEach(item => {
+                    let premFlag = permissionList.some(p => {
+                      if (item.id === p.id) {
+                        return true
+                      }
+                    })
+                    if (premFlag) {
+                    } else {
+                      permissionList.push(item)
+                    }
+                  })
+                }
+              });
+            }
+            commit('SET_PERMISSIONLIST', permissionList)
+            sessionStorage.setItem(PERMISSIONLIST, JSON.stringify(permissionList))
             resolve(response)
           } else {
             reject(response)
@@ -39,14 +64,20 @@ const user = {
         })
       })
     },
-    // 获取用户信息
+    // 获取权限菜单信息
     GetPermissionList () {
+      return new Promise((resolve) => {
+        const permissionList = JSON.parse(sessionStorage.getItem('Permission_List'))
+        resolve(permissionList)
+      })
+    },
+    // 获取个人信息
+    GetInfoList () {
       return new Promise((resolve) => {
         const userinfo = JSON.parse(sessionStorage.getItem('Login_Userinfo'))
         resolve(userinfo)
       })
     },
-
     // 登出
     Logout ({ commit, state }) {
       return new Promise((resolve, reject) => {
