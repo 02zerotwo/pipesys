@@ -16,6 +16,7 @@
     <el-table :data="dataList"
               row-key="id"
               border
+              v-loading="loading"
               default-expand-all>
       <el-table-column prop="ext"
                        label="菜单名称" />
@@ -75,6 +76,7 @@ export default {
         perms: [],
       }
       ],
+      loading: false,
     }
   },
   computed: {
@@ -88,9 +90,11 @@ export default {
   methods: {
     // 获取用户列表数据
     loadData () {
+      this.loading = true
       getAllPerm().then(res => {
         if (res.status === 200) {
           this.dataList = res.data
+          this.loading = false
         }
       })
     },

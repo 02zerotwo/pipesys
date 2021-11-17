@@ -37,6 +37,7 @@
     <div>
       <!-- 权限信息 -->
       <el-table :data="dataList"
+                v-loading="loading"
                 size="small"
                 :highlight-current-row="true"
                 :stripe="true"
@@ -113,6 +114,7 @@ export default {
       selectForm: {
         key: ''
       },
+      loading: true,
       dataList: [{
         id: '',
         name: '',
@@ -140,6 +142,7 @@ export default {
 
   methods: {
     query () {
+      this.loading = true
       const params = {
         roleName: this.selectForm.key,
         pageNo: this.paginations.pageNo,
@@ -149,6 +152,7 @@ export default {
         if (res.status === 200) {
           this.dataList = res.data.list
           this.paginations.total = res.data.total
+          this.loading = false
 
         }
       })
@@ -160,6 +164,7 @@ export default {
     },
     // 获取用户列表数据
     loadData () {
+      this.loading = true
       const params = {
         roleName: '',
         pageNo: this.paginations.pageNo,
@@ -169,6 +174,7 @@ export default {
         if (res.status === 200) {
           this.dataList = res.data.list
           this.paginations.total = res.data.total
+          this.loading = false
         }
       })
     },

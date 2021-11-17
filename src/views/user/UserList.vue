@@ -37,6 +37,7 @@
     <div>
       <!-- 用户信息 -->
       <el-table :data="userList"
+                v-loading="loading"
                 size="small"
                 :highlight-current-row="true"
                 :stripe="true"
@@ -147,7 +148,7 @@ export default {
         }
       }
       ],
-
+      loading: false,
       // 分页
       paginations: {
         // 默认显示第几页
@@ -167,6 +168,7 @@ export default {
 
   methods: {
     query () {
+      this.loading = true
       const params = {
         key: this.selectForm.key,
         pageNo: this.paginations.pageNo,
@@ -176,7 +178,7 @@ export default {
         if (res.status === 200) {
           this.userList = res.data.list
           this.paginations.total = res.data.total
-
+          this.loading = false
         }
       })
     },
@@ -187,6 +189,7 @@ export default {
     },
     // 获取用户列表数据
     getUserList () {
+      this.loading = true
       const params = {
         key: '',
         pageNo: this.paginations.pageNo,
@@ -196,7 +199,7 @@ export default {
         if (res.status === 200) {
           this.userList = res.data.list
           this.paginations.total = res.data.total
-
+          this.loading = false
         }
       })
     },

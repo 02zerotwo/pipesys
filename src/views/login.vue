@@ -26,7 +26,7 @@
         <el-button type="primary"
                    style="width:100%;"
                    @click="handleSubmit"
-                   :loading="logining">登录</el-button>
+                   v-loading.fullscreen.lock="fullscreenLoading">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -38,7 +38,7 @@ import { ElMessage } from 'element-plus'
 export default {
   data () {
     return {
-      logining: false,
+      fullscreenLoading: false,
       ruleForm2: {
         username: 'admin',
         password: '123'
@@ -54,7 +54,7 @@ export default {
     handleSubmit (event) {
       this.$refs.ruleForm2.validate((valid) => {
         if (valid) {
-          // this.logining = true
+          this.fullscreenLoading = true
           const params = {
             username: this.ruleForm2.username,
             password: this.ruleForm2.password
@@ -68,6 +68,7 @@ export default {
                 type: 'success',
                 duration: 1600
               })
+              this.fullscreenLoading = false
               this.$router.push({ path: '/' })
             }
           })
