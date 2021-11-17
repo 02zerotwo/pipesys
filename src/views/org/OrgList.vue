@@ -11,8 +11,8 @@
             <el-form-item prop="userName">
               <el-input size="medium"
                         style="width:220px"
-                        v-model="selectForm.key"
-                        placeholder="请输入关键词"></el-input>
+                        v-model="selectForm.orgName"
+                        placeholder="请输入组织名"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button size="medium"
@@ -28,7 +28,7 @@
                      size="small"
                      @click="handleAdd()">
             <el-icon>
-              <!-- <i-plus /> -->
+              <i-plus />
             </el-icon>新增组织
           </el-button>
         </el-row>
@@ -41,24 +41,32 @@
                 :highlight-current-row="true"
                 :stripe="true"
                 :height="420"
-                border>
+                border
+                v-loading="loading">
         <el-table-column label="序号"
                          type="index"
                          width="60"
                          align="center" />
 
-        <el-table-column label="组织名"
+        <el-table-column label="组织机构"
                          align="center"
                          header-align="center">
           <template #default="scope">
             <span style="margin-left: 10px">{{ scope.row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="所属公司"
+        <el-table-column label="机构代码"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span style="margin-left: 10px">{{ scope.row.parentName }}</span>
+            <span style="margin-left: 10px">{{ scope.row.orgaNumber }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="行业类型"
+                         align="center"
+                         header-align="center">
+          <template #default="scope">
+            <span style="margin-left: 10px">{{ scope.row.type.name }}</span>
           </template>
         </el-table-column>
         <el-table-column label="位置"
@@ -81,16 +89,7 @@
           <template #default="scope">
             <el-button type="primary"
                        size="mini"
-                       @click="handleEdit(scope.row)">编辑</el-button>
-            <el-popconfirm confirm-button-text="确定"
-                           cancel-button-text="取消"
-                           icon-color="red"
-                           @confirm="handleDel(scope.row)"
-                           title="确定删除这条数据吗?">
-              <template #reference>
-                <el-button size="mini">删除</el-button>
-              </template>
-            </el-popconfirm>
+                       @click="handleView(scope.row)">查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -101,6 +100,8 @@
                     @pageFunc="pageFunc"></Pagination>
 
       </div>
+      <add-org ref="addOrg" @ok="modalFormOk" />
+      <view-org-user ref="view" />
 
     </div>
   </el-card>
@@ -108,25 +109,33 @@
 </template>
 
 <script scope>
-import { getAllOrgs} from '@/api/api.js'
+import { getAllOrgs } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 import Pagination from '@/components/Pagination'
+import AddOrg from './components/AddOrg.vue'
+import ViewOrgUser from './components/ViewOrgUser.vue'
 export default {
   components: {
     Pagination,
+    AddOrg,
+    ViewOrgUser
   },
-  data () {
+  data() {
     return {
+      loading: false,
       selectForm: {
-        key: ''
+        orgName: '',
       },
-      orgList: [{
-        id: '',
-        name: '',
-        parentName: '',
-        location: '',
-        ext: '',
-      }
+      orgList: [
+        {
+          id: '',
+          name: '',
+          parentId: '',
+          type: [],
+          location: '',
+          orgaNumber: '',
+          ext: '',
+        },
       ],
 
       // 分页
@@ -134,84 +143,74 @@ export default {
         // 默认显示第几页
         pageNo: 1,
         // 默认每页显示的条数（可修改）
-        pageSize: 10
-      }
+        pageSize: 10,
+      },
     }
   },
-  computed: {
-
-  },
+  computed: {},
   // 页面加载时就加载组织信息
-  created () {
+  created() {
     this.getOrgList()
   },
 
   methods: {
-    query () {
+    query() {
+      this.loading = true
       const params = {
-        key: this.selectForm.key,
+        orgName: this.selectForm.orgName,
         pageNo: this.paginations.pageNo,
-        pageSize: this.paginations.pageSize
+        pageSize: this.paginations.pageSize,
       }
-      getAllOrgs(params).then(res => {
+      getAllOrgs(params).then((res) => {
         if (res.status === 200) {
+          ElMessage({
+            message: '查询成功!',
+            type: 'success',
+          })
           this.orgList = res.data.list
           this.paginations.total = res.data.total
-
         }
+        this.loading = false
       })
     },
-    reset () {
+    reset() {
       // 重置搜索关键词
-      this.selectForm.key = ''
+      this.selectForm.orgName = ''
       this.getOrgList()
     },
     // 获取组织列表数据
-    getOrgList () {
-      const params = {
+    getOrgList() {
+        const params = {
         orgName: '',
         pageNo: this.paginations.pageNo,
-        pageSize: this.paginations.pageSize
+        pageSize: this.paginations.pageSize,
       }
-      getAllOrgs(params).then(res => {
+      getAllOrgs(params).then((res) => {
         if (res.status === 200) {
-          this.orgList = res.data.list
-          this.paginations.total = res.data.total
-
+            this.orgList = res.data.list
+            this.paginations.total = res.data.total
         }
       })
+      
     },
-    handleAdd () {
-      this.$refs.addUser.add()
-      this.$refs.addUser.title = '用户新增页面'
+    handleAdd() {
+      this.$refs.addOrg.add()
+      this.$refs.addOrg.title = '组织新增页面'
     },
-    handleEdit (row) {
-      this.$refs.EditUser.edit(row)
+    handleView(row) {
+      this.$refs.view.show(row)
+      this.$refs.view.title = '员工信息列表'
     },
-    // 删除的逻辑
-    handleDel (row) {
-      const params = {
-        id: row.id
-      }
-      deleteUser(params).then(res => {
-        ElMessage({
-          message: '用户删除成功!',
-          type: 'success'
-        })
-        this.getOrgList()
-      })
-    },
-    modalFormOk () { // 添加完用户的回调函数
+    modalFormOk() {
+      // 添加完机构的回调函数
       this.getOrgList()
-
     },
-    pageFunc (data) {
+    pageFunc(data) {
       this.paginations.pageSize = data.pageSize
       this.paginations.pageNo = data.pageNum
-      this.getOrgList()// 请求数据的函数
-    }
-
-  }
+      this.getOrgList() // 请求数据的函数
+    },
+  },
 }
 </script>
 <style >

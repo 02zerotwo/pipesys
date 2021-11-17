@@ -1,6 +1,6 @@
 <template>
 
-  <!-- 新增组织 -->
+  <!-- 新增机构 -->
   <el-dialog v-model="visible"
              :title="title"
              @close="close">
@@ -11,20 +11,19 @@
                label-width="120px">
         <el-row>
           <el-col :span="11">
-            <el-form-item label="组织名:"
+            <el-form-item label="机构名:"
                           prop="name">
               <el-input v-model="ruleForm.name"
-                        placeholder="请输入组织名称"></el-input>
+                        placeholder="请输入机构名称"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="11">
-            <el-form-item label="请选择所属公司:">
-              <el-select v-model="roles"
-                         multiple
-                         placeholder="请选择公司名">
+          <el-col :span="8">
+            <el-form-item label="类型:">
+              <el-select v-model="type.id"
+                         placeholder="请选择行业类型">
                 <el-option v-for="item in options"
                            :key="item.id"
-                           :label="item.ext"
+                           :label="item.name"
                            :value="item.id">
                 </el-option>
               </el-select>
@@ -33,20 +32,24 @@
         </el-row>
         <el-row>
           <el-col :span="11">
-            <el-form-item label="手机号:"
-                          prop="phone">
-              <el-input v-model="ruleForm.phone"
-                        placeholder="请输入手机号"></el-input>
+            <el-form-item label="机构代码:"
+                          prop="orgaNumber">
+              <el-input v-model="ruleForm.orgaNumber"
+                        placeholder="请输入机构代码"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="11">
+            <el-form-item label="地址:"
+                          prop="location">
+              <el-input v-model="ruleForm.location"
+                        placeholder="请输入公司地址"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="11">
-            <el-form-item label="密码:"
-                          prop="password">
-              <el-input v-model="ruleForm.password"
-                        type="password"
-                        placeholder="请输入密码"></el-input>
+            <el-form-item label="备注信息:">
+              <el-input v-model="ruleForm.ext"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -70,7 +73,7 @@
 </template>
 
 <script>
-import { addUser, getAllRole, getAllOrga, getAllUserByName } from '@/api/api.js'
+import { addOrg, getAllType } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 export default {
   components: {},
@@ -82,46 +85,38 @@ export default {
       title: '',
       ruleForm: {
         // 表单的属性要对应数据的字段,目前没有进行驼峰转换处理
-        id: '',
-        username: '',
-        roles: [],
-        password: '',
-        phone: '',
+        name: '',
+        parentId: '',
+        type: {
+          id: '',
+        },
+        location: '',
+        orgaNumber: '',
+        ext: '',
       },
-      roles: [],
-      o: '',
+      type: { id: '' },
       options: [],
-      org: [],
       // 表单验证
       rules: {
-        username: [
+        name: [
           {
             required: true,
-            message: '用户名不能为空',
+            message: '组织名不能为空',
             trigger: 'blur',
           },
-          {
-            validator: this.validateUsername,
-          },
         ],
-        password: [
+        location: [
           {
             required: true,
-            message: '密码不可为空',
+            message: '公司地址不能为空',
             trigger: 'blur',
           },
-          {
-            pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,18}$/,
-            message: '密码须包含数字、字母两种元素，且密码位数为6-16位',
-          },
         ],
-        phone: [
-          { required: true, message: '请输入手机号码', trigger: 'blur' },
-          { min: 11, max: 11, message: '请输入11位手机号码', trigger: 'blur' },
+        orgaNumber: [
           {
-            pattern:
-              /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/,
-            message: '请输入正确的手机号码',
+            required: true,
+            message: '机构代码不能为空',
+            trigger: 'blur',
           },
         ],
       },
@@ -131,81 +126,38 @@ export default {
   computed: {},
 
   methods: {
-    add() {
-      this.edit({})
-    },
-    async edit(record) {
+    async add() {
       this.visible = true
-      await getAllRole({ roleName: '', pageNo: 1, pageSize: 100 }).then(
-        (res) => {
-          this.options = res.data.list
-        }
-      )
-      await getAllOrga({ orgName: '', pageNo: 1, pageSize: 100 }).then(
-        (res) => {
-          this.org = res.data.list
-        }
-      )
+      await getAllType().then((res) => {
+        this.options = res.data
+      })
+
       this.$nextTick(() => {
         // 待dom生成以后再来获取dom对象
         // 用来编辑给输入框赋予初始值
         this.$refs.ruleForm.resetFields() // 对整个表单进行重置，将所有字段值重置为初始值并移除校验结果
-
-        this.ruleForm = Object.assign({}, record)
-        if (record) {
-          this.ruleForm.roles.forEach((value, index) => {
-            this.roles.push(value.id)
-          })
-        }
       })
     },
     handleOk() {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           let params = this.ruleForm
-          params.roleIdArrays = this.roles
-          params.orgaId = this.o
-          // if (!params.id) {  //判断是否执行添加方法 已经分离
-          addUser(params).then((res) => {
+          params.type = this.type
+          addOrg(params).then((res) => {
             ElMessage({
-              message: '用户添加成功!',
+              message: '机构添加成功!',
               type: 'success',
             })
             this.$emit('ok')
             this.close()
           })
-          // } else { // 否则就是修改方法
-          //   eidtUser(params).then(res => {
-          //     ElMessage({
-          //       message: '用户修改成功!',
-          //       type: 'success'
-          //     })
-          //     this.$emit('ok')
-          //     this.close()
-          //   })
-          // }
         } else {
           return false
         }
       })
     },
-    validateUsername(rule, value, callback) {
-      let params = {
-        name: value,
-      }
-
-      getAllUserByName(params).then((res) => {
-        if (res.data) {
-          callback()
-        }
-        callback('用户已存在')
-      })
-      callback()
-    },
     close() {
       this.visible = false
-      this.roles = []
-      this.o = ''
     },
   },
 }

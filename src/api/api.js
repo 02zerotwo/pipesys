@@ -6,12 +6,11 @@ const getUserById = (params) => getAction('/sys/user/id', params)
 const addUser = (params) => postAction('/sys/user', params)
 const eidtUser = (params) => putAction('/sys/user/modify', params)
 const deleteUser = (params) => deleteAction('/sys/user', params)
-const getAllRole = (params) => getAction('/sys/role', params)
-const getAllOrga = (params) => getAction('/sys/orga', params)
 const modifyPwd = (params) => putAction('sys/user/password',params)
 const modifyInfo = (params) => putAction('sys/user/modify',params)
 const getAllUserByName = (params) => getAction('/sys/user/name', params)
 // 角色模块api接口
+const getAllRole = (params) => getAction('/sys/role', params)
 const addRole = (params) => postAction('/sys/role', params)
 const deleteRole = (params) => deleteAction('/sys/role', params)
 const getAllPerm = (params) => getAction('/sys/perm', params)
@@ -20,9 +19,11 @@ const editPerm = (params) => postAction('/sys/role/perm', params)
 const addPerm = (params) => postAction('/sys/perm', params)
 const deletePerm = (params) => deleteAction('/sys/perm', params)
 const eidtPerm = (params) => putAction('/sys/perm', params)
-// 组织管理api接口
+// 机构管理api接口
 const getAllOrgs = (params) => getAction('/sys/orga', params)
+const getAllType = (params) => getAction('/sys/orgaType', params)
 const addOrg = (params) => postAction('/sys/orga', params)
+const getUserByOrgId = (params) => getAction('/sys/user/orga', params)
 
 export {
   getAllUsers,
@@ -32,7 +33,6 @@ export {
   deleteUser,
   eidtUser,
   getAllRole,
-  getAllOrga,
   modifyPwd,
   modifyInfo,
   addRole,
@@ -43,5 +43,7 @@ export {
   deletePerm,
   eidtPerm,
   getAllOrgs,
-  addOrg
+  addOrg,
+  getAllType,
+  getUserByOrgId
 }
