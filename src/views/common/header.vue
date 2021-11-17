@@ -1,7 +1,6 @@
 <template>
   <div>
     <el-row>
-
       <el-col :span="21">
         <Breadcrumb />
         <!-- 占位 -->
@@ -41,7 +40,7 @@ export default {
   components: {
     Breadcrumb,
     Personal,
-    Password,
+    Password
   },
 
   data () {
