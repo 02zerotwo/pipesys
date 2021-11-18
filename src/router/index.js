@@ -48,7 +48,7 @@ const routes = [
       {
         path: 'org',
         name: 'org',
-        meta: { title: '组织管理' },
+        meta: { title: '机构管理' },
         component: () => import('@/views/org/OrgList')
       },
 

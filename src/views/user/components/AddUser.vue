@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { addUser, getAllRole, getAllOrga, getAllUserByName } from '@/api/api.js'
+import { addUser, getAllRole, getAllOrgs, getAllUserByName } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 export default {
   components: {},
@@ -102,8 +102,8 @@ export default {
       },
       roles: [],
       o: '',
-      options: [],
       org: [],
+      options: [],
       // 表单验证
       rules: {
         username: [
@@ -143,17 +143,14 @@ export default {
   computed: {},
 
   methods: {
-    add() {
-      this.edit({})
-    },
-    async edit(record) {
+    async add(record) {
       this.visible = true
       await getAllRole({ roleName: '', pageNo: 1, pageSize: 100 }).then(
         (res) => {
           this.options = res.data.list
         }
       )
-      await getAllOrga({ orgName: '', pageNo: 1, pageSize: 100 }).then(
+      await getAllOrgs({ orgName: '', pageNo: 1, pageSize: 100 }).then(
         (res) => {
           this.org = res.data.list
         }
@@ -162,13 +159,6 @@ export default {
         // 待dom生成以后再来获取dom对象
         // 用来编辑给输入框赋予初始值
         this.$refs.ruleForm.resetFields() // 对整个表单进行重置，将所有字段值重置为初始值并移除校验结果
-
-        // this.ruleForm = Object.assign({}, record)
-        // if (record) {
-        //   this.ruleForm.roles.forEach((value, index) => {
-        //     this.roles.push(value.id)
-        //   })
-        // }
       })
     },
     handleOk() {
@@ -177,7 +167,7 @@ export default {
           let params = this.ruleForm
           params.roleIdArrays = this.roles
           params.orgaId = this.o
-          // if (!params.id) {  //判断是否执行添加方法 已经分离
+          console.log(params)
           addUser(params).then((res) => {
             ElMessage({
               message: '用户添加成功!',
@@ -186,16 +176,6 @@ export default {
             this.$emit('ok')
             this.close()
           })
-          // } else { // 否则就是修改方法
-          //   eidtUser(params).then(res => {
-          //     ElMessage({
-          //       message: '用户修改成功!',
-          //       type: 'success'
-          //     })
-          //     this.$emit('ok')
-          //     this.close()
-          //   })
-          // }
         } else {
           return false
         }

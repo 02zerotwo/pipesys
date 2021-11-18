@@ -81,7 +81,7 @@
 
 </template>
 <script>
-import { getAllRole, getAllOrga,modifyInfo } from '@/api/api.js'
+import { getAllRole, getAllOrgs,modifyInfo } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 export default {
   components: {},
@@ -125,7 +125,6 @@ export default {
   },
   methods: {
     async showInfo(record) {
-      console.log(record)
       this.visible = true
       this.timer = new Date().getTime();
       await getAllRole({ roleName: '', pageNo: 1, pageSize: 100 }).then(
@@ -133,7 +132,7 @@ export default {
           this.r_options = res.data.list
         }
       )
-      await getAllOrga({ orgName: '', pageNo: 1, pageSize: 100 }).then(
+      await getAllOrgs({ orgName: '', pageNo: 1, pageSize: 100 }).then(
         (res) => {
           this.org = res.data.list
         }
