@@ -89,6 +89,9 @@
           <template #default="scope">
             <el-button type="primary"
                        size="mini"
+                       @click="handleAddE(scope.row)">新增员工</el-button>
+            <el-button type="primary"
+                       size="mini"
                        @click="handleView(scope.row)">查看</el-button>
           </template>
         </el-table-column>
@@ -102,7 +105,7 @@
       </div>
       <add-org ref="addOrg" @ok="modalFormOk" />
       <view-org-user ref="view" />
-
+      <add-employee ref="addE" />
     </div>
   </el-card>
 
@@ -114,11 +117,13 @@ import { ElMessage } from 'element-plus'
 import Pagination from '@/components/Pagination'
 import AddOrg from './components/AddOrg.vue'
 import ViewOrgUser from './components/ViewOrgUser.vue'
+import AddEmployee from './components/AddEmployee.vue'
 export default {
   components: {
     Pagination,
     AddOrg,
-    ViewOrgUser
+    ViewOrgUser,
+    AddEmployee
   },
   data() {
     return {
@@ -169,8 +174,8 @@ export default {
           })
           this.orgList = res.data.list
           this.paginations.total = res.data.total
+          this.loading = false
         }
-        this.loading = false
       })
     },
     reset() {
@@ -180,15 +185,17 @@ export default {
     },
     // 获取组织列表数据
     getOrgList() {
-        const params = {
+      this.loading = true
+      const params = {
         orgName: '',
         pageNo: this.paginations.pageNo,
         pageSize: this.paginations.pageSize,
       }
       getAllOrgs(params).then((res) => {
         if (res.status === 200) {
-            this.orgList = res.data.list
-            this.paginations.total = res.data.total
+          this.orgList = res.data.list
+          this.paginations.total = res.data.total
+          this.loading = false
         }
       })
       
@@ -196,6 +203,10 @@ export default {
     handleAdd() {
       this.$refs.addOrg.add()
       this.$refs.addOrg.title = '组织新增页面'
+    },
+    handleAddE(row) {
+      this.$refs.addE.add(row)
+      this.$refs.addOrg.title = '新增员工'
     },
     handleView(row) {
       this.$refs.view.show(row)

@@ -24,6 +24,8 @@ const getAllOrgs = (params) => getAction('/sys/orga', params)
 const getAllType = (params) => getAction('/sys/orgaType', params)
 const addOrg = (params) => postAction('/sys/orga', params)
 const getUserByOrgId = (params) => getAction('/sys/user/orga', params)
+const getOtherUsers = (params) => getAction('/sys/user/orgaId',params)
+const getOrgUser = (params) => getAction('/sys/user/orga',params)
 
 export {
   getAllUsers,
@@ -45,5 +47,7 @@ export {
   getAllOrgs,
   addOrg,
   getAllType,
-  getUserByOrgId
+  getUserByOrgId,
+  getOtherUsers,
+  getOrgUser
 }

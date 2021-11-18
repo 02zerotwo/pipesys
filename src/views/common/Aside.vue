@@ -25,35 +25,32 @@
 import NavigationItem from './NavigationItem.vue'
 export default {
   components: {
-    NavigationItem
+    NavigationItem,
   },
 
-  data () {
+  data() {
     return {
       menu: [],
-      permissionList: []
-
+      permissionList: [],
     }
   },
 
   computed: {},
-  created () {
+  created() {
     //取权限菜单
     this.$store.dispatch('GetPermissionList').then((permissionList) => {
       console.log(permissionList)
       this.permissionList = permissionList
-
     })
   },
   methods: {
-    handleOpen (key, keyPath) {
+    handleOpen(key, keyPath) {
       console.log(key, keyPath)
     },
-    handleClose (key, keyPath) {
+    handleClose(key, keyPath) {
       console.log(key, keyPath)
-    }
-
-  }
+    },
+  },
 }
 </script>
 <style lang='less' scoped>

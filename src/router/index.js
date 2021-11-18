@@ -51,9 +51,6 @@ const routes = [
         meta: { title: '机构管理' },
         component: () => import('@/views/org/OrgList')
       },
-
-
-
     ]
   },
   {
