@@ -1,9 +1,12 @@
 <template>
   <div>
     <!--叶子级菜单-->
-    <template v-if="item.children==null">
+    <template v-if="item.children==null||item.children.length==0">
       <el-menu-item :key="item.id"
-                    :index="item.path">{{item.ext}}</el-menu-item>
+                    :index="item.path">
+        <e-icon :class="item.icon"></e-icon>
+        <span style="margin-left:10px">{{item.ext}}</span>
+      </el-menu-item>
     </template>
     <!--父级菜单-->
     <el-sub-menu v-else

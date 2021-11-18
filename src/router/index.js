@@ -68,6 +68,22 @@ const routes = [
       }
 
     ]
+  },
+  {
+    path: '/item',
+    name: 'item',
+    meta: { title: '项目管理' },
+    redirect: '/item/itemList',
+    component: () => import('@/views/index'),
+    children: [
+      {
+        path: 'itemList',
+        name: 'itemList',
+        meta: { title: '项目信息' },
+        component: () => import('@/views/item/ItemList')
+      }
+
+    ]
   }
 ]
 
