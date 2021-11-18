@@ -182,7 +182,7 @@ export default {
 
             eidtPerm(params).then(res => {
               ElMessage({
-                message: '用户修改成功!',
+                message: '菜单修改成功!',
                 type: 'success'
               })
               this.handleClose()
