@@ -6,15 +6,9 @@ const getUserById = (params) => getAction('/sys/user/id', params)
 const addUser = (params) => postAction('/sys/user', params)
 const eidtUser = (params) => putAction('/sys/user/modify', params)
 const deleteUser = (params) => deleteAction('/sys/user', params)
-<<<<<<< HEAD
-const getAllRole = (params) => getAction('/sys/role', params)
 const getAllOrga = (params) => getAction('/sys/orga', params)
 const modifyPwd = (params) => putAction('sys/user/password', params)
 const modifyInfo = (params) => putAction('sys/user/modify', params)
-=======
-const modifyPwd = (params) => putAction('sys/user/password',params)
-const modifyInfo = (params) => putAction('sys/user/modify',params)
->>>>>>> d4f0d241db12dd7adb9c428a765f138fe2cc1964
 const getAllUserByName = (params) => getAction('/sys/user/name', params)
 // 角色模块api接口
 const getAllRole = (params) => getAction('/sys/role', params)
@@ -60,5 +54,6 @@ export {
   eidtItem,
   deleteItem,
   getAllType,
-  getUserByOrgId
+  getUserByOrgId,
+  getAllOrga
 }
