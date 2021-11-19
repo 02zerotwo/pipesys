@@ -27,24 +27,31 @@
           </el-form>
         </el-row>
         <el-row>
-          <el-button type="primary"
-                     size="small"
-                     @click="handleAdd()">
-            <el-icon>
-              <i-plus />
-            </el-icon>新增员工
+          <el-button type="danger" v-if="multipleSelectionFlag" @click="popDelete">批量删除
           </el-button>
+          <el-dialog v-model="multiDeleteVisible" title="提示" width="30%">
+                <h1>该数据删除后不可恢复，你确定要删除吗？</h1>
+                <template v-slot:footer>
+                  <el-button type="primary" @click="multiDelete">确 定</el-button>
+                  <el-button @click="multiDeleteVisible = false">取 消</el-button>
+                </template>
+          </el-dialog>
         </el-row>
       </div>
     </template>
     <div>
-      <!-- 用户信息 -->
+      <!-- 机构信息 -->
       <el-table :data="employees"
                 size="small"
                 :highlight-current-row="true"
                 :stripe="true"
                 :height="420"
+                v-model="loading"
+                @selection-change="handleSelectionChange"
                 border>
+        <el-table-column type="selection"
+                         width="50"
+                         align="center" />
         <el-table-column label="序号"
                          type="index"
                          width="60"
@@ -64,33 +71,13 @@
             <span>{{scope.row.phone }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作"
-                         align="center"
-                         header-align="center">
-          <template #default="scope">
-            <el-button type="primary"
-                       size="mini"
-                       @click="handleEdit(scope.row)">编辑</el-button>
-            <el-popconfirm confirm-button-text="确定"
-                           cancel-button-text="取消"
-                           icon-color="red"
-                           @confirm="handleDel(scope.row)"
-                           title="确定删除这条数据吗?">
-              <template #reference>
-                <el-button size="mini">删除</el-button>
-              </template>
-            </el-popconfirm>
-          </template>
-        </el-table-column>
       </el-table>
       <!-- 分页  -->
       <div class="block">
         <Pagination :pageSize="paginations.pageSize"
                     :pageTotal="paginations.total"
                     @pageFunc="pageFunc"></Pagination>
-
       </div>
-
     </div>
   </el-card>
 </el-dialog>
@@ -109,6 +96,10 @@ export default {
     return {
       visible: false,
       title: '',
+      loading: false,
+      multipleSelectionFlag: false, // 是否显示批量删除按钮
+      multiDeleteVisible: false,    // 批量删除对话框
+      multipleSelection: '',
       selectForm: {
         key: ''
       },
@@ -128,41 +119,61 @@ export default {
     }
   },
   computed: {
-
   },
   methods: {
     show (row) {
-      console.log(row)
+      this.loading = true
       this.visible = true
       const params = {
         orgaId : row.id
       }
       getUserByOrgId(params).then((res => {
-        console.log(res.data)
         this.employees = res.data
         this.paginations.total = res.data.length
       }))
     },
     query () {
+      this.loading = true
       const params = {
-        key: this.selectForm.key,
-        pageNo: this.paginations.pageNo,
-        pageSize: this.paginations.pageSize
+        
       }
-      getAllUsers(params).then(res => {
-        this.employees = res.data.list
-      })
+      getOrgUser(params).then((res => {
 
+      }))
     },
     reset () {
       // 重置搜索关键词
       this.selectForm.key = ''
       this.getEmployees()
     },
+    handleSelectionChange (val) {
+      console.log(val)
+      this.multipleSelection = val
+      this.multipleSelectionFlag = true
+      if (this.multipleSelection.length == 0) {   
+        // 如不进行判断则勾选完毕后批量删除按钮还是会在
+        this.multipleSelectionFlag = false
+      }
+    },
+    popDelete () {
+      this.multiDeleteVisible = true
+    },
+    multiDelete () {
+      this.multiDeleteVisible = false
+      let checkArr = this.multipleSelection  // multipleSelection存储了勾选到的数据
+      let params = []
+      checkArr.forEach(function (item) {
+        console.log(item.id)
+        params.push(item.id)  // 添加所有需要删除数据的id到一个数组，post提交过去
+      })
+    },
     pageFunc (data) {
       this.paginations.pageSize = data.pageSize
       this.paginations.pageNo = data.pageNum
       this.getEmployees()// 请求数据的函数
+    },
+    close () {
+      this.visible = false
     }
   }
 }

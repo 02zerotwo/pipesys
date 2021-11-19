@@ -88,36 +88,8 @@ export default {
       url: '',
       roles: [],
       o: '',
-      org: [
-        {
-          id: 1,
-          name: '南京煤业有限公司'
-        },
-        {
-          id: 2,
-          name: '南京煤业有限公司1'
-        },
-        {
-          id: 3,
-          name: '南京煤业有限公司2'
-        }
-
-      ],
-      options: [
-        {
-          id: 1,
-          ext: '超级管理员'
-        },
-        {
-          value: 2,
-          label: '普通管理员'
-        },
-        {
-          value: 3,
-          label: '安装工人'
-        }
-
-      ],
+      org: [],
+      options: [],
       // 表单验证
       rules: {
         username: [
@@ -148,9 +120,11 @@ export default {
     async edit (record) {
       this.visible = true
       await getAllRole({ roleName: '', pageNo: 1, pageSize: 100 }).then(res => {
+        console.log(res)
         this.options = res.data.list
       })
       await getAllOrga({ orgName: '', pageNo: 1, pageSize: 100 }).then(res => {
+        console.log(res)
         this.org = res.data.list
       })
       this.$nextTick(() => { // 待dom生成以后再来获取dom对象

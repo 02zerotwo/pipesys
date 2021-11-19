@@ -30,6 +30,9 @@ const addItem = (params) => postAction('/item/item', params)
 const eidtItem = (params) => putAction('/item/item', params)
 const deleteItem = (params) => deleteAction('/item/item', params)
 const getUserByOrgId = (params) => getAction('/sys/user/orga', params)
+const getOtherUsers = (params) => getAction('/sys/user/orgaId',params)
+const getOrgUser = (params) => getAction('/sys/user/orga',params)
+
 export {
   getAllUsers,
   getUserById,
@@ -55,5 +58,7 @@ export {
   deleteItem,
   getAllType,
   getUserByOrgId,
+  getOtherUsers,
+  getOrgUser,
   getAllOrga
 }
