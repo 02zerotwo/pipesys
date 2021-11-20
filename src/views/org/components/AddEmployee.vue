@@ -78,7 +78,7 @@
 </template>
 
 <script scope>
-import { getOtherUsers, getOrgUser } from '@/api/api.js'
+import { getOtherUsers, getAllUsers, addOtherUser } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 export default {
   components: {
@@ -109,14 +109,15 @@ export default {
     query () {
       this.loading = true
       const params = {
-        orgaId: this.orgaId,
-        username: this.selectForm.key
+        key: this.selectForm.key,
+        pageNo: 1,
+        pageSize: 100
       }
-      console.log(params)
-      getOrgUser(params).then((res => {
-        console.log(res)
-        this.userList = res.data
-        this.loading = false
+      getAllUsers(params).then((res => {
+        if (res.status === 200) {
+          this.userList = res.data.list
+          this.loading = false
+        }
       }))
 
     },
@@ -136,11 +137,14 @@ export default {
         this.loading = false
       })
     },
-    add(row) {
+    add (row) {
       this.visible = true
       this.orgaId = row.id
       this.getUserList()
       console.log(this.orgaId)
+    },
+    popAdd () {
+      this.multiAddVisible = true
     },
     handleSelectionChange (val) {
       console.log(val)
@@ -148,12 +152,24 @@ export default {
     },
     multiAdd () {
       this.multiAddVisible = false
-      let checkArr = this.multipleSelection  // multipleSelection存储了勾选到的数据
-      let params = []
+      const checkArr = this.multipleSelection  // multipleSelection存储了勾选到的数据
+      const arrays = []
       checkArr.forEach(function (item) {
         console.log(item.id)
-        params.push(item.id)  // 添加所有需要删除数据的id到一个数组，post提交过去
+        arrays.push(item.id)  // 添加所有需要删除数据的id到一个数组
       })
+      console.log(arrays)
+      const params = {
+        orgaId: this.orgaId,
+        idArrays: arrays
+      }
+      addOtherUser(params).then((res => {
+        ElMessage({
+          message: '新增成功!',
+          type: 'success',
+        })
+        this.visible = false
+      }))
     },
     modalFormOk () { // 添加完用户的回调函数
       this.getUserList()

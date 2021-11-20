@@ -16,7 +16,7 @@ const addRole = (params) => postAction('/sys/role', params)
 const deleteRole = (params) => deleteAction('/sys/role', params)
 const getAllPerm = (params) => getAction('/sys/perm', params)
 const editPerm = (params) => postAction('/sys/role/perm', params)
-// 菜单模块api接口
+// 菜单模块api接口/sys/user/ids
 const addPerm = (params) => postAction('/sys/perm', params)
 const deletePerm = (params) => deleteAction('/sys/perm', params)
 const eidtPerm = (params) => putAction('/sys/perm', params)
@@ -24,14 +24,16 @@ const eidtPerm = (params) => putAction('/sys/perm', params)
 const getAllOrgs = (params) => getAction('/sys/orga', params)
 const getAllType = (params) => getAction('/sys/orgaType', params)
 const addOrg = (params) => postAction('/sys/orga', params)
+const getUserByOrgId = (params) => getAction('/sys/user/orga', params)
+const getOtherUsers = (params) => getAction('/sys/user/orgaId',params)
+const getOrgUser = (params) => getAction('/sys/user/orga',params)
+const addOtherUser = (params) => putAction('/sys/user/orgaId',params)
 //项目管理
 const getAllItem = (params) => getAction('/item/item', params)
 const addItem = (params) => postAction('/item/item', params)
 const eidtItem = (params) => putAction('/item/item', params)
 const deleteItem = (params) => deleteAction('/item/item', params)
-const getUserByOrgId = (params) => getAction('/sys/user/orga', params)
-const getOtherUsers = (params) => getAction('/sys/user/orgaId',params)
-const getOrgUser = (params) => getAction('/sys/user/orga',params)
+
 
 export {
   getAllUsers,
@@ -60,5 +62,6 @@ export {
   getUserByOrgId,
   getOtherUsers,
   getOrgUser,
-  getAllOrga
+  getAllOrga,
+  addOtherUser
 }
