@@ -66,7 +66,7 @@
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span style="margin-left: 10px"> {{scope.row.organize.name}}</span>
+            <span style="margin-left: 10px"> {{scope.row.organize == null ? '' :scope.row.organize.name}}</span>
           </template>
         </el-table-column>
         <el-table-column label="手机号"
