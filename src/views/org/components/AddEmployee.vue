@@ -2,7 +2,6 @@
   <el-dialog v-model="visible"
              :title="title"
              @close="close">
-    <el-card class="box-card">
       <template #header>
         <div>
           <el-row>
@@ -78,7 +77,6 @@
         </div>
 
       </div>
-    </el-card>
   </el-dialog>
 </template>
 

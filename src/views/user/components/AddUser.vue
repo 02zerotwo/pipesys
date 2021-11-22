@@ -4,7 +4,6 @@
   <el-dialog v-model="visible"
              :title="title"
              @close="close">
-    <el-card class="box-card">
       <el-form ref="ruleForm"
                :model="ruleForm"
                :rules="rules"
@@ -69,7 +68,6 @@
         <el-row>&nbsp; </el-row>
       </el-form>
 
-    </el-card>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="close">取消</el-button>
