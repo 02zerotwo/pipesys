@@ -2,7 +2,6 @@
   <el-dialog v-model="visible"
              :title="title"
              @close="close">
-    <el-card class="box-card">
       <template #header>
         <div>
           <el-row>
@@ -71,17 +70,23 @@
             </template>
           </el-table-column>
         </el-table>
+        <div class="block">
+          <Pagination :pageSize="paginations.pageSize"
+                      :pageTotal="paginations.total"
+                      @pageFunc="pageFunc"></Pagination>
+        </div>
 
       </div>
-    </el-card>
   </el-dialog>
 </template>
 
 <script scope>
 import { getOtherUsers, getAllUsers, addOtherUser } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
+import Pagination from '@/components/Pagination'
 export default {
   components: {
+    Pagination
   },
   data () {
     return {
@@ -99,6 +104,13 @@ export default {
         }
       ],
       loading: false,
+      // 分页
+      paginations: {
+        // 默认显示第几页
+        pageNo: 1,
+        // 默认每页显示的条数（可修改）
+        pageSize: 10,
+      }
     }
   },
   computed: {
@@ -116,6 +128,7 @@ export default {
       getAllUsers(params).then((res => {
         if (res.status === 200) {
           this.userList = res.data.list
+          this.paginations.total = res.data.total
           this.loading = false
         }
       }))
@@ -134,6 +147,7 @@ export default {
       }
       getOtherUsers(params).then(res => {
         this.userList = res.data
+        this.paginations.total = res.data.length
         this.loading = false
       })
     },
@@ -170,10 +184,6 @@ export default {
         })
         this.visible = false
       }))
-    },
-    modalFormOk () { // 添加完用户的回调函数
-      this.getUserList()
-
     },
     pageFunc (data) {
       this.paginations.pageSize = data.pageSize

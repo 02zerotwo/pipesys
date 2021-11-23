@@ -65,9 +65,14 @@ const routes = [
         name: 'pipemodel',
         meta: { title: '管道管理' },
         component: () => import('@/views/pipemodel/ModelList')
+      },
+      {
+        path: 'sensormodel',
+        name: 'sensormodel',
+        meta: { title: '传感器模型' },
+        component: () => import('@/views/model/SensorModelList')
       }
-
-    ]
+    ],
   },
   {
     path: '/item',

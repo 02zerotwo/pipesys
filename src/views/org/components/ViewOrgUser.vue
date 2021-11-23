@@ -90,7 +90,7 @@
 </template>
 
 <script scope>
-import { getOrgUser, deleteMulitUser, getUserByOrgId } from '@/api/api.js'
+import { getOrgUser, getUserByOrgId } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 import Pagination from '@/components/Pagination'
 import { axios } from '@/utils/request'

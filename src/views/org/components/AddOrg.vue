@@ -4,7 +4,6 @@
   <el-dialog v-model="visible"
              :title="title"
              @close="close">
-    <el-card class="box-card">
       <el-form ref="ruleForm"
                :model="ruleForm"
                :rules="rules"
@@ -53,14 +52,8 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <!-- 占位空白符 后续可以直接 在里面添加元素 -->
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
       </el-form>
 
-    </el-card>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="close">取消</el-button>
