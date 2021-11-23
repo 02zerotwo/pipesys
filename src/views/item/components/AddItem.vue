@@ -4,64 +4,62 @@
   <el-dialog v-model="visible"
              :title="title"
              @close="close">
-    <el-card class="box-card">
-      <el-form ref="ruleForm"
-               :model="ruleForm"
-               :rules="rules"
-               label-width="120px">
-        <el-row>
-          <el-col :span="11">
-            <el-form-item label="项目名称:"
-                          prop="name">
-              <el-input v-model="ruleForm.name"
-                        placeholder="请输入项目名称"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="11">
-            <el-form-item label="项目编码:"
-                          prop="number">
-              <el-input v-model="ruleForm.number"
-                        placeholder="请输入项目名称"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="11">
-            <el-form-item label="手机号:"
-                          prop="phone">
-              <el-input v-model="ruleForm.phone"
-                        placeholder="请输入手机号"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="11">
-            <el-form-item label="项目地址:">
-              <el-input v-model="ruleForm.addr"
-                        placeholder="请输入项目地址"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="11">
-            <el-form-item label="部门:">
-              <el-select v-model="o"
-                         placeholder="请选择部门">
-                <el-option v-for="item in org"
-                           :key="item.id"
-                           :label="item.name"
-                           :value="item.id">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <!-- 占位空白符 后续可以直接 在里面添加元素 -->
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
-      </el-form>
+    <el-form ref="ruleForm"
+             :model="ruleForm"
+             :rules="rules"
+             label-width="120px">
+      <el-row>
+        <el-col :span="11">
+          <el-form-item label="项目名称:"
+                        prop="name">
+            <el-input v-model="ruleForm.name"
+                      placeholder="请输入项目名称"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="11">
+          <el-form-item label="项目编码:"
+                        prop="number">
+            <el-input v-model="ruleForm.number"
+                      placeholder="请输入项目名称"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="11">
+          <el-form-item label="手机号:"
+                        prop="phone">
+            <el-input v-model="ruleForm.phone"
+                      placeholder="请输入手机号"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="11">
+          <el-form-item label="项目地址:">
+            <el-input v-model="ruleForm.addr"
+                      placeholder="请输入项目地址"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="11">
+          <el-form-item label="部门:">
+            <el-select v-model="o"
+                       placeholder="请选择部门">
+              <el-option v-for="item in org"
+                         :key="item.id"
+                         :label="item.name"
+                         :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <!-- 占位空白符 后续可以直接 在里面添加元素 -->
+      <el-row>&nbsp; </el-row>
+      <el-row>&nbsp; </el-row>
+      <el-row>&nbsp; </el-row>
+      <el-row>&nbsp; </el-row>
+    </el-form>
 
-    </el-card>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="close">取消</el-button>

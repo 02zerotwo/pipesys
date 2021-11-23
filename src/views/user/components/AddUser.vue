@@ -4,72 +4,69 @@
   <el-dialog v-model="visible"
              :title="title"
              @close="close">
-    <el-card class="box-card">
-      <el-form ref="ruleForm"
-               :model="ruleForm"
-               :rules="rules"
-               label-width="120px">
-        <el-row>
-          <el-col :span="11">
-            <el-form-item label="用户名:"
-                          prop="username">
-              <el-input v-model="ruleForm.username"
-                        placeholder="请输入用户名称"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="11">
-            <el-form-item label="角色名:">
-              <el-select v-model="roles"
-                         multiple
-                         placeholder="请选择角色名">
-                <el-option v-for="item in options"
-                           :key="item.id"
-                           :label="item.ext"
-                           :value="item.id">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="11">
-            <el-form-item label="手机号:"
-                          prop="phone">
-              <el-input v-model="ruleForm.phone"
-                        placeholder="请输入手机号"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="11">
-            <el-form-item label="部门:">
-              <el-select v-model="o"
-                         placeholder="请选择部门">
-                <el-option v-for="item in org"
-                           :key="item.id"
-                           :label="item.name"
-                           :value="item.id">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="11">
-            <el-form-item label="密码:"
-                          prop="password">
-              <el-input v-model="ruleForm.password"
-                        type="password"
-                        placeholder="请输入密码"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <!-- 占位空白符 后续可以直接 在里面添加元素 -->
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
-      </el-form>
-
-    </el-card>
+    <el-form ref="ruleForm"
+             :model="ruleForm"
+             :rules="rules"
+             label-width="120px">
+      <el-row>
+        <el-col :span="11">
+          <el-form-item label="用户名:"
+                        prop="username">
+            <el-input v-model="ruleForm.username"
+                      placeholder="请输入用户名称"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="11">
+          <el-form-item label="角色名:">
+            <el-select v-model="roles"
+                       multiple
+                       placeholder="请选择角色名">
+              <el-option v-for="item in options"
+                         :key="item.id"
+                         :label="item.ext"
+                         :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="11">
+          <el-form-item label="手机号:"
+                        prop="phone">
+            <el-input v-model="ruleForm.phone"
+                      placeholder="请输入手机号"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="11">
+          <el-form-item label="部门:">
+            <el-select v-model="o"
+                       placeholder="请选择部门">
+              <el-option v-for="item in org"
+                         :key="item.id"
+                         :label="item.name"
+                         :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="11">
+          <el-form-item label="密码:"
+                        prop="password">
+            <el-input v-model="ruleForm.password"
+                      type="password"
+                      placeholder="请输入密码"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <!-- 占位空白符 后续可以直接 在里面添加元素 -->
+      <el-row>&nbsp; </el-row>
+      <el-row>&nbsp; </el-row>
+      <el-row>&nbsp; </el-row>
+      <el-row>&nbsp; </el-row>
+    </el-form>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="close">取消</el-button>
@@ -87,7 +84,7 @@ import { ElMessage } from 'element-plus'
 export default {
   components: {},
 
-  data() {
+  data () {
     return {
       visible: false,
       disabled: false,
@@ -143,7 +140,7 @@ export default {
   computed: {},
 
   methods: {
-    async add(record) {
+    async add (record) {
       this.visible = true
       await getAllRole({ roleName: '', pageNo: 1, pageSize: 100 }).then(
         (res) => {
@@ -161,7 +158,7 @@ export default {
         this.$refs.ruleForm.resetFields() // 对整个表单进行重置，将所有字段值重置为初始值并移除校验结果
       })
     },
-    handleOk() {
+    handleOk () {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           let params = this.ruleForm
@@ -181,7 +178,7 @@ export default {
         }
       })
     },
-    validateUsername(rule, value, callback) {
+    validateUsername (rule, value, callback) {
       let params = {
         name: value,
       }
@@ -193,7 +190,7 @@ export default {
         }
       })
     },
-    close() {
+    close () {
       this.visible = false
       this.roles = []
       this.o = ''

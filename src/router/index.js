@@ -64,7 +64,7 @@ const routes = [
         path: 'pipemodel',
         name: 'pipemodel',
         meta: { title: '管道管理' },
-        component: () => import('@/views/user/UserList')
+        component: () => import('@/views/pipemodel/ModelList')
       }
 
     ]

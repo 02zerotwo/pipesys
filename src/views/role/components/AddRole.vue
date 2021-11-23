@@ -4,37 +4,36 @@
   <el-dialog v-model="visible"
              :title="title"
              @close="close">
-    <el-card class="box-card">
-      <el-form ref="ruleForm"
-               :model="ruleForm"
-               :rules="rules"
-               label-width="120px">
-        <el-row>
-          <el-col :span="11">
-            <el-form-item label="角色编码:"
-                          prop="name">
-              <el-input v-model="ruleForm.name"
-                        placeholder="请输入角色编码"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="11">
-            <el-form-item label="角色名:"
-                          prop="ext">
-              <el-input v-model="ruleForm.ext"
-                        placeholder="请输入角色名称"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <!-- 占位空白符 后续可以直接 在里面添加元素 -->
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
-      </el-form>
 
-    </el-card>
+    <el-form ref="ruleForm"
+             :model="ruleForm"
+             :rules="rules"
+             label-width="120px">
+      <el-row>
+        <el-col :span="11">
+          <el-form-item label="角色编码:"
+                        prop="name">
+            <el-input v-model="ruleForm.name"
+                      placeholder="请输入角色编码"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="11">
+          <el-form-item label="角色名:"
+                        prop="ext">
+            <el-input v-model="ruleForm.ext"
+                      placeholder="请输入角色名称"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <!-- 占位空白符 后续可以直接 在里面添加元素 -->
+      <el-row>&nbsp; </el-row>
+      <el-row>&nbsp; </el-row>
+      <el-row>&nbsp; </el-row>
+      <el-row>&nbsp; </el-row>
+      <el-row>&nbsp; </el-row>
+      <el-row>&nbsp; </el-row>
+    </el-form>
+
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="close">取消</el-button>
