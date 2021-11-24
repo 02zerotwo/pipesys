@@ -52,7 +52,6 @@
           </el-col>
         </el-row>
       </el-form>
-
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="close">取消</el-button>
@@ -70,7 +69,7 @@ import { ElMessage } from 'element-plus'
 export default {
   components: {},
 
-  data() {
+  data () {
     return {
       visible: false,
       disabled: false,
@@ -115,7 +114,7 @@ export default {
   computed: {},
 
   methods: {
-    async add(record) {
+    async add (record) {
       this.visible = true
       await getAllRole({ roleName: '', pageNo: 1, pageSize: 100 }).then(
         (res) => {
@@ -133,7 +132,7 @@ export default {
         this.$refs.ruleForm.resetFields() // 对整个表单进行重置，将所有字段值重置为初始值并移除校验结果
       })
     },
-    handleOk() {
+    handleOk () {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           let params = this.ruleForm
@@ -153,7 +152,7 @@ export default {
         }
       })
     },
-    validateUsername(rule, value, callback) {
+    validateUsername (rule, value, callback) {
       let params = {
         name: value,
       }
@@ -165,7 +164,7 @@ export default {
         }
       })
     },
-    close() {
+    close () {
       this.visible = false
       this.roles = []
       this.o = ''
