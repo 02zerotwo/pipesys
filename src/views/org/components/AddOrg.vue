@@ -16,11 +16,11 @@
                         placeholder="请输入机构名称"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="11">
             <el-form-item label="类型:">
-              <el-select v-model="type.id"
+              <el-select v-model="ruleForm.type.id"
                          placeholder="请选择行业类型">
-                <el-option v-for="item in options"
+                <el-option v-for="item in types"
                            :key="item.id"
                            :label="item.name"
                            :value="item.id">
@@ -87,8 +87,7 @@ export default {
         orgaNumber: '',
         ext: '',
       },
-      type: { id: '' },
-      options: [],
+      types: [],
       // 表单验证
       rules: {
         name: [
@@ -121,21 +120,15 @@ export default {
   methods: {
     async add() {
       this.visible = true
+      console.log(this.ruleForm)
       await getAllType().then((res) => {
-        this.options = res.data
-      })
-
-      this.$nextTick(() => {
-        // 待dom生成以后再来获取dom对象
-        // 用来编辑给输入框赋予初始值
-        this.$refs.ruleForm.resetFields() // 对整个表单进行重置，将所有字段值重置为初始值并移除校验结果
+        this.types = res.data
       })
     },
     handleOk() {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           let params = this.ruleForm
-          params.type = this.type
           addOrg(params).then((res) => {
             ElMessage({
               message: '机构添加成功!',

@@ -97,7 +97,7 @@
                            @confirm="handleDel(scope.row)"
                            title="确定删除这条数据吗?">
               <template #reference>
-                <el-button size="mini">删除</el-button>
+                <el-button type="danger" size="mini">删除</el-button>
               </template>
             </el-popconfirm>
           </template>
@@ -225,7 +225,6 @@ export default {
     },
     modalFormOk () { // 添加完用户的回调函数
       this.getUserList()
-
     },
     pageFunc (data) {
       this.paginations.pageSize = data.pageSize

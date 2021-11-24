@@ -51,21 +51,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col :span="11">
-            <el-form-item label="密码:"
-                          prop="password">
-              <el-input v-model="ruleForm.password"
-                        type="password"
-                        placeholder="请输入密码"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <!-- 占位空白符 后续可以直接 在里面添加元素 -->
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
       </el-form>
 
     <template #footer>
@@ -112,17 +97,6 @@ export default {
           },
           {
             validator: this.validateUsername,
-          },
-        ],
-        password: [
-          {
-            required: true,
-            message: '密码不可为空',
-            trigger: 'blur',
-          },
-          {
-            pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,18}$/,
-            message: '密码须包含数字、字母两种元素，且密码位数为6-16位',
           },
         ],
         phone: [
