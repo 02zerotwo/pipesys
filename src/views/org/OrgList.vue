@@ -93,6 +93,9 @@
             <el-button type="primary"
                        size="mini"
                        @click="handleView(scope.row)">查看</el-button>
+            <el-button type="primary"
+                       size="mini"
+                       @click="handleEditO(scope.row)">编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -106,6 +109,7 @@
       <add-org ref="addOrg" @ok="modalFormOk" />
       <view-org-user ref="view" />
       <add-employee ref="addE" />
+      <edit-org ref="editO" />
     </div>
   </el-card>
 
@@ -118,12 +122,14 @@ import Pagination from '@/components/Pagination'
 import AddOrg from './components/AddOrg.vue'
 import ViewOrgUser from './components/ViewOrgUser.vue'
 import AddEmployee from './components/AddEmployee.vue'
+import EditOrg from './components/EditOrg.vue'
 export default {
   components: {
     Pagination,
     AddOrg,
     ViewOrgUser,
-    AddEmployee
+    AddEmployee,
+    EditOrg
   },
   data() {
     return {
@@ -136,13 +142,12 @@ export default {
           id: '',
           name: '',
           parentId: '',
-          type: [],
+          type: {},
           location: '',
           orgaNumber: '',
           ext: '',
         },
       ],
-
       // 分页
       paginations: {
         // 默认显示第几页
@@ -192,6 +197,7 @@ export default {
         pageSize: this.paginations.pageSize,
       }
       getAllOrgs(params).then((res) => {
+        console.log(res)
         if (res.status === 200) {
           this.orgList = res.data.list
           this.paginations.total = res.data.total
@@ -202,15 +208,18 @@ export default {
     },
     handleAdd() {
       this.$refs.addOrg.add()
-      this.$refs.addOrg.title = '组织新增页面'
+      this.$refs.addOrg.title = '机构新增页面'
     },
     handleAddE(row) {
       this.$refs.addE.add(row)
-      this.$refs.addOrg.title = '新增员工'
+      this.$refs.addE.title = '新增员工页面'
     },
     handleView(row) {
       this.$refs.view.show(row)
       this.$refs.view.title = '员工信息列表'
+    },
+    handleEditO(row) {
+      this.$refs.editO.edit(row)
     },
     modalFormOk() {
       // 添加完机构的回调函数
