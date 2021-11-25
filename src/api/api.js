@@ -25,15 +25,19 @@ const getAllOrgs = (params) => getAction('/sys/orga', params)
 const getAllType = (params) => getAction('/sys/orgaType', params)
 const addOrg = (params) => postAction('/sys/orga', params)
 const getUserByOrgId = (params) => getAction('/sys/user/orga', params)
-const getOtherUsers = (params) => getAction('/sys/user/orgaId',params)
-const getOrgUser = (params) => getAction('/sys/user/orga',params)
-const addOtherUser = (params) => putAction('/sys/user/orgaId',params)
+const getOtherUsers = (params) => getAction('/sys/user/orgaId', params)
+const getOrgUser = (params) => getAction('/sys/user/orga', params)
+const addOtherUser = (params) => putAction('/sys/user/orgaId', params)
 //项目管理
 const getAllItem = (params) => getAction('/item/item', params)
 const addItem = (params) => postAction('/item/item', params)
 const eidtItem = (params) => putAction('/item/item', params)
 const deleteItem = (params) => deleteAction('/item/item', params)
-
+//管道模型
+const getAllPipeModel = (params) => getAction('/model/pipeModel', params)
+const addPipeModel = (params) => postAction('/model/pipeModel', params)
+const deletePipeModel = (params) => deleteAction('/model/pipeModel', params)
+const eidtPipeModel = (params) => putAction('/model/pipeModel', params)
 
 export {
   getAllUsers,
@@ -63,5 +67,9 @@ export {
   getOtherUsers,
   getOrgUser,
   getAllOrga,
-  addOtherUser
+  addOtherUser,
+  getAllPipeModel,
+  addPipeModel,
+  deletePipeModel,
+  eidtPipeModel
 }

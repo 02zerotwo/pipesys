@@ -17,7 +17,9 @@
             <el-form-item>
               <el-button size="medium"
                          type="primary"
-                         @click="query">查询</el-button>
+                         @click="getpipeModelList">查询</el-button>
+              <el-button size="medium"
+                         @click="reset">重置</el-button>
             </el-form-item>
           </el-form>
         </el-row>
@@ -75,7 +77,8 @@
                          width="200"
                          header-align="center">
           <template #default="scope">
-            <el-link type="primary">{{scope.row.pipeIntroduce }}</el-link>
+            <el-link type="primary"
+                     @click="downloadIntroduce(scope.row,scope.row.fileName[0],1)">{{scope.row.fileName[0] }}</el-link>
           </template>
         </el-table-column>
         <el-table-column label="管道图片"
@@ -85,7 +88,7 @@
           <template #default="scope">
             <el-image style="height: 100px"
                       fit="contain"
-                      :src="scope.row.pipePic">
+                      :src="'http://localhost:8003/'+scope.row.fileRelativePath[1]">
             </el-image>
           </template>
         </el-table-column>
@@ -94,7 +97,8 @@
                          width="200"
                          header-align="center">
           <template #default="scope">
-            <el-link type="primary">{{scope.row.pipeManual }}</el-link>
+            <el-link type="primary"
+                     @click="downloadIntroduce(scope.row,scope.row.fileName[2],3)">{{scope.row.fileName[2] }}</el-link>
           </template>
         </el-table-column>
         <el-table-column label="创建时间"
@@ -107,6 +111,7 @@
         </el-table-column>
 
         <el-table-column label="操作"
+                         v-loading="loading"
                          align="center"
                          width="160"
                          fixed="right"
@@ -143,7 +148,8 @@
 </template>
 
 <script scope>
-// import { getAllPipeModel } from '@/api/api.js'
+import { getAllPipeModel, deletePipeModel } from '@/api/api.js'
+import { downloadFile } from '@/api/manage.js'
 import AddPipeModel from './components/AddPipeModel.vue'
 import Pagination from '@/components/Pagination'
 export default {
@@ -154,28 +160,7 @@ export default {
   data () {
     return {
       selectForm: { key: '' },
-      pipeModelList: [
-        {
-          "id": null,
-          "pipeName": "管道名01",
-          "pipeNumber": "998管道",
-          "pipeType": "多波纹",
-          "pipeIntroduce": "",
-          "pipePic": "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          "pipeManual": "管道手册后台名1",
-          "createTime": null
-        },
-        {
-          "id": null,
-          "pipeName": "管道名2",
-          "pipeNumber": "9992管道",
-          "pipeType": "单波纹",
-          "pipeIntroduce": "管道说明书后台名2",
-          "pipePic": "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-          "pipeManual": "管道手册后台名2",
-          "createTime": null
-        }
-      ],//当前页要展示的数据
+      pipeModelList: [],//当前页要展示的数据
       formData: {},//表单数据
       loading: false,
       // 分页
@@ -195,17 +180,22 @@ export default {
   methods: {
     // 获取管道模型列表数据
     getpipeModelList () {
-      // const params = {
-      //   key: '',
-      //   pageNo: this.paginations.pageNo,
-      //   pageSize: this.paginations.pageSize
-      // }
-      // getAllPipeModel(params).then(res => {
-      //   if (res.status === 200) {
-      //     this.pipeModelList = res.data.list
-      //     this.paginations.total = res.data.total
-      //   }
-      // })
+      this.loading = true
+      const params = {
+        key: this.selectForm.key,
+        pageNo: this.paginations.pageNo,
+        pageSize: this.paginations.pageSize
+      }
+      getAllPipeModel(params).then(res => {
+        if (res.status === 200) {
+          this.pipeModelList = res.data.list
+          this.paginations.total = res.data.total
+          this.loading = false
+        }
+      })
+    },
+    downloadIntroduce (row, fname, num) {
+      downloadFile('/model/download', fname, { id: row.id, num: num })
     },
     handleAdd () {
       this.$refs.addPipeModel.add()
@@ -215,6 +205,22 @@ export default {
       this.$refs.addPipeModel.edit(row)
       this.$refs.addPipeModel.title = '编辑管道模型'
     },
+    modalFormOk () {
+      this.getpipeModelList()
+    },
+    handleDel (row) {
+      deletePipeModel({ id: row.id }).then(res => {
+        if (res.status === 200) {
+          this.$message.success('删除管道模型成功!')
+          this.getpipeModelList()
+        }
+      })
+    },
+    reset () {
+      // 重置搜索关键词
+      this.selectForm.key = ''
+      this.getpipeModelList()
+    }
   }
 }
 </script>
