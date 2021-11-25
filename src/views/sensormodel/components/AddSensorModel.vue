@@ -18,11 +18,11 @@
       <el-row>
         <el-col>
           <el-form-item label="设备模型型号:">
-            <el-select v-model="modelList.deviceType">
+            <el-select v-model="value">
               <el-option v-for="item in deviceTypes"
                          :key="item.value"
                          :label="item.label"
-                         :value="item.label">
+                         :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
@@ -48,6 +48,47 @@
           </el-form-item>
         </el-col>
       </el-row>
+      <el-row>
+        <el-col>
+          <el-form-item label="数据点:">
+            <el-table :data="dataNewList"
+                      size="mini"
+                      :row-style="{height:'20px'}"
+                      :cell-style="{padding:'0px'}" 
+                      fit="false"
+                      >
+              <el-table-column  label="名称"
+                                align="center"
+                                header-align="center" width='100px' prop="dataPointName">
+                <template #default="scope">
+                  <span style="margin-left: 10px">{{ scope.row.dataPointName }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="备注"
+                              align="center"
+                              header-align="center" width='100px' prop="dataPointExtra">
+                <template #default="scope">
+                  <span style="margin-left: 10px">{{ scope.row.dataPointExtra }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="阈值A"
+                               align="center"
+                               header-align="center" width='100px' prop="lowThreshold">
+                <template #default="scope">
+                  <span>{{scope.row.lowThreshold }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="阈值B"
+                              align="center"
+                              header-align="center" width='100px' prop="highThreshold">
+                <template #default="scope">
+                  <span>{{scope.row.highThreshold }}</span>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <template #footer>
       <el-button @click="close">取消</el-button>
@@ -64,26 +105,28 @@ export default {
   data() {
     return {
       visible: false,
-      modelList: [
-        {
+      modelList: {
           id: '',
           deviceName: '',
           deviceType: '',
           deviceNumber: '',
           createTime: '',
           upInterval: '',
-          protocol: [],
-          dataPointName: '',
-          dataPointExtra: '',
-          lowThreshold: '',
-          highThreshold: '',
+          protocol: []
         },
-      ],
+      dataNewList: [],
+      dataList: [
+        {value:1,dataPointName: '温度',dataPointExtra:'腐蚀',lowThreshold:10,highThreshold:50},
+        {value:2,dataPointName: '压力',dataPointExtra:'泄露',lowThreshold: 5,highThreshold:20},
+        {value:3,dataPointName: '位移',dataPointExtra:'位移',lowThreshold:10,highThreshold:40}
+        ],
       deviceTypes: [
+        { label: '全部', value: 0 },
         { label: '温度传感器', value: 1 },
         { label: '压力传感器', value: 2 },
         { label: '位移传感器', value: 3 },
       ],
+      value: '',
       protocols: [],
       // 表单验证
       rules: {
@@ -105,6 +148,13 @@ export default {
     }
   },
   methods: {
+    searchSensor(keywords) {
+      return this.dataList.filter(item =>{
+        if(item.value === keywords){
+          return item
+        }
+      })
+    },
     add() {
       this.visible = true
     },
@@ -114,12 +164,23 @@ export default {
       console.log(this.modelList.protocol)
     },
     handleOk() {
+      console.log(this.modelList.deviceType)
       console.log(this.modelList)
     },
     close() {
       this.visible = false
     },
   },
+  watch: {
+    // 根据下拉框所选值显示table里的内容
+    value: function(val) {
+      if(val == 0){
+        this.dataNewList = this.dataList
+      }else{
+        this.dataNewList = this.searchSensor(val)
+      }
+    }
+  }
 }
 </script>
 <style scoped>
