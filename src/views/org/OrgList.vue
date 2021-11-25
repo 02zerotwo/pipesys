@@ -69,7 +69,7 @@
             <span style="margin-left: 10px">{{ scope.row.type.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="位置"
+        <el-table-column label="所属区域"
                          align="center"
                          header-align="center">
           <template #default="scope">
