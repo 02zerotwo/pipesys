@@ -255,6 +255,7 @@ export default {
               this.close()
             })
           } else {
+
             eidtPipeModel(params).then(res => {
               if (res.status === 200) {
                 this.$message.success('修改管道模型成功!')
@@ -305,7 +306,6 @@ export default {
       uploadAction('/model/upload', fromData).then(res => {
         if (res.status === 200) {
           this.formData.pipePic = res.data[0]
-          debugger
           params.onSuccess('文件上传成功')
         }
       })
