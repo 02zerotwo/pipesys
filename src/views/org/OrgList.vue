@@ -109,7 +109,7 @@
       <add-org ref="addOrg" @ok="modalFormOk" />
       <view-org-user ref="view" />
       <add-employee ref="addE" />
-      <edit-org ref="editO" />
+      <edit-org ref="editO" @ok="modalFormOk" />
     </div>
   </el-card>
 

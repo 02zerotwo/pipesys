@@ -93,6 +93,7 @@
 </template>
 
 <script scope>
+import {getAllSensorModel} from '@/api/api.js'
 import Pagination from '@/components/Pagination'
 import AddSensorModel from './components/AddSensorModel.vue'
 export default {
@@ -132,9 +133,22 @@ export default {
   },
   computed: {},
   // 页面加载时就加载组织信息
-  created() {},
+  created() {
+    this.getSensors()
+  },
 
   methods: {
+    getSensors() {
+      const params = {
+        pageNo: 1,
+        pageSize: 10,
+        key: ''
+      }
+      getAllSensorModel(params).then((res => {
+        this.modelList = res.data.list
+        console.log(res)
+      }))
+    },
     query() {
       this.loading = true
     },

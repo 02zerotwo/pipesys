@@ -2,41 +2,39 @@
   <el-dialog v-model="visible"
              :title="title"
              @close="close">
+    <el-card class="box-card">
       <template #header>
-        <div>
-          <el-row>
-            <el-form ref="selectForm"
-                    :inline="true"
-                    :model="selectForm"
-                    class="demo-form-inline">
-
-              <el-form-item prop="userName">
-                <el-input size="medium"
-                          style="width:220px"
-                          v-model="selectForm.key"
-                          placeholder="请输入关键词"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button size="medium"
-                          type="primary"
-                          @click="query">查询</el-button>
-                <el-button size="medium"
-                          @click="reset">重置</el-button>
-              </el-form-item>
-            </el-form>
-          </el-row>
-          <el-row>
-            <el-button type="primary" @click="popAdd">批量新增
-            </el-button>
-            <el-dialog v-model="multiAddVisible" title="提示" width="30%">
-                  <h1>你确定要新增该数据吗？</h1>
-                  <template v-slot:footer>
-                    <el-button type="primary" @click="multiAdd">确 定</el-button>
-                    <el-button @click="multiAddVisible = false">取 消</el-button>
-                  </template>
-            </el-dialog>
-          </el-row>
-        </div>
+        <el-row>
+          <el-form ref="selectForm"
+                   :inline="true"
+                   :model="selectForm"
+                   class="demo-form-inline">
+            <el-form-item>
+              <el-input size="medium"
+                        style="width:220px"
+                        v-model="selectForm.key"
+                        placeholder="请输入关键词"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button size="medium"
+                        type="primary"
+                        @click="query">查询</el-button>
+              <el-button size="medium"
+                        @click="reset">重置</el-button>
+            </el-form-item>
+          </el-form>
+        </el-row>
+        <el-row>
+          <el-button type="primary" @click="popAdd">批量新增
+          </el-button>
+          <el-dialog v-model="multiAddVisible" title="提示" width="30%">
+                <h1>你确定要新增该数据吗？</h1>
+                <template v-slot:footer>
+                  <el-button type="primary" @click="multiAdd">确 定</el-button>
+                  <el-button @click="multiAddVisible = false">取 消</el-button>
+                </template>
+          </el-dialog>
+        </el-row>
       </template>
       <div>
         <!-- 用户信息 -->
@@ -77,6 +75,7 @@
         </div>
 
       </div>
+    </el-card>
   </el-dialog>
 </template>
 
@@ -122,16 +121,15 @@ export default {
       this.loading = true
       const params = {
         key: this.selectForm.key,
-        pageNo: 1,
-        pageSize: 100
+        orgaId: this.orgaId,
+        pageNo: this.paginations.pageNo,
+        pageSize: this.paginations.pageSize
       }
-      getAllUsers(params).then((res => {
-        if (res.status === 200) {
-          this.userList = res.data.list
-          this.paginations.total = res.data.total
-          this.loading = false
-        }
-      }))
+      getOtherUsers(params).then(res => {
+        this.userList = res.data.list
+        this.paginations.total = res.data.total
+        this.loading = false
+      })
 
     },
     reset () {
@@ -144,10 +142,12 @@ export default {
       this.loading = true
       const params = {
         orgaId: this.orgaId,
+        pageNo: this.paginations.pageNo,
+        pageSize: this.paginations.pageSize
       }
       getOtherUsers(params).then(res => {
-        this.userList = res.data
-        this.paginations.total = res.data.length
+        this.userList = res.data.list
+        this.paginations.total = res.data.total
         this.loading = false
       })
     },

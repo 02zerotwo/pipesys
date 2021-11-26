@@ -137,10 +137,12 @@ export default {
       const params = {
         orgaId: this.orgaId,
         username: '',
+        pageNo: this.paginations.pageNo,
+        pageSize: this.paginations.pageSize
       }
       getUserByOrgId(params).then((res) => {
-        this.employees = res.data
-        this.paginations.total = res.data.length
+        this.employees = res.data.list
+        this.paginations.total = res.data.total
         this.loading = false
       })
     },
@@ -149,6 +151,8 @@ export default {
       const params = {
         orgaId: this.orgaId,
         username: this.selectForm.key,
+        pageNo: this.paginations.pageNo,
+        pageSize: this.paginations.pageSize
       }
       getOrgUser(params).then((res) => {
         if (res.status === 200) {
@@ -156,7 +160,7 @@ export default {
             message: '查询成功!',
             type: 'success',
           })
-          this.employees = res.data
+          this.employees = res.data.list
           this.paginations.total = res.data.length
           this.loading = false
         }
@@ -206,7 +210,7 @@ export default {
     pageFunc(data) {
       this.paginations.pageSize = data.pageSize
       this.paginations.pageNo = data.pageNum
-      this.getEmployees() // 请求数据的函数
+      this.getUsers() // 请求数据的函数
     },
     close() {
       this.visible = false

@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { getAllType } from '@/api/api.js'
+import { getAllType, editOrg } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 
 export default {
@@ -106,11 +106,22 @@ export default {
       console.log(record)
       this.visible = true
       await getAllType().then((res) => {
-        this.types = res.data
+        this.types = res.data.list
       })
       this.ruleForm = Object.assign({}, record)
+      console.log(this.ruleForm)
     },
-    handleOk() {},
+    handleOk() {
+      const params = this.ruleForm
+      editOrg(params).then((res => {
+        ElMessage({
+          message: '修改成功',
+          type: 'success'
+        })
+        this.$emit('ok')
+        this.handleClose()
+      }))
+    },
     handleClose() {
       this.visible = false
     },

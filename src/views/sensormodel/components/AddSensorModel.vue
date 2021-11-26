@@ -16,9 +16,9 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col>
-          <el-form-item label="设备模型型号:">
-            <el-select v-model="value">
+        <el-col :span="11">
+          <el-form-item label="设备模型型号:" >
+            <el-select v-model="value" @change="selected">
               <el-option v-for="item in deviceTypes"
                          :key="item.value"
                          :label="item.label"
@@ -29,9 +29,9 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col>
+        <el-col :span="14">
           <el-form-item label="协议选择:">
-            <el-checkbox-group v-model="protocols" @change="selected">
+            <el-checkbox-group v-model="protocols" @change="checked">
               <el-checkbox label="MQTT"></el-checkbox>
               <el-checkbox label="COAP"></el-checkbox>
               <el-checkbox label="NB-IoT"></el-checkbox>
@@ -112,8 +112,12 @@ export default {
           deviceNumber: '',
           createTime: '',
           upInterval: '',
-          protocol: []
-        },
+          protocol: [],
+          dataPointName: '',
+          dataPointExtra: '',
+          lowThreshold: '',
+          highThreshold: ''
+      },
       dataNewList: [],
       dataList: [
         {value:1,dataPointName: '温度',dataPointExtra:'腐蚀',lowThreshold:10,highThreshold:50},
@@ -160,12 +164,17 @@ export default {
     },
     selected(val) {
       console.log(val)
-      this.modelList.protocol = val
-      console.log(this.modelList.protocol)
+    },
+    checked(val) {
+      console.log(val)
     },
     handleOk() {
-      console.log(this.modelList.deviceType)
+      this.modelList.dataPointName = this.dataNewList[0].dataPointName
+      this.modelList.dataPointExtra = this.dataNewList[0].dataPointExtra
+      this.modelList.lowThreshold = this.dataNewList[0].lowThreshold
+      this.modelList.highThreshold = this.dataNewList[0].highThreshold
       console.log(this.modelList)
+      console.log(this.dataNewList)
     },
     close() {
       this.visible = false
