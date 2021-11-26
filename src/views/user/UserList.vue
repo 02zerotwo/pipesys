@@ -123,7 +123,7 @@
 <script scope>
 import { getAllUsers, deleteUser } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
-import AddUser from './components/AddUser'
+import AddUser from './components/AddUser.vue'
 import EditUser from './components/EditUser.vue'
 import Pagination from '@/components/Pagination'
 export default {

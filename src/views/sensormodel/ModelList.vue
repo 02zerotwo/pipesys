@@ -3,15 +3,13 @@
     <template #header>
       <div>
         <el-row>
-          <el-form ref="selectForm"
+          <el-form ref="select"
                    :inline="true"
-                   :model="selectForm"
                    class="demo-form-inline">
-
             <el-form-item prop="userName">
               <el-input size="medium"
                         style="width:220px"
-                        v-model="selectForm.sensorModelName"
+                        v-model="selectForm.modelName"
                         placeholder="请输入想要查找的模型"></el-input>
             </el-form-item>
             <el-form-item>
@@ -29,14 +27,14 @@
                      @click="handleAdd()">
             <el-icon>
               <i-plus />
-            </el-icon>新增模型
+            </el-icon>新增设备模型
           </el-button>
         </el-row>
       </div>
     </template>
     <div>
       <!-- 传感器模型信息 -->
-      <el-table :data="sensorModelList"
+      <el-table :data="modelList"
                 size="small"
                 :highlight-current-row="true"
                 :stripe="true"
@@ -47,26 +45,18 @@
                          type="index"
                          width="60"
                          align="center" />
-
-        <el-table-column label="设备名称"
+        <el-table-column label="传感器编码"
+                         align="center"
+                         header-align="center">
+          <template #default="scope">
+            <span style="margin-left: 10px">{{ scope.row.deviceNumber }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="传感器模型名称"
                          align="center"
                          header-align="center">
           <template #default="scope">
             <span style="margin-left: 10px">{{ scope.row.deviceName }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="设备类型"
-                         align="center"
-                         header-align="center">
-          <template #default="scope">
-            <span style="margin-left: 10px">{{ scope.row.deviceType }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="设备编号"
-                         align="center"
-                         header-align="center">
-          <template #default="scope">
-            <span style="margin-left: 10px">{{ scope.row.type.deviceNumber }}</span>
           </template>
         </el-table-column>
         <el-table-column label="创建时间"
@@ -76,58 +66,16 @@
             <span>{{scope.row.createTime }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="协议"
-                         align="center"
-                         header-align="center">
-          <template #default="scope">
-            <span>{{ scope.row.protocol }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="upInterval"
-                         align="center"
-                         header-align="center">
-          <template #default="scope">
-            <span>{{ scope.row.upInterval }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="dataPointName"
-                         align="center"
-                         header-align="center">
-          <template #default="scope">
-            <span>{{ scope.row.dataPointName }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="dataPointExtra"
-                         align="center"
-                         header-align="center">
-          <template #default="scope">
-            <span>{{ scope.row.dataPointExtra }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="lowThreshold"
-                         align="center"
-                         header-align="center">
-          <template #default="scope">
-            <span>{{ scope.row.lowThreshold }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="highThreshold"
-                         align="center"
-                         header-align="center">
-          <template #default="scope">
-            <span>{{ scope.row.highThreshold }}</span>
-          </template>
-        </el-table-column>
         <el-table-column label="操作"
                          align="center"
                          header-align="center">
           <template #default="scope">
             <el-button type="primary"
                        size="mini"
-                       @click="handleAddE(scope.row)">新增员工</el-button>
-            <el-button type="primary"
+                       @click="handleModify(scope.row)">修改</el-button>
+            <el-button type="danger"
                        size="mini"
-                       @click="handleView(scope.row)">查看</el-button>
+                       @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -138,9 +86,7 @@
                     @pageFunc="pageFunc"></Pagination>
 
       </div>
-      <add-org ref="addOrg" @ok="modalFormOk" />
-      <view-org-user ref="view" />
-      <add-employee ref="addE" />
+      <add-sensor-model ref="addSensor" />
     </div>
   </el-card>
 
@@ -148,17 +94,19 @@
 
 <script scope>
 import Pagination from '@/components/Pagination'
+import AddSensorModel from './components/AddSensorModel.vue'
 export default {
   components: {
     Pagination,
+    AddSensorModel,
   },
   data() {
     return {
       loading: false,
       selectForm: {
-        sensorModelName: '',
+        modelName: '',
       },
-      sensorModelList: [
+      modelList: [
         {
           id: '',
           deviceName: '',
@@ -169,7 +117,7 @@ export default {
           dataPointName: '',
           dataPointExtra: '',
           lowThreshold: '',
-          highThreshold: ''
+          highThreshold: '',
         },
       ],
 
@@ -184,8 +132,7 @@ export default {
   },
   computed: {},
   // 页面加载时就加载组织信息
-  created() {
-  },
+  created() {},
 
   methods: {
     query() {
@@ -193,11 +140,11 @@ export default {
     },
     reset() {
       // 重置搜索关键词
-      this.selectForm.orgName = ''
+      this.selectForm.modelName = ''
     },
     handleAdd() {
-      this.$refs.addOrg.add()
-      this.$refs.addOrg.title = '组织新增页面'
+      this.$refs.addSensor.add()
+      this.$refs.addSensor.title = '新增设备模型'
     },
     handleAddE(row) {
       this.$refs.addE.add(row)
@@ -207,16 +154,12 @@ export default {
       this.$refs.view.show(row)
       this.$refs.view.title = '员工信息列表'
     },
-    modalFormOk() {
-      // 添加完机构的回调函数
-      this.getOrgList()
-    },
+    modalFormOk() {},
     pageFunc(data) {
       this.paginations.pageSize = data.pageSize
       this.paginations.pageNo = data.pageNum
-      this.getOrgList() // 请求数据的函数
     },
-  }
+  },
 }
 </script>
 <style >

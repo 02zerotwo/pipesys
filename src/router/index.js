@@ -70,7 +70,7 @@ const routes = [
         path: 'sensormodel',
         name: 'sensormodel',
         meta: { title: '传感器模型' },
-        component: () => import('@/views/model/SensorModelList')
+        component: () => import('@/views/sensormodel/ModelList')
       }
     ],
   },
