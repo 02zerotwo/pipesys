@@ -37,7 +37,7 @@ const deleteItem = (params) => deleteAction('/item/item', params)
 const getAllPipeModel = (params) => getAction('/model/pipeModel', params)
 const addPipeModel = (params) => postAction('/model/pipeModel', params)
 const deletePipeModel = (params) => deleteAction('/model/pipeModel', params)
-const eidtPipeModel = (params) => putAction('/model/pipeModel', params)
+const eidtPipeModel = (params) => putAction('/model/pipeModelSuper', params)
 
 export {
   getAllUsers,
