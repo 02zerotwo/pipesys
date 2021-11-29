@@ -24,6 +24,7 @@ const eidtPerm = (params) => putAction('/sys/perm', params)
 const getAllOrgs = (params) => getAction('/sys/orga', params)
 const getAllType = (params) => getAction('/sys/orgaType', params)
 const addOrg = (params) => postAction('/sys/orga', params)
+const editOrg = (params) => putAction('/sys/orga', params)
 const getUserByOrgId = (params) => getAction('/sys/user/orga', params)
 const getOtherUsers = (params) => getAction('/sys/user/orgaId', params)
 const getOrgUser = (params) => getAction('/sys/user/orga', params)
@@ -37,7 +38,12 @@ const deleteItem = (params) => deleteAction('/item/item', params)
 const getAllPipeModel = (params) => getAction('/model/pipeModel', params)
 const addPipeModel = (params) => postAction('/model/pipeModel', params)
 const deletePipeModel = (params) => deleteAction('/model/pipeModel', params)
-const eidtPipeModel = (params) => putAction('/model/pipeModelSuper', params)
+const eidtPipeModel = (params) => putAction('/model/pipeModel', params)
+//传感器模型
+const getAllSensorModel = (params) => getAction('/model/sensorModel', params)
+const addSensorModel = (params) => postAction('/model/sensorModel', params)
+const deleteSensorModel = (params) => deleteAction('/model/sensorModel', params)
+const editSensorModel = (params) => putAction('/model/sensorModel', params)
 
 //管道增删改查
 const addPipe = (params) => postAction('/asset/pipe', params)
@@ -64,6 +70,7 @@ export {
   eidtPerm,
   getAllOrgs,
   addOrg,
+  editOrg,
   getAllItem,
   addItem,
   eidtItem,
@@ -81,5 +88,9 @@ export {
   addPipe,
   getPipes,
   editPipe,
-  deletePipe
+  deletePipe,
+  getAllSensorModel,
+  addSensorModel,
+  deleteSensorModel,
+  editSensorModel
 }

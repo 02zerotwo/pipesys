@@ -10,7 +10,7 @@
               <el-input size="medium"
                         style="width:220px"
                         v-model="selectForm.modelName"
-                        placeholder="请输入想要查找的模型"></el-input>
+                        placeholder="请输入模型名关键字"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button size="medium"
@@ -59,6 +59,13 @@
             <span style="margin-left: 10px">{{ scope.row.deviceName }}</span>
           </template>
         </el-table-column>
+        <el-table-column label="传感器模型类型"
+                         align="center"
+                         header-align="center">
+          <template #default="scope">
+            <span>{{scope.row.deviceType }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="创建时间"
                          align="center"
                          header-align="center">
@@ -73,9 +80,15 @@
             <el-button type="primary"
                        size="mini"
                        @click="handleModify(scope.row)">修改</el-button>
-            <el-button type="danger"
-                       size="mini"
-                       @click="handleDelete(scope.row)">删除</el-button>
+            <el-popconfirm confirm-button-text="确定"
+                           cancel-button-text="取消"
+                           icon-color="red"
+                           @confirm="handleDelete(scope.row)"
+                           title="确定删除这条数据吗?">
+              <template #reference>
+                <el-button type="danger" size="mini">删除</el-button>
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -86,19 +99,24 @@
                     @pageFunc="pageFunc"></Pagination>
 
       </div>
-      <add-sensor-model ref="addSensor" />
+      <add-sensor-model ref="addSensor" @ok='handleFormOK'  />
+      <edit-sensor-model ref="editSensor" @ok='handleFormOK' />
     </div>
   </el-card>
 
 </template>
 
 <script scope>
+import { getAllSensorModel, deleteSensorModel } from '@/api/api.js'
+import { ElMessage } from 'element-plus'
 import Pagination from '@/components/Pagination'
 import AddSensorModel from './components/AddSensorModel.vue'
+import EditSensorModel from './components/EditSensorModel.vue'
 export default {
   components: {
     Pagination,
     AddSensorModel,
+    EditSensorModel
   },
   data() {
     return {
@@ -132,29 +150,65 @@ export default {
   },
   computed: {},
   // 页面加载时就加载组织信息
-  created() {},
+  created() {
+    this.getSensors()
+  },
 
   methods: {
+    getSensors() {
+      this.loading = true
+      const params = {
+        pageNo: 1,
+        pageSize: 10,
+        key: ''
+      }
+      getAllSensorModel(params).then((res => {
+        this.modelList = res.data.list
+        this.paginations.total = res.data.total
+        this.loading = false
+      }))
+    },
     query() {
       this.loading = true
+      const params = {
+        pageNo: 1,
+        pageSize: 10,
+        key: this.selectForm.modelName
+      }
+      getAllSensorModel(params).then((res => {
+        this.modelList = res.data.list
+        this.paginations.total = res.data.total
+        this.loading = false
+      }))
     },
     reset() {
       // 重置搜索关键词
       this.selectForm.modelName = ''
+      this.getSensors()
     },
     handleAdd() {
       this.$refs.addSensor.add()
       this.$refs.addSensor.title = '新增设备模型'
     },
-    handleAddE(row) {
-      this.$refs.addE.add(row)
-      this.$refs.addOrg.title = '新增员工'
+    handleModify(row) {
+      this.$refs.editSensor.edit(row)
+      this.$refs.editSensor.title = '编辑设备模型'
     },
-    handleView(row) {
-      this.$refs.view.show(row)
-      this.$refs.view.title = '员工信息列表'
+    handleDelete(row) {
+      const params = {
+        id: row.id
+      }
+      deleteSensorModel(params).then((res => {
+        ElMessage({
+          message: '删除成功',
+          type: 'success'
+        })
+        this.getSensors()
+      }))
     },
-    modalFormOk() {},
+    handleFormOK() {
+      this.getSensors()
+    },
     pageFunc(data) {
       this.paginations.pageSize = data.pageSize
       this.paginations.pageNo = data.pageNum

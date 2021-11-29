@@ -1,7 +1,7 @@
 <template>
 
   <!-- 新增传感器 -->
-  <el-dialog v-model="visible"
+  <el-drawer v-model="visible"
              :title="新增设备模型"
              @close="close">
     <el-form :model="modelList"
@@ -31,7 +31,7 @@
       <el-row>
         <el-col :span="14">
           <el-form-item label="协议选择:">
-            <el-radio-group v-model="modelList.protocol" @change="checked">
+            <el-radio-group v-model="modelList.protocol" >
               <el-radio  label="MQTT"></el-radio>
               <el-radio  label="COAP"></el-radio>
               <el-radio  label="NB-IoT"></el-radio>
@@ -98,16 +98,16 @@
         </el-col>
       </el-row>
     </el-form>
-    <template #footer>
+    <span class="drawe-footer">
       <el-button @click="close">取消</el-button>
       <el-button type="primary"
                   @click="handleOk">确认</el-button>
-    </template>
-  </el-dialog>
+    </span>
+  </el-drawer>
 
 </template>
 <script>
-import {addSensorModel} from '@/api/api.js'
+import { editSensorModel } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 export default {
   components: {},
@@ -116,10 +116,10 @@ export default {
     return {
       visible: false,
       modelList: {
+          id: '',
           deviceName: '',
           deviceType: '',
           deviceNumber: '',
-          createTime: '',
           upInterval: '',
           protocol: '',
           dataPointName: '',
@@ -175,14 +175,17 @@ export default {
         }
       })
     },
-    add() {
+    edit(row) {
+      this.modelList = row
       this.visible = true
+      this.$nextTick(() => {
+        this.value = row.deviceType
+        this.searchSensor(row.deviceType)
+      })
+      
     },
     selected(val) {
       this.modelList.deviceType = val
-    },
-    checked() {
-      console.log(this.modelList.protocol)
     },
     handleOk() {
       this.modelList.dataPointName = this.dataNewList[0].dataPointName
@@ -190,10 +193,9 @@ export default {
       this.modelList.lowThreshold = this.dataNewList[0].lowThreshold
       this.modelList.highThreshold = this.dataNewList[0].highThreshold
       const params = this.modelList
-      addSensorModel(params).then((res => {
-        console.log(res)
+      editSensorModel(params).then((res => {
         ElMessage({
-          message: '添加成功',
+          message: '修改成功',
           type: 'success'
         })
         this.$emit('ok')
@@ -217,4 +219,21 @@ export default {
 }
 </script>
 <style scoped>
+.drawe-footer {
+  width: 100%;
+
+  position: absolute;
+
+  bottom: 0;  
+
+  left: 0;
+
+  border-top: 1px solid #e8e8e8;
+
+  padding: 10px 16px;
+
+  text-align: right;
+
+  background-color: white;
+}
 </style>

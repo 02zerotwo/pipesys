@@ -122,7 +122,8 @@ export default {
       this.visible = true
       console.log(this.ruleForm)
       await getAllType().then((res) => {
-        this.types = res.data
+        console.log(res)
+        this.types = res.data.list
       })
     },
     handleOk() {
