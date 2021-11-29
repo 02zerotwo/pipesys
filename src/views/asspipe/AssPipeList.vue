@@ -7,7 +7,6 @@
                    :inline="true"
                    :model="selectForm"
                    class="demo-form-inline">
-
             <el-form-item>
               <el-input size="medium"
                         style="width:220px"
@@ -17,109 +16,119 @@
             <el-form-item>
               <el-button size="medium"
                          type="primary"
-                         @click="getpipeModelList">查询</el-button>
+                         @click="getpipeList">查询</el-button>
               <el-button size="medium"
                          @click="reset">重置</el-button>
             </el-form-item>
+
           </el-form>
+
         </el-row>
         <el-row>
           <el-button type="primary"
                      size="small"
-                     @click="handleAdd()">
+                     @click="handleAdd">
             <el-icon>
               <i-plus />
-            </el-icon>新增管道模型
+            </el-icon>新增管道
           </el-button>
         </el-row>
       </div>
     </template>
     <div>
-      <!-- 管道模型信息 -->
-      <el-table :data="pipeModelList"
+      <!-- 用户信息 -->
+      <el-table :data="dataList"
                 size="small"
                 :highlight-current-row="true"
-                v-loading="loading"
                 :stripe="true"
+                v-loading="loading"
                 :height="420"
                 border>
-        <el-table-column label="序号"
+        <el-table-column label="管道序号"
                          type="index"
-                         width="60"
+                         width="75"
                          align="center" />
+        <el-table-column label="管道名"
+                         align="center"
+                         width="200"
+                         header-align="center">
+          <template #default="scope">
+            <span style="margin-left: 10px">{{ scope.row.productName }}</span>
+          </template>
+        </el-table-column>
 
-        <el-table-column label="型号编码"
-                         width="170"
-                         align="center"
-                         header-align="center">
-          <template #default="scope">
-            <span style="margin-left: 10px">{{ scope.row.pipeNumber }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="管道名称"
-                         width="180"
-                         align="center"
-                         header-align="center">
-          <template #default="scope">
-            <span style="margin-left: 10px">{{ scope.row.pipeName }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="管道类型"
-                         align="center"
-                         width="120"
-                         header-align="center">
-          <template #default="scope">
-            <span>{{scope.row.pipeType }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="管道说明书"
+        <el-table-column label="管道编码"
                          align="center"
                          width="200"
                          header-align="center">
           <template #default="scope">
-            <el-link type="primary"
-                     @click="downloadIntroduce(scope.row,scope.row.fileName[0],1)">{{scope.row.fileName[0] }}</el-link>
+            <span style="margin-left: 10px">{{ scope.row.productCode }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="管道图片"
+
+        <el-table-column label="管道模型"
                          align="center"
                          width="200"
                          header-align="center">
           <template #default="scope">
-            <el-image style="height: 100px"
-                      fit="contain"
-                      :src="'http://localhost:8003/'+scope.row.fileRelativePath[1]">
-            </el-image>
+            <span style="margin-left: 10px">{{ scope.row.pipeModel == null ? '' : scope.row.pipeModel.pipeName }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="管道手册"
+
+        <el-table-column label="机构名"
                          align="center"
                          width="200"
                          header-align="center">
           <template #default="scope">
-            <el-link type="primary"
-                     @click="downloadIntroduce(scope.row,scope.row.fileName[2],3)">{{scope.row.fileName[2] }}</el-link>
+            <span style="margin-left: 10px">{{ scope.row.organize == null ? '' : scope.row.organize.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间"
+
+        <el-table-column label="项目名称"
                          align="center"
-                         width="210"
+                         width="200"
                          header-align="center">
           <template #default="scope">
-            <span>{{scope.row.createTime }}</span>
+            <span style="margin-left: 10px">{{ scope.row.item == null ? '' : scope.row.item.name }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="传感器名称"
+                         align="center"
+                         width="200"
+                         header-align="center">
+          <template #default="scope">
+            <span style="margin-left: 10px">{{ scope.row.sensor == null ? '' : scope.row.sensor.sensorName }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="生产时间"
+                         align="center"
+                         :width="160"
+                         header-align="center">
+          <template #default="scope">
+            <span style="margin-left: 10px">{{ scope.row.manuDate}}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="出厂时间"
+                         align="center"
+                         :width="160"
+                         header-align="center">
+          <template #default="scope">
+            <span style="margin-left: 10px">{{ scope.row.productDate }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="操作"
-                         v-loading="loading"
                          align="center"
-                         width="160"
+                         :width="160"
                          fixed="right"
                          header-align="center">
           <template #default="scope">
             <el-button type="primary"
                        size="mini"
-                       @click="handleEdit(scope.row)">编辑</el-button>
+                       @click="handleEdit(scope.row)">修改</el-button>
             <el-popconfirm confirm-button-text="确定"
                            cancel-button-text="取消"
                            icon-color="red"
@@ -137,89 +146,107 @@
         <Pagination :pageSize="paginations.pageSize"
                     :pageTotal="paginations.total"
                     @pageFunc="pageFunc"></Pagination>
-
       </div>
-
     </div>
-    <AddPipeModel ref="addPipeModel"
-                  @ok="modalFormOk"></AddPipeModel>
+    <Addpipe ref="Addpipe"
+             @ok="modalFormOk"></Addpipe>
   </el-card>
 
 </template>
 
-<script scope>
-import { getAllPipeModel, deletePipeModel } from '@/api/api.js'
-import { downloadFile } from '@/api/manage.js'
-import AddPipeModel from './components/AddPipeModel.vue'
+<script >
+import { getPipes } from '@/api/api.js'
+import Addpipe from './components/Addpipe.vue'
 import Pagination from '@/components/Pagination'
 export default {
   components: {
-    AddPipeModel,
-    Pagination,
+    Addpipe,
+    Pagination
+
   },
   data () {
     return {
-      selectForm: { key: '' },
-      pipeModelList: [],//当前页要展示的数据
-      formData: {},//表单数据
-      loading: false,
+      selectForm: {
+        key: ''
+      },
+      dataList: [{ // 表单的属性要对应数据的字段,目前没有进行驼峰转换处理
+        id: '',
+        productName: "",
+        productCode: "",
+        manuDate: "",
+        productDate: '',
+        pipeModel: { pipeName: '' },
+        item: { name: '' },
+        sensor: { sensorName: '' },
+        organize: {
+          name: ''
+        }
+      }],
       // 分页
       paginations: {
         // 默认显示第几页
         pageNo: 1,
         // 默认每页显示的条数（可修改）
         pageSize: 10
-      }
+      },
+      loading: false,
+
     }
   },
-  // VUE对象初始化完成后自动执行
+  /*computed: {
+
+  },*/
+  // 页面加载时就加载用户信息
   created () {
-    this.getpipeModelList()
+    this.getpipeList()
   },
 
-  methods: {
-    // 获取管道模型列表数据
-    getpipeModelList () {
+  methods:
+  {
+    getpipeList () {
       this.loading = true
       const params = {
-        key: this.selectForm.key,
-        pageNo: this.paginations.pageNo,
-        pageSize: this.paginations.pageSize
+        pageNo: this.pageNo,
+        pageSize: this.pageSize,
+        key: this.selectForm.key
       }
-      getAllPipeModel(params).then(res => {
-        if (res.status === 200) {
-          this.pipeModelList = res.data.list
-          this.paginations.total = res.data.total
-          this.loading = false
-        }
+      getPipes(params).then(res => {
+        this.dataList = res.data.list
+        this.paginations.total = res.data.total
+        this.loading = false
       })
-    },
-    downloadIntroduce (row, fname, num) {
-      downloadFile('/model/download', fname, { id: row.id, num: num })
     },
     handleAdd () {
-      this.$refs.addPipeModel.add()
-      this.$refs.addPipeModel.title = '新增管道模型'
+      this.$refs.Addpipe.add();
+      this.$refs.Addpipe.title = '管道新增页面'
     },
     handleEdit (row) {
-      this.$refs.addPipeModel.edit(row)
-      this.$refs.addPipeModel.title = '编辑管道模型'
-    },
-    modalFormOk () {
-      this.getpipeModelList()
+      this.$refs.Addpipe.add(row)
     },
     handleDel (row) {
-      deletePipeModel({ id: row.id }).then(res => {
-        if (res.status === 200) {
-          this.$message.success('删除管道模型成功!')
-          this.getpipeModelList()
-        }
+      const params = {
+        id: row.id
+      }
+      delepipe(params).then(res => {
+        ElMessage({
+          message: '管道删除成功!',
+          type: 'success'
+        })
+        this.getpipeList()
       })
+    },
+    modalFormOk () { // 添加完用户的回调函数
+      this.getpipeList()
+    },
+    pageFunc (data) {
+      this.paginations.pageSize = data.pageSize
+      this.paginations.pageNo = data.pageNum
+      this.getpipeList()// 请求数据的函数
     },
     reset () {
       // 重置搜索关键词
       this.selectForm.key = ''
-      this.getpipeModelList()
+      this.getpipeList()
     }
   }
 }

@@ -89,6 +89,22 @@ const routes = [
       }
 
     ]
+  },
+  {
+    path: '/assets',
+    name: 'assets',
+    meta: { title: '资产管理' },
+    redirect: '/assets/pipe',
+    component: () => import('@/views/index'),
+    children: [
+      {
+        path: 'pipe',
+        name: 'pipe',
+        meta: { title: '管道信息' },
+        component: () => import('@/views/asspipe/AssPipeList')
+      }
+
+    ]
   }
 ]
 

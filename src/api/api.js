@@ -39,6 +39,12 @@ const addPipeModel = (params) => postAction('/model/pipeModel', params)
 const deletePipeModel = (params) => deleteAction('/model/pipeModel', params)
 const eidtPipeModel = (params) => putAction('/model/pipeModelSuper', params)
 
+//管道增删改查
+const addPipe = (params) => postAction('/asset/pipe', params)
+const getPipes = (params) => getAction('/asset/pipe', params)
+const editPipe = (params) => putAction('/asset/pipe', params)
+const deletePipe = (params) => deleteAction('/asset/pipe', params)
+
 export {
   getAllUsers,
   getUserById,
@@ -71,5 +77,9 @@ export {
   getAllPipeModel,
   addPipeModel,
   deletePipeModel,
-  eidtPipeModel
+  eidtPipeModel,
+  addPipe,
+  getPipes,
+  editPipe,
+  deletePipe
 }
