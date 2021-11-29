@@ -51,6 +51,9 @@ const getPipes = (params) => getAction('/asset/pipe', params)
 const editPipe = (params) => putAction('/asset/pipe', params)
 const deletePipe = (params) => deleteAction('/asset/pipe', params)
 
+//传感器管理
+const getSensor = (params) => getAction('/asset/sensor', params)
+
 export {
   getAllUsers,
   getUserById,
@@ -92,5 +95,6 @@ export {
   getAllSensorModel,
   addSensorModel,
   deleteSensorModel,
-  editSensorModel
+  editSensorModel,
+  getSensor
 }

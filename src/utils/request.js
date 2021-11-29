@@ -30,8 +30,6 @@ const err = (error) => {
           type: 'error',
           duration: 1600
         })
-        sessionStorage.clear()
-        window.location.href = '/login'
         break
       case 402:
         ElMessage({

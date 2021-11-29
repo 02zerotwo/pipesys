@@ -65,12 +65,12 @@
           </el-form-item>
         </el-col>
         <el-col :span="11">
-          <el-form-item label="机构名:">
-            <el-select v-model="organize"
-                       placeholder="请选择机构">
-              <el-option v-for="item in org"
+          <el-form-item label="传感器名称:">
+            <el-select v-model="sensor"
+                       placeholder="请选择传感器">
+              <el-option v-for="item in sensorList"
                          :key="item.id"
-                         :label="item.name"
+                         :label="item.sensorName"
                          :value="item.id">
               </el-option>
             </el-select>
@@ -84,6 +84,7 @@
                         prop="productDate">
             <el-date-picker v-model="ruleForm.productDate"
                             type="datetime"
+                            value-format="YYYY-MM-DD HH:mm:ss"
                             placeholder="选择生产日期">
             </el-date-picker>
           </el-form-item>
@@ -94,6 +95,7 @@
                         prop="productDate">
             <el-date-picker v-model="ruleForm.manuDate"
                             type="datetime"
+                            value-format="YYYY-MM-DD HH:mm:ss"
                             placeholder="选择出厂日期">
             </el-date-picker>
           </el-form-item>
@@ -112,7 +114,7 @@
 </template>
 
 <script>
-import { addPipe, editPipe, getAllOrgs, getAllPipeModel, getAllItem } from '@/api/api.js'
+import { addPipe, editPipe, getAllOrgs, getAllPipeModel, getAllItem, getSensor } from '@/api/api.js'
 export default {
   components: {
   },
@@ -133,6 +135,7 @@ export default {
       org: [],
       pipeModelList: [],
       itemList: [],
+      sensorList: [],
       pipeModel: '',
       item: '',
       sensor: '',
@@ -176,24 +179,63 @@ export default {
       await getAllItem({ key: '', pageNo: 1, pageSize: 1000 }).then(res => {
         this.itemList = res.data.list
       })
+      await getSensor({ key: '', pageNo: 1, pageSize: 1000 }).then(res => {
+        this.sensorList = res.data.list
+      })
+
       this.$nextTick(() => {
         this.$refs.ruleForm.resetFields() // 对整个表单进行重置，将所有字段值重置为初始值并移除校验结果
         this.ruleForm = Object.assign({}, record)
-
+        if (record.item) {
+          this.item = record.item.id
+        }
+        if (record.organize) {
+          this.organize = record.organize.id
+        }
+        if (record.pipeModel) {
+          this.pipeModel = record.pipeModel.id
+        }
+        if (record.sensor) {
+          this.sensor = record.sensor.id
+        }
       })
     },
     handleOk () {
-      const params = this.ruleForm
-      console.log(params)
-      if (params.id === null) {
-        addPipe(params).then((res => {
-          console.log(res)
-          this.visible = false
-        }))
-      } else {
-        editPipe(params).then((res => {
+      let params = this.ruleForm
+      params.pipeModel = {
+        id: this.pipeModel
+      }
+      params.item = {
+        id: this.item
+      }
+      params.organize = {
+        id: this.organize
+      }
+      params.sensor = {
+        id: this.sensor
+      }
+      if (params.id === undefined || params.id === null) {
+        addPipe(params).then(res => {
+          if (res.status === 200) {
+            this.$message.success('添加管道管理成功!')
+            this.$emit('ok')
+            this.close()
+          }
 
-        }))
+        })
+      } else {
+
+        editPipe(params).then(res => {
+
+          if (res.status === 200) {
+            this.$message.success('修改管道管理成功!')
+            this.$emit('ok')
+            this.close()
+          }
+          if (res.status === 400) {
+            this.$message.error(res.msg);
+          }
+        })
       }
 
     },
@@ -202,6 +244,7 @@ export default {
       this.pipeModel = ''
       this.organize = ''
       this.item = ''
+      this.sensor = ''
     }
   }
 }
