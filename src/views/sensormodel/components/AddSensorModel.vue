@@ -15,6 +15,14 @@
           </el-form-item>
         </el-col>
       </el-row>
+            <el-row>
+        <el-col :span="11">
+          <el-form-item label="设备编号:"
+                        prop="deviceNumber">
+            <el-input v-model="modelList.deviceNumber"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
       <el-row>
         <el-col :span="11">
           <el-form-item label="设备模型型号:" >
@@ -89,14 +97,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row>
-        <el-col :span="11">
-          <el-form-item label="设备编号:"
-                        prop="deviceNumber">
-            <el-input v-model="modelList.deviceNumber"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
+
     </el-form>
     <template #footer>
       <el-button @click="close">取消</el-button>
