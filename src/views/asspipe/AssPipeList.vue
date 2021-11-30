@@ -155,7 +155,7 @@
 </template>
 
 <script >
-import { getPipes } from '@/api/api.js'
+import { getPipes, deletePipe } from '@/api/api.js'
 import Addpipe from './components/Addpipe.vue'
 import Pagination from '@/components/Pagination'
 export default {
@@ -221,17 +221,15 @@ export default {
       this.$refs.Addpipe.title = '管道新增页面'
     },
     handleEdit (row) {
-      this.$refs.Addpipe.add(row)
+      this.$refs.Addpipe.edit(row)
+      this.$refs.Addpipe.title = '管道编辑页面'
     },
     handleDel (row) {
       const params = {
         id: row.id
       }
-      delepipe(params).then(res => {
-        ElMessage({
-          message: '管道删除成功!',
-          type: 'success'
-        })
+      deletePipe(params).then(res => {
+        this.$message.success('删除管道成功!')
         this.getpipeList()
       })
     },
