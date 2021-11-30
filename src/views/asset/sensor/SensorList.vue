@@ -9,8 +9,8 @@
             <el-form-item prop="userName">
               <el-input size="medium"
                         style="width:220px"
-                        v-model="selectForm.modelName"
-                        placeholder="请输入模型名关键字"></el-input>
+                        v-model="selectForm.sensorName"
+                        placeholder="请输入想要查询的传感器"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button size="medium"
@@ -27,14 +27,14 @@
                      @click="handleAdd()">
             <el-icon>
               <i-plus />
-            </el-icon>新增设备模型
+            </el-icon>新增传感器
           </el-button>
         </el-row>
       </div>
     </template>
     <div>
       <!-- 传感器模型信息 -->
-      <el-table :data="modelList"
+      <el-table :data="sensorList"
                 size="small"
                 :highlight-current-row="true"
                 :stripe="true"
@@ -45,32 +45,46 @@
                          type="index"
                          width="60"
                          align="center" />
-        <el-table-column label="传感器模型编码"
+        <el-table-column label="传感器编码"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span style="margin-left: 10px">{{ scope.row.deviceNumber }}</span>
+            <span style="margin-left: 10px">{{ scope.row.sensorCode }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="传感器模型名称"
+        <el-table-column label="传感器名称"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span style="margin-left: 10px">{{ scope.row.deviceName }}</span>
+            <span style="margin-left: 10px">{{ scope.row.sensorName }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="传感器模型类型"
+        <el-table-column label="传感器模型"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span>{{scope.row.deviceType }}</span>
+            <span>{{scope.row.sensorModel }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="创建时间"
+        <el-table-column label="所属项目"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span>{{scope.row.createTime }}</span>
+            <span>{{scope.row.itemName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="协议"
+                         align="center"
+                         header-align="center">
+          <template #default="scope">
+            <span>{{scope.row.protocol }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="所属厂家"
+                         align="center"
+                         header-align="center">
+          <template #default="scope">
+            <span>{{scope.row.orgaName }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作"
@@ -100,48 +114,43 @@
                     @pageFunc="pageFunc"></Pagination>
 
       </div>
-      <add-sensor-model ref="addSensor"
-                        @ok='handleFormOK' />
-      <edit-sensor-model ref="editSensor"
-                         @ok='handleFormOK' />
+      <add-sensor ref="addSensor"/>
     </div>
   </el-card>
 
 </template>
 
 <script scope>
-import { getAllSensorModel, deleteSensorModel } from '@/api/api.js'
+import { getSensors, deleteSensor } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 import Pagination from '@/components/Pagination'
-import AddSensorModel from './components/AddSensorModel.vue'
-import EditSensorModel from './components/EditSensorModel.vue'
+import AddSensor from './AddSensor.vue'
+// import EditSensorModel from './components/EditSensorModel.vue'
 export default {
   components: {
     Pagination,
-    AddSensorModel,
-    EditSensorModel,
+    AddSensor
   },
   data() {
     return {
       loading: false,
       selectForm: {
-        modelName: '',
+        sensorName: '',
       },
-      modelList: [
+      sensorList: [
         {
           id: '',
-          deviceName: '',
-          deviceType: '',
-          deviceNumber: '',
-          createTime: '',
-          upInterval: '',
-          dataPointName: '',
-          dataPointExtra: '',
-          lowThreshold: '',
-          highThreshold: '',
+          sensorCode: 'PZJ001',
+          sensorName: '传感器1',
+          sensorModel: '传感器模型1',
+          itemName: '测试',
+          protocol: 'MQTT',
+          orgaName: '苏州地铁'
+          // sensorModel_id: '',
+          // item_id: '',
+          // orga_id: ''
         },
       ],
-
       // 分页
       paginations: {
         // 默认显示第几页
@@ -154,44 +163,44 @@ export default {
   computed: {},
   // 页面加载时就加载组织信息
   created() {
-    this.getSensors()
+    // this.getAllSensors()
   },
 
   methods: {
-    getSensors() {
-      this.loading = true
-      const params = {
-        pageNo: 1,
-        pageSize: 10,
-        key: '',
-      }
-      getAllSensorModel(params).then((res) => {
-        this.modelList = res.data.list
-        this.paginations.total = res.data.total
-        this.loading = false
-      })
-    },
+    // getAllSensors() {
+    //   this.loading = true
+    //   const params = {
+    //     pageNo: 1,
+    //     pageSize: 10,
+    //     key: '',
+    //   }
+    //   getSensors(params).then((res) => {
+    //     this.sensorList = res.data.list
+    //     this.paginations.total = res.data.total
+    //     this.loading = false
+    //   })
+    // },
     query() {
       this.loading = true
       const params = {
         pageNo: 1,
         pageSize: 10,
-        key: this.selectForm.modelName,
+        key: this.selectForm.sensorName,
       }
       getAllSensorModel(params).then((res) => {
-        this.modelList = res.data.list
+        this.sensorList = res.data.list
         this.paginations.total = res.data.total
         this.loading = false
       })
     },
     reset() {
       // 重置搜索关键词
-      this.selectForm.modelName = ''
-      this.getSensors()
+      this.selectForm.sensorName = ''
+      this.getAllSensors()
     },
     handleAdd() {
       this.$refs.addSensor.add()
-      this.$refs.addSensor.title = '新增设备模型'
+      this.$refs.addSensor.title = '新增传感器'
     },
     handleModify(row) {
       this.$refs.editSensor.edit(row)
@@ -201,16 +210,16 @@ export default {
       const params = {
         id: row.id,
       }
-      deleteSensorModel(params).then((res) => {
+      deleteSensor(params).then((res) => {
         ElMessage({
           message: '删除成功',
           type: 'success',
         })
-        this.getSensors()
+        this.getAllSensors()
       })
     },
     handleFormOK() {
-      this.getSensors()
+      this.getAllSensors()
     },
     pageFunc(data) {
       this.paginations.pageSize = data.pageSize

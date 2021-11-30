@@ -64,13 +64,13 @@ const routes = [
         path: 'pipemodel',
         name: 'pipemodel',
         meta: { title: '管道管理' },
-        component: () => import('@/views/pipemodel/ModelList')
+        component: () => import('@/views/model/pipemodel/ModelList')
       },
       {
         path: 'sensormodel',
         name: 'sensormodel',
         meta: { title: '传感器模型' },
-        component: () => import('@/views/sensormodel/ModelList')
+        component: () => import('@/views/model/sensormodel/ModelList')
       }
     ],
   },
