@@ -68,9 +68,10 @@
         </el-table-column>
         <el-table-column label="创建时间"
                          align="center"
-                         header-align="center">
+                         header-align="center"
+                         >
           <template #default="scope">
-            <span>{{scope.row.createTime }}</span>
+            <span>{{dateFormat(scope.row.createTime) }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作"
@@ -127,21 +128,7 @@ export default {
       selectForm: {
         modelName: '',
       },
-      modelList: [
-        {
-          id: '',
-          deviceName: '',
-          deviceType: '',
-          deviceNumber: '',
-          createTime: '',
-          upInterval: '',
-          dataPointName: '',
-          dataPointExtra: '',
-          lowThreshold: '',
-          highThreshold: '',
-        },
-      ],
-
+      modelList: [],
       // 分页
       paginations: {
         // 默认显示第几页
@@ -179,6 +166,7 @@ export default {
         key: this.selectForm.modelName,
       }
       getAllSensorModel(params).then((res) => {
+        
         this.modelList = res.data.list
         this.paginations.total = res.data.total
         this.loading = false
@@ -215,6 +203,12 @@ export default {
     pageFunc(data) {
       this.paginations.pageSize = data.pageSize
       this.paginations.pageNo = data.pageNum
+    },
+    //时间格式化的方法
+    dateFormat(data) {
+      // 获取单元格数据
+      let dt = new Date(data)
+      return dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate() + ' ' + dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds()
     },
   },
 }
