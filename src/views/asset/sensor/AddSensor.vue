@@ -4,14 +4,14 @@
   <el-dialog v-model="visible"
              :title="title"
              @close="close">
-    <el-form ref="ruleForm"
-              :model="ruleForm"
-              :rules="rules"
-              label-width="120px">
+    <el-form ref="sensorForm"
+             :model="ruleForm"
+             :rules="rules"
+             label-width="120px">
       <el-row style="text-align: center">
         <el-col :span="11">
           <el-form-item label="传感器编码:"
-                    prop="sensorCode">
+                        prop="sensorCode">
             <el-input v-model="ruleForm.sensorCode"></el-input>
           </el-form-item>
         </el-col>
@@ -19,7 +19,7 @@
       <el-row>
         <el-col :span="11">
           <el-form-item label="传感器名称:"
-                    prop="sensorName">
+                        prop="sensorName">
             <el-input v-model="ruleForm.sensorName"></el-input>
           </el-form-item>
         </el-col>
@@ -27,11 +27,11 @@
       <el-row>
         <el-form-item label="传感器模型:">
           <el-select v-model="models"
-                      placeholder="请选择模型">
+                     placeholder="请选择模型">
             <el-option v-for="item in m_options"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id">
+                       :key="item.id"
+                       :label="item.deviceName"
+                       :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
@@ -39,11 +39,11 @@
       <el-row>
         <el-form-item label="所属项目:">
           <el-select v-model="items"
-                      placeholder="请选择所属项目">
+                     placeholder="请选择所属项目">
             <el-option v-for="item in i_options"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id">
+                       :key="item.id"
+                       :label="item.name"
+                       :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
@@ -51,26 +51,14 @@
       <el-row>
         <el-form-item label="所属厂家:">
           <el-select v-model="orgas"
-                      placeholder="请选择所属厂家">
+                     placeholder="请选择所属厂家">
             <el-option v-for="item in o_options"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id">
+                       :key="item.id"
+                       :label="item.name"
+                       :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
-      </el-row>
-      <el-row>
-        <el-form-item label="协议选择:">
-          <el-select v-model="protocols"
-                      placeholder="请选择协议">
-            <el-option v-for="item in p_options"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item>   
       </el-row>
     </el-form>
     <template #footer>
@@ -85,34 +73,46 @@
 </template>
 
 <script>
-import { getAllSensorModel } from '@/api/api.js'
+import {
+  getAllSensorModel,
+  getAllItem,
+  getAllOrgs,
+  addSensor,
+  editSensor,
+} from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 export default {
   components: {},
 
-  data () {
+  data() {
     return {
       visible: false,
       title: '',
       ruleForm: {
-        // 表单的属性要对应数据的字段,目前没有进行驼峰转换处理
-        id: '',
+        sensorCode: '',
+        sensorName: '',
       },
       models: [],
       items: [],
       orgas: [],
-      m_options: [{id:1,name:'模型1'},{id:2,name:'模型2'}],
-      i_options: [{id:1,name:'项目1'},{id:2,name:'项目2'}],
-      o_options: [{id:1,name:'厂家1'},{id:2,name:'厂家2'}],
-      p_options: [{id:1,name:'MQTT'},{id:2,name:'ModBus'}],
+      m_options: [],
+      i_options: [],
+      o_options: [],
       // 表单验证
       rules: {
         sensorCode: [
           {
             required: true,
-            message: '用户名不能为空',
+            message: '传感器编号不能为空',
             trigger: 'blur',
-          }
+          },
+        ],
+        sensorName: [
+          {
+            required: true,
+            message: '传感器名称不能为空',
+            trigger: 'blur',
+          },
         ],
       },
     }
@@ -121,10 +121,66 @@ export default {
   computed: {},
 
   methods: {
-    async add() {
+    add() {
+      this.edit({})
+    },
+    edit(row) {
+      console.log(row)
       this.visible = true
-      await getAllSensorModel()
-    }
+      getAllSensorModel({ pageNo: 1, pageSize: 100, key: '' }).then((res) => {
+        let l = res.data.list
+        for (var i = 0; i < l.length; i++) {
+          this.m_options.push(l[i])
+        }
+      })
+      getAllItem({ pageNo: 1, pageSize: 100, key: '' }).then((res) => {
+        let l = res.data.list
+        for (var i = 0; i < l.length; i++) {
+          this.i_options.push(l[i])
+        }
+      })
+      getAllOrgs({ pageNo: 1, pageSize: 100, orgName: '' }).then((res) => {
+        let l = res.data.list
+        for (var i = 0; i < l.length; i++) {
+          this.o_options.push(l[i])
+        }
+      })
+      this.$nextTick(() => {
+        this.$refs.sensorForm.resetFields()
+        this.ruleForm = Object.assign({}, row)
+        this.models = row.sensorModel.id
+        this.items = row.item.id
+        this.orgas = row.item.organize.id
+      })
+    },
+    handleOk() {
+      const params = this.ruleForm
+      params.sensorModelId = this.models
+      params.itemId = this.items
+      params.orgaId = this.orgas
+      if (!params.id) {
+        addSensor(params).then((res) => {
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+          this.$emit('ok')
+          this.close()
+        })
+      } else {
+        editSensor(this.ruleForm).then((res) => {
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+          this.$emit('ok')
+          this.close()
+        })
+      }
+    },
+    close() {
+      this.visible = false
+    },
   },
 }
 </script>

@@ -152,10 +152,9 @@ export default {
         },
       ],
       deviceTypes: [
-        { label: '全部', value: 0 },
-        { label: '温度传感器', value: 1 },
-        { label: '压力传感器', value: 2 },
-        { label: '位移传感器', value: 3 },
+        { label: '温度传感器', value: 0 },
+        { label: '压力传感器', value: 1 },
+        { label: '位移传感器', value: 2 },
       ],
       value: '',
       // 表单验证
@@ -196,11 +195,10 @@ export default {
     add() {
       this.edit({})
     },
-    edit(record){
+    edit(record) {
       this.visible = true
       this.$nextTick(() => {
         this.$refs.dataAddForm.resetFields()
-        console.log(record)
         this.modelList = Object.assign({}, record)
         this.value = record.deviceType
         this.searchSensor(record.deviceType)
@@ -209,19 +207,16 @@ export default {
     selected(val) {
       this.modelList.deviceType = val
     },
-    checked() {
-      console.log(this.modelList.protocol)
-    },
     handleOk() {
       this.modelList.dataPointName = this.dataNewList[0].dataPointName
       this.modelList.dataPointExtra = this.dataNewList[0].dataPointExtra
       this.modelList.lowThreshold = this.dataNewList[0].lowThreshold
       this.modelList.highThreshold = this.dataNewList[0].highThreshold
       const params = this.modelList
-      console.log(params.id)
-      if(!params.id){
+      console.log(params)
+      if (!params.id) {
         addSensorModel(params).then((res) => {
-        console.log(res)
+          console.log(res)
           ElMessage({
             message: '添加成功',
             type: 'success',
@@ -229,7 +224,7 @@ export default {
           this.$emit('ok')
           this.close()
         })
-      }else {
+      } else {
         editSensorModel(params).then((res) => {
           console.log(res)
           ElMessage({
@@ -248,11 +243,7 @@ export default {
   watch: {
     // 根据下拉框所选值显示table里的内容
     value: function (val) {
-      if (val == '全部') {
-        this.dataNewList = this.dataList
-      } else {
-        this.dataNewList = this.searchSensor(val)
-      }
+      this.dataNewList = this.searchSensor(val)
     },
   },
 }

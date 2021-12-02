@@ -77,14 +77,14 @@
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span>{{scope.row.sensorModel.protocol }}</span>
+            <span>{{ scope.row.sensorModel.protocol }}</span>
           </template>
         </el-table-column>
         <el-table-column label="所属厂家"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span>{{scope.row.item.organize.name }}</span>
+            <span>{{ scope.row.item.organize.name }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作"
@@ -114,7 +114,7 @@
                     @pageFunc="pageFunc"></Pagination>
 
       </div>
-      <add-sensor ref="addSensor"/>
+      <add-sensor ref="addSensor" @ok="handleFormOK"/>
     </div>
   </el-card>
 
@@ -125,7 +125,6 @@ import { getSensors, deleteSensor } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 import Pagination from '@/components/Pagination'
 import AddSensor from './AddSensor.vue'
-// import EditSensorModel from './components/EditSensorModel.vue'
 export default {
   components: {
     Pagination,
@@ -162,6 +161,7 @@ export default {
         pageSize: this.paginations.pageSize
       }
       getSensors(params).then((res) => {
+        console.log(res)
         this.sensorList = res.data.list
         this.paginations.total = res.data.total
         this.loading = false
@@ -190,8 +190,8 @@ export default {
       this.$refs.addSensor.title = '新增传感器'
     },
     handleModify(row) {
-      this.$refs.editSensor.edit(row)
-      this.$refs.editSensor.title = '编辑设备模型'
+      this.$refs.addSensor.edit(row)
+      this.$refs.addSensor.title = '编辑传感器'
     },
     handleDelete(row) {
       const params = {
@@ -211,6 +211,7 @@ export default {
     pageFunc(data) {
       this.paginations.pageSize = data.pageSize
       this.paginations.pageNo = data.pageNum
+      this.getAllSensors()
     },
   },
 }

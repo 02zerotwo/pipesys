@@ -63,13 +63,12 @@
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span>{{scope.row.deviceType }}</span>
+            <span>{{ scope.row.deviceType }}</span>
           </template>
         </el-table-column>
         <el-table-column label="创建时间"
                          align="center"
-                         header-align="center"
-                         >
+                         header-align="center">
           <template #default="scope">
             <span>{{dateFormat(scope.row.createTime) }}</span>
           </template>
@@ -203,10 +202,20 @@ export default {
       this.getSensorModels()
     },
     //时间格式化的方法
-    dateFormat(data) {
-      // 获取单元格数据
-      let dt = new Date(data)
-      return dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate() + ' ' + dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds()
+    dateFormat(value) {
+      let date = new Date(value)
+      let y = date.getFullYear()
+      let MM = date.getMonth() + 1
+      MM = MM < 10 ? "0" + MM : MM
+      let d = date.getDate()
+      d = d < 10 ? "0" + d : d
+      let h = date.getHours()
+      h = h < 10 ? "0" + h : h
+      let m = date.getMinutes()
+      m = m < 10 ? "0" + m : m
+      let s = date.getSeconds()
+      s = s < 10 ? "0" + s : s
+      return y + "-" + MM + "-" + d + " " + h + ":" + m + ":" +s;
     },
   },
 }
