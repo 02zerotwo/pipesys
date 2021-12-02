@@ -103,8 +103,6 @@
       </div>
       <add-sensor-model ref="addSensor"
                         @ok='handleFormOK' />
-      <edit-sensor-model ref="editSensor"
-                         @ok='handleFormOK' />
     </div>
   </el-card>
 
@@ -115,12 +113,10 @@ import { getAllSensorModel, deleteSensorModel } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 import Pagination from '@/components/Pagination'
 import AddSensorModel from './components/AddSensorModel.vue'
-import EditSensorModel from './components/EditSensorModel.vue'
 export default {
   components: {
     Pagination,
     AddSensorModel,
-    EditSensorModel,
   },
   data() {
     return {
@@ -141,18 +137,19 @@ export default {
   computed: {},
   // 页面加载时就加载组织信息
   created() {
-    this.getSensors()
+    this.getSensorModels()
   },
 
   methods: {
-    getSensors() {
+    getSensorModels() {
       this.loading = true
       const params = {
-        pageNo: 1,
-        pageSize: 10,
-        key: '',
+        pageNo: this.paginations.pageNo,
+        pageSize: this.paginations.pageSize,
+        key: ''
       }
       getAllSensorModel(params).then((res) => {
+        console.log(res)
         this.modelList = res.data.list
         this.paginations.total = res.data.total
         this.loading = false
@@ -161,12 +158,12 @@ export default {
     query() {
       this.loading = true
       const params = {
-        pageNo: 1,
-        pageSize: 10,
-        key: this.selectForm.modelName,
+        pageNo: this.paginations.pageNo,
+        pageSize: this.paginations.pageSize,
+        key: this.selectForm.modelName
       }
       getAllSensorModel(params).then((res) => {
-        
+        console.log(res)
         this.modelList = res.data.list
         this.paginations.total = res.data.total
         this.loading = false
@@ -175,15 +172,15 @@ export default {
     reset() {
       // 重置搜索关键词
       this.selectForm.modelName = ''
-      this.getSensors()
+      this.getSensorModels()
     },
     handleAdd() {
       this.$refs.addSensor.add()
       this.$refs.addSensor.title = '新增设备模型'
     },
     handleModify(row) {
-      this.$refs.editSensor.edit(row)
-      this.$refs.editSensor.title = '编辑设备模型'
+      this.$refs.addSensor.edit(row)
+      this.$refs.addSensor.title = '编辑设备模型'
     },
     handleDelete(row) {
       const params = {
@@ -194,15 +191,16 @@ export default {
           message: '删除成功',
           type: 'success',
         })
-        this.getSensors()
+        this.getSensorModels()
       })
     },
     handleFormOK() {
-      this.getSensors()
+      this.getSensorModels()
     },
     pageFunc(data) {
       this.paginations.pageSize = data.pageSize
       this.paginations.pageNo = data.pageNum
+      this.getSensorModels()
     },
     //时间格式化的方法
     dateFormat(data) {

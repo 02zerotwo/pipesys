@@ -5,6 +5,7 @@
              :title="新增设备模型"
              @close="close">
     <el-form :model="modelList"
+             ref="dataAddForm"
              :rules="rules"
              label-width="120px">
       <el-row>
@@ -117,7 +118,7 @@
 
 </template>
 <script>
-import { addSensorModel } from '@/api/api.js'
+import { addSensorModel, editSensorModel } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 export default {
   components: {},
@@ -125,18 +126,7 @@ export default {
   data() {
     return {
       visible: false,
-      modelList: {
-        deviceName: '',
-        deviceType: '',
-        deviceNumber: '',
-        createTime: '',
-        upInterval: '',
-        protocol: '',
-        dataPointName: '',
-        dataPointExtra: '',
-        lowThreshold: '',
-        highThreshold: '',
-      },
+      modelList: {},
       dataNewList: [],
       dataList: [
         {
@@ -204,7 +194,17 @@ export default {
       })
     },
     add() {
+      this.edit({})
+    },
+    edit(record){
       this.visible = true
+      this.$nextTick(() => {
+        this.$refs.dataAddForm.resetFields()
+        console.log(record)
+        this.modelList = Object.assign({}, record)
+        this.value = record.deviceType
+        this.searchSensor(record.deviceType)
+      })
     },
     selected(val) {
       this.modelList.deviceType = val
@@ -218,15 +218,28 @@ export default {
       this.modelList.lowThreshold = this.dataNewList[0].lowThreshold
       this.modelList.highThreshold = this.dataNewList[0].highThreshold
       const params = this.modelList
-      addSensorModel(params).then((res) => {
+      console.log(params.id)
+      if(!params.id){
+        addSensorModel(params).then((res) => {
         console.log(res)
-        ElMessage({
-          message: '添加成功',
-          type: 'success',
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+          this.$emit('ok')
+          this.close()
         })
-        this.$emit('ok')
-        this.close()
-      })
+      }else {
+        editSensorModel(params).then((res) => {
+          console.log(res)
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+          this.$emit('ok')
+          this.close()
+        })
+      }
     },
     close() {
       this.visible = false

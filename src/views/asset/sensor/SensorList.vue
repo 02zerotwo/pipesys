@@ -63,28 +63,28 @@
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span>{{scope.row.sensorModel }}</span>
+            <span>{{scope.row.sensorModel.deviceName }}</span>
           </template>
         </el-table-column>
         <el-table-column label="所属项目"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span>{{scope.row.itemName }}</span>
+            <span>{{scope.row.item.name }}</span>
           </template>
         </el-table-column>
         <el-table-column label="协议"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span>{{scope.row.protocol }}</span>
+            <span>{{scope.row.sensorModel.protocol }}</span>
           </template>
         </el-table-column>
         <el-table-column label="所属厂家"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span>{{scope.row.orgaName }}</span>
+            <span>{{scope.row.item.organize.name }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作"
@@ -137,20 +137,7 @@ export default {
       selectForm: {
         sensorName: '',
       },
-      sensorList: [
-        {
-          id: '',
-          sensorCode: 'PZJ001',
-          sensorName: '传感器1',
-          sensorModel: '传感器模型1',
-          itemName: '测试',
-          protocol: 'MQTT',
-          orgaName: '苏州地铁'
-          // sensorModel_id: '',
-          // item_id: '',
-          // orga_id: ''
-        },
-      ],
+      sensorList: [],
       // 分页
       paginations: {
         // 默认显示第几页
@@ -161,33 +148,33 @@ export default {
     }
   },
   computed: {},
-  // 页面加载时就加载组织信息
+  // 页面加载时就加载传感器信息
   created() {
-    // this.getAllSensors()
+    this.getAllSensors()
   },
 
   methods: {
-    // getAllSensors() {
-    //   this.loading = true
-    //   const params = {
-    //     pageNo: 1,
-    //     pageSize: 10,
-    //     key: '',
-    //   }
-    //   getSensors(params).then((res) => {
-    //     this.sensorList = res.data.list
-    //     this.paginations.total = res.data.total
-    //     this.loading = false
-    //   })
-    // },
+    getAllSensors() {
+      this.loading = true
+      const params = {
+        key: '',
+        pageNo: this.paginations.pageNo,
+        pageSize: this.paginations.pageSize
+      }
+      getSensors(params).then((res) => {
+        this.sensorList = res.data.list
+        this.paginations.total = res.data.total
+        this.loading = false
+      })
+    },
     query() {
       this.loading = true
       const params = {
-        pageNo: 1,
-        pageSize: 10,
         key: this.selectForm.sensorName,
+        pageNo: this.paginations.pageNo,
+        pageSize: this.paginations.pageSize
       }
-      getAllSensorModel(params).then((res) => {
+      getSensors(params).then((res) => {
         this.sensorList = res.data.list
         this.paginations.total = res.data.total
         this.loading = false

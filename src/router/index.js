@@ -101,10 +101,15 @@ const routes = [
       {
         path: 'pipe',
         name: 'pipe',
-        meta: { title: '管道信息' },
+        meta: { title: '管道管理' },
         component: () => import('@/views/asspipe/AssPipeList')
+      },
+      {
+        path: 'sensor',
+        name: 'sensor',
+        meta: { title: '传感器管理' },
+        component: () => import('@/views/asset/sensor/SensorList')
       }
-
     ]
   }
 ]

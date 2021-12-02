@@ -9,7 +9,7 @@
               :rules="rules"
               label-width="120px">
       <el-row style="text-align: center">
-        <el-col :span="14">
+        <el-col :span="11">
           <el-form-item label="传感器编码:"
                     prop="sensorCode">
             <el-input v-model="ruleForm.sensorCode"></el-input>
@@ -17,57 +17,61 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="14">
+        <el-col :span="11">
           <el-form-item label="传感器名称:"
                     prop="sensorName">
             <el-input v-model="ruleForm.sensorName"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="传感器模型:">
-        <el-select v-model="models"
-                    multiple
-                    placeholder="请选择模型">
-          <el-option v-for="item in m_options"
-                      :key="item.id"
-                      :label="item.name"
-                      :value="item.id">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="所属项目:">
-        <el-select v-model="items"
-                    multiple
-                    placeholder="请选择所属项目">
-          <el-option v-for="item in i_options"
-                      :key="item.id"
-                      :label="item.name"
-                      :value="item.id">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="所属厂家:">
-        <el-select v-model="orgas"
-                    multiple
-                    placeholder="请选择所属厂家">
-          <el-option v-for="item in o_options"
-                      :key="item.id"
-                      :label="item.name"
-                      :value="item.id">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="协议选择:">
-        <el-select v-model="protocols"
-                    multiple
-                    placeholder="请选择协议">
-          <el-option v-for="item in p_options"
-                      :key="item.id"
-                      :label="item.name"
-                      :value="item.id">
-          </el-option>
-        </el-select>
-      </el-form-item>    
+      <el-row>
+        <el-form-item label="传感器模型:">
+          <el-select v-model="models"
+                      placeholder="请选择模型">
+            <el-option v-for="item in m_options"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-row>
+      <el-row>
+        <el-form-item label="所属项目:">
+          <el-select v-model="items"
+                      placeholder="请选择所属项目">
+            <el-option v-for="item in i_options"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-row>
+      <el-row>
+        <el-form-item label="所属厂家:">
+          <el-select v-model="orgas"
+                      placeholder="请选择所属厂家">
+            <el-option v-for="item in o_options"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-row>
+      <el-row>
+        <el-form-item label="协议选择:">
+          <el-select v-model="protocols"
+                      placeholder="请选择协议">
+            <el-option v-for="item in p_options"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>   
+      </el-row>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
@@ -81,6 +85,7 @@
 </template>
 
 <script>
+import { getAllSensorModel } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 export default {
   components: {},
@@ -92,7 +97,6 @@ export default {
       ruleForm: {
         // 表单的属性要对应数据的字段,目前没有进行驼峰转换处理
         id: '',
-        
       },
       models: [],
       items: [],
@@ -117,8 +121,9 @@ export default {
   computed: {},
 
   methods: {
-    add() {
+    async add() {
       this.visible = true
+      await getAllSensorModel()
     }
   },
 }
