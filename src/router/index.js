@@ -111,6 +111,44 @@ const routes = [
         component: () => import('@/views/asset/sensor/SensorList')
       }
     ]
+  },
+  {
+    path: '/alarm',
+    name: 'alarm',
+    meta: { title: '报警管理' },
+    redirect: '/alarm/alarmList',
+    component: () => import('@/views/index'),
+    children: [
+      {
+        path: 'alarmList',
+        name: 'alarmList',
+        meta: { title: '报警信息' },
+        component: () => import('@/views/alarm/AlarmList')
+      }
+
+    ]
+  },
+  {
+    path: '/monitor',
+    name: 'monitor',
+    meta: { title: '管道监测' },
+    redirect: '/monitor/monitorList',
+    component: () => import('@/views/index'),
+    children: [
+      {
+        path: 'monitorList',
+        name: 'monitorList',
+        meta: { title: '实时监测' },
+        component: () => import('@/views/monitor/monitorList')
+      },
+      {
+        path: 'bigScreen',
+        name: 'bigScreen',
+        meta: { title: '大屏展示' },
+        component: () => import('@/views/monitor/bigScreen')
+      }
+
+    ]
   }
 ]
 

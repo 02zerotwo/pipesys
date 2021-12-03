@@ -37,7 +37,7 @@ export default {
   methods: {}
 }
 </script>
-<style lang='less'>
+<style lang='less' >
 @import "/src/styles/less/element-ui.less";
 .homeWarp {
   position: absolute;
@@ -58,13 +58,13 @@ export default {
   z-index: 10;
 }
 
-.el-aside {
+.main_container > .el-aside {
   background-color: #304156;
   color: var(--el-text-color-primary);
   text-align: center;
   line-height: 200px;
   height: 100%;
-  width: 200px;
+  width: 220px;
 }
 
 .el-main {
