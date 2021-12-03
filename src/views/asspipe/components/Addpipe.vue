@@ -114,7 +114,7 @@
 </template>
 
 <script>
-import { addPipe, editPipe, getAllOrgs, getAllPipeModel, getAllItem, getSensor } from '@/api/api.js'
+import { addPipe, editPipe, getAllOrgs, getAllPipeModel, getAllItem, getNoUsSensor } from '@/api/api.js'
 export default {
   components: {
   },
@@ -179,7 +179,7 @@ export default {
       await getAllItem({ key: '', pageNo: 1, pageSize: 1000 }).then(res => {
         this.itemList = res.data.list
       })
-      await getSensor({ key: '', pageNo: 1, pageSize: 1000 }).then(res => {
+      await getNoUsSensor({ key: '', pageNo: 1, pageSize: 1000 }).then(res => {
         this.sensorList = res.data.list
       })
 

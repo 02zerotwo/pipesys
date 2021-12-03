@@ -8,34 +8,37 @@
                    :model="selectForm"
                    class="demo-form-inline">
 
-            <el-form-item prop="userName">
-              <el-input size="medium"
-                        style="width:220px"
-                        v-model="selectForm.key"
-                        placeholder="请输入关键词"></el-input>
+            <el-form-item>
+              <el-select v-model="selectForm.key"
+                         placeholder="请选择报警状态">
+                <el-option label="已处理"
+                           value="1"></el-option>
+                <el-option label="未处理"
+                           value="0"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item>
+              <el-date-picker v-model="selectForm.date"
+                              type="datetimerange"
+                              range-separator="To"
+                              value-format="YYYY-MM-DD HH:mm:ss"
+                              start-placeholder="起始日期"
+                              end-placeholder="结束日期">
+              </el-date-picker>
             </el-form-item>
             <el-form-item>
               <el-button size="medium"
                          type="primary"
-                         @click="query">查询</el-button>
+                         @click="loadData">查询</el-button>
               <el-button size="medium"
                          @click="reset">重置</el-button>
             </el-form-item>
           </el-form>
         </el-row>
-        <el-row>
-          <el-button type="primary"
-                     size="small"
-                     @click="handleAdd()">
-            <el-icon>
-              <i-plus />
-            </el-icon>新增项目
-          </el-button>
-        </el-row>
       </div>
     </template>
     <div>
-      <!-- 项目信息 -->
+      <!-- 报警信息 -->
       <el-table :data="dataList"
                 v-loading="loading"
                 size="small"
@@ -47,59 +50,64 @@
                          type="index"
                          width="60"
                          align="center" />
-
-        <el-table-column label="项目名称"
+        <el-table-column label="报警传感器"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span style="margin-left: 10px">{{ scope.row.name }}</span>
+            <span style="margin-left: 10px">{{scope.row.sensor==null?'':scope.row.sensor.sensorName}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="项目编码"
+        <!-- <el-table-column label="报警管道"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span style="margin-left: 10px"> {{scope.row.number}}</span>
+            <span style="margin-left: 10px"> {{scope.row.sensorCode}}</span>
           </template>
-        </el-table-column>
-        <el-table-column label="组织名称"
+        </el-table-column> -->
+        <el-table-column label="数据点名称"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span style="margin-left: 10px"> {{scope.row.organize == null ? '' :scope.row.organize.name}}</span>
+            <span style="margin-left: 10px">{{scope.row.sensor==null?'':scope.row.sensor.sensorModel.dataPointName }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="手机号"
+        <el-table-column label="当前值"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span style="margin-left: 10px">{{scope.row.phone }}</span>
+            <span style="margin-left: 10px">{{ scope.row.currentValue}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="项目地址"
+        <el-table-column label="报警内容"
                          align="center"
                          header-align="center">
           <template #default="scope">
-            <span style="margin-left: 10px">{{ scope.row.addr}}</span>
+            <span style="margin-left: 10px">{{ scope.row.alarmMsg}}</span>
           </template>
         </el-table-column>
-
+        <el-table-column label="是否处理"
+                         align="center"
+                         header-align="center">
+          <template #default="scope">
+            <el-tag :type="scope.row.isHandled ? 'success' : 'danger'"
+                    disable-transitions>{{ scope.row.isHandled?'已处理':'未处理'}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="报警时间"
+                         align="center"
+                         header-align="center">
+          <template #default="scope">
+            <span style="margin-left: 10px">{{ scope.row.alarmTime}}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作"
                          align="center"
+                         width="120"
                          header-align="center">
           <template #default="scope">
             <el-button type="primary"
                        size="mini"
-                       @click="handleEdit(scope.row)">编辑</el-button>
-            <el-popconfirm confirm-button-text="确定"
-                           cancel-button-text="取消"
-                           icon-color="red"
-                           @confirm="handleDel(scope.row)"
-                           title="确定删除这条数据吗?">
-              <template #reference>
-                <el-button size="mini">删除</el-button>
-              </template>
-            </el-popconfirm>
+                       @click="handleEdit(scope.row)">更改状态</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -112,36 +120,23 @@
 
     </div>
   </el-card>
-  <AddItem ref="AddItem"
-           @ok="modalFormOk"></AddItem>
+
 </template>
 
 <script scope>
-import { getAllItem, deleteItem } from '@/api/api.js'
-import { ElMessage } from 'element-plus'
+import { getAlarm, editAlarm } from '@/api/api.js'
 import Pagination from '@/components/Pagination'
-import AddItem from './components/AddItem.vue'
 export default {
   components: {
-    Pagination,
-    AddItem
+    Pagination
   },
   data () {
     return {
       selectForm: {
-        key: ''
+        key: '',
+        date: []
       },
-      dataList: [{
-        id: '',
-        name: '',
-        number: '',
-        addr: '',
-        createTime: '',
-        organize: {
-          name: ''
-        },
-        phone: ''
-      }
+      dataList: [
       ],
       loading: false,
       // 分页
@@ -150,7 +145,6 @@ export default {
         pageNo: 1,
         // 默认每页显示的条数（可修改）
         pageSize: 10
-
       }
     }
   },
@@ -162,58 +156,44 @@ export default {
     this.loadData()
   },
 
+
   methods: {
-    query () {
-      this.loading = true
-      const params = {
-        key: this.selectForm.key,
-        pageNo: this.paginations.pageNo,
-        pageSize: this.paginations.pageSize
-      }
-      getAllItem(params).then(res => {
-        this.dataList = res.data.list
-        this.paginations.total = res.data.total
-        this.loading = false
-      })
-    },
+
     reset () {
       // 重置搜索关键词
       this.selectForm.key = ''
+      this.selectForm.date = []
       this.loadData()
     },
     // 获取用户列表数据
     loadData () {
       this.loading = true
+      let date = this.selectForm.date
+
       const params = {
-        key: '',
+        from: date.length == 0 ? '' : date[0],
+        end: date.length == 0 ? '' : date[1],
+        key: this.selectForm.key,
         pageNo: this.paginations.pageNo,
         pageSize: this.paginations.pageSize
       }
-      getAllItem(params).then(res => { //res 就是结果集
-        this.dataList = res.data.list
-        this.paginations.total = res.data.total
-        this.loading = false
+
+      getAlarm(params).then(res => {
+        if (res.status === 200) {
+          this.dataList = res.data.list
+          this.paginations.total = res.data.total
+          this.loading = false
+        }
       })
     },
-    handleAdd () {
-      this.$refs.AddItem.add()
-      this.$refs.AddItem.title = '新增项目'
-    },
     handleEdit (row) {
-      this.$refs.AddItem.edit(row)
-      this.$refs.AddItem.title = '编辑项目'
-    },
-    // 删除的逻辑
-    handleDel (row) {
-      const params = {
-        id: row.id
-      }
-      deleteItem(params).then(res => {
-        ElMessage({
-          message: '项目删除成功!',
-          type: 'success'
-        })
-        this.loadData()
+      let params = row
+      params.isHandled = !row.isHandled
+      editAlarm(params).then(res => {
+        if (res.status === 200) {
+          this.$message.success('更改状态成功!')
+          this.loadData()
+        }
       })
     },
     modalFormOk () { // 添加完用户的回调函数

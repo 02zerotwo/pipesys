@@ -206,14 +206,17 @@ export default {
     getpipeList () {
       this.loading = true
       const params = {
+
         pageNo: this.pageNo,
         pageSize: this.pageSize,
         key: this.selectForm.key
       }
       getPipes(params).then(res => {
-        this.dataList = res.data.list
-        this.paginations.total = res.data.total
-        this.loading = false
+        if (res.status === 200) {
+          this.dataList = res.data.list
+          this.paginations.total = res.data.total
+          this.loading = false
+        }
       })
     },
     handleAdd () {

@@ -59,7 +59,9 @@ export default {
       currentPages: this.currentPage
     }
   },
-  mounted () { },
+  mounted () {
+
+  },
   methods: {
     // 选择每页显示数量
     sizeChange (val) {

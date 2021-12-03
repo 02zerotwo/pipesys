@@ -10,6 +10,7 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import 'e-icon-picker/lib/index.css'; // 基本样式，包含基本图标
 import 'font-awesome/css/font-awesome.min.css'; //font-awesome 图标库
 import 'e-icon-picker/lib/ele/icon.css'; //element-plus 图标库
+import dataV from '@jiaminghi/data-view'
 const app = createApp(App)
 // 统一注册el-icon图标
 for (const iconName in ElIconModules) {
@@ -17,5 +18,6 @@ for (const iconName in ElIconModules) {
 }
 app.use(store)
 app.use(router)
+app.use(dataV)
 app.use(ElementPlus, { locale: zhCn })
 app.mount('#app')
