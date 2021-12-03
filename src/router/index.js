@@ -5,6 +5,7 @@ const routes = [
     path: '/login',
     name: 'login',
     component: () => import('@/views/login')
+    // component: () => import('@/views/asset/sensor/SensorList')
   },
   {
     path: '/',
@@ -64,13 +65,13 @@ const routes = [
         path: 'pipemodel',
         name: 'pipemodel',
         meta: { title: '管道管理' },
-        component: () => import('@/views/pipemodel/ModelList')
+        component: () => import('@/views/model/pipemodel/ModelList')
       },
       {
         path: 'sensormodel',
         name: 'sensormodel',
         meta: { title: '传感器模型' },
-        component: () => import('@/views/sensormodel/ModelList')
+        component: () => import('@/views/model/sensormodel/ModelList')
       }
     ],
   },
@@ -100,10 +101,15 @@ const routes = [
       {
         path: 'pipe',
         name: 'pipe',
-        meta: { title: '管道信息' },
+        meta: { title: '管道管理' },
         component: () => import('@/views/asspipe/AssPipeList')
+      },
+      {
+        path: 'sensor',
+        name: 'sensor',
+        meta: { title: '传感器管理' },
+        component: () => import('@/views/asset/sensor/SensorList')
       }
-
     ]
   },
   {

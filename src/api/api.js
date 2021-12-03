@@ -58,14 +58,13 @@ const getPipeModelByItemId = (params) => getAction('/asset/pipe/itemId', params)
 //传感器管理
 const getSensor = (params) => getAction('/asset/sensor', params)
 const getNoUsSensor = (params) => getAction('/asset/sensorId', params)
-
-
 //报警管理
 const getAlarm = (params) => getAction('/alarm/alarm', params)
 const editAlarm = (params) => putAction('/alarm/alarm', params)
-
-
-
+const getSensors = (params) => getAction('/asset/sensor', params)
+const addSensor = (params) => postAction('/asset/sensor', params)
+const editSensor = (params) => putAction('/asset/sensor', params)
+const deleteSensor = (params) => deleteAction('/asset/sensor', params)
 
 export {
   getAllUsers,
@@ -114,5 +113,9 @@ export {
   editAlarm,
   getItemByOrgaId,
   getPipeModelByItemId,
-  getNoUsSensor
+  getNoUsSensor,
+  getSensors,
+  addSensor,
+  editSensor,
+  deleteSensor,
 }
