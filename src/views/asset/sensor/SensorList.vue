@@ -194,6 +194,7 @@ export default {
       this.$refs.addSensor.title = '编辑传感器'
     },
     handleDelete(row) {
+      console.log(row)
       const params = {
         id: row.id,
       }

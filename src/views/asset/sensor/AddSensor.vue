@@ -26,7 +26,7 @@
       </el-row>
       <el-row>
         <el-form-item label="传感器模型:">
-          <el-select v-model="models"
+          <el-select v-model="model"
                      placeholder="请选择模型">
             <el-option v-for="item in m_options"
                        :key="item.id"
@@ -38,8 +38,9 @@
       </el-row>
       <el-row>
         <el-form-item label="所属项目:">
-          <el-select v-model="items"
-                     placeholder="请选择所属项目">
+            <el-select v-model="item"
+                      placeholder="请选择所属项目"
+                      @change="sel">
             <el-option v-for="item in i_options"
                        :key="item.id"
                        :label="item.name"
@@ -50,14 +51,7 @@
       </el-row>
       <el-row>
         <el-form-item label="所属厂家:">
-          <el-select v-model="orgas"
-                     placeholder="请选择所属厂家">
-            <el-option v-for="item in o_options"
-                       :key="item.id"
-                       :label="item.name"
-                       :value="item.id">
-            </el-option>
-          </el-select>
+          <el-input v-model="orga.name" disabled ></el-input>
         </el-form-item>
       </el-row>
     </el-form>
@@ -76,7 +70,6 @@
 import {
   getAllSensorModel,
   getAllItem,
-  getAllOrgs,
   addSensor,
   editSensor,
 } from '@/api/api.js'
@@ -91,13 +84,15 @@ export default {
       ruleForm: {
         sensorCode: '',
         sensorName: '',
+        models: {},
+        items: {},
+        orga: {},
       },
-      models: [],
-      items: [],
-      orgas: [],
+      model: {},
+      item: {},
+      orga: {},
       m_options: [],
       i_options: [],
-      o_options: [],
       // 表单验证
       rules: {
         sensorCode: [
@@ -121,7 +116,22 @@ export default {
   computed: {},
 
   methods: {
+    sel(val) {
+      this.searchSensor(val)
+    },
+    searchSensor(keywords) {
+      return this.i_options.filter((item) => {
+        if (item.id === keywords) {
+          this.orga = item.organize
+          console.log(this.orga)
+          return
+        }
+      })
+    },
     add() {
+      this.model = ''
+      this.item = ''
+      this.orga = ''
       this.edit({})
     },
     edit(row) {
@@ -139,25 +149,23 @@ export default {
           this.i_options.push(l[i])
         }
       })
-      getAllOrgs({ pageNo: 1, pageSize: 100, orgName: '' }).then((res) => {
-        let l = res.data.list
-        for (var i = 0; i < l.length; i++) {
-          this.o_options.push(l[i])
-        }
-      })
       this.$nextTick(() => {
         this.$refs.sensorForm.resetFields()
         this.ruleForm = Object.assign({}, row)
-        this.models = row.sensorModel.id
-        this.items = row.item.id
-        this.orgas = row.item.organize.id
+        this.model = row.sensorModel.id
+        this.item = row.item.id
+        this.orga = row.item.organize
       })
     },
     handleOk() {
+      console.log(this.item)
+      console.log(this.model)
+      console.log(this.orga)
       const params = this.ruleForm
-      params.sensorModelId = this.models
-      params.itemId = this.items
-      params.orgaId = this.orgas
+      params.sensorModelId = this.model
+      params.itemId = this.item
+      params.orgaId = this.orga.id
+      console.log(params)
       if (!params.id) {
         addSensor(params).then((res) => {
           ElMessage({
@@ -180,6 +188,8 @@ export default {
     },
     close() {
       this.visible = false
+      this.$refs.sensorForm.resetFields()
+
     },
   },
 }
