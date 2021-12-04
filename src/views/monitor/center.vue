@@ -1,5 +1,10 @@
 <template>
   <div id="center">
+    <dv-border-box-8 class="top">
+      <dv-scroll-board class="dv-scr-board"
+                       :config="config"
+                       ref="scrollBoard" />
+    </dv-border-box-8>
     <div class="up">
       <div class="bg-color-black item"
            v-for="item in titleItem"
@@ -118,6 +123,20 @@ export default {
           }
         }
       ],
+      config: {
+        header: ['项目名称', '项目编码', '项目地址'],
+        data: [
+        ],
+        rowNum: 3, //表格行数
+        headerHeight: 50,
+        headerBGC: '#0f1325', //表头
+        oddRowBGC: '#0f1325', //奇数行
+        evenRowBGC: '#171c33', //偶数行
+        index: true,
+        columnWidth: [70, 200, 200],
+        align: ['center'],
+        waitTime: 2000
+      },
       ranking: {
         data: [
           {
@@ -205,6 +224,16 @@ export default {
   },
   components: {
 
+  },
+  methods: {
+    lodaItem (data) {
+      this.config.data = []
+      data.forEach(element => {
+        this.config.data.push([element.name, element.number, element.addr])
+      });
+
+      this.$refs['scrollBoard'].updateRows(this.config.data)
+    }
   }
 }
 </script>
@@ -213,6 +242,18 @@ export default {
 #center {
   display: flex;
   flex-direction: column;
+  .top {
+    width: 100%;
+    padding: 16px;
+    padding-top: 20px;
+    height: 230px;
+    border-radius: 5px;
+    .header {
+      display: flex;
+      flex-direction: row;
+      font-size: 15px;
+    }
+  }
   .up {
     width: 100%;
     display: flex;

@@ -35,6 +35,7 @@ const addItem = (params) => postAction('/item/item', params)
 const eidtItem = (params) => putAction('/item/item', params)
 const deleteItem = (params) => deleteAction('/item/item', params)
 const getItemByOrgaId = (params) => getAction('/item/item/orgaId', params)
+const getItemCount = (params) => getAction('/item/item/count', params)
 
 //管道模型
 const getAllPipeModel = (params) => getAction('/model/pipeModel', params)
@@ -118,4 +119,5 @@ export {
   addSensor,
   editSensor,
   deleteSensor,
+  getItemCount
 }
