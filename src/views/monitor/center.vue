@@ -3,37 +3,35 @@
     <dv-border-box-8 class="top">
       <dv-scroll-board class="dv-scr-board"
                        :config="config"
+                       @click="itemRow"
                        ref="scrollBoard" />
     </dv-border-box-8>
-    <div class="up">
-      <div class="bg-color-black item"
-           v-for="item in titleItem"
-           :key="item.title">
-        <p class="ml-3 colorBlue fw-b fs-xl">{{ item.title }}</p>
-        <div>
-          <dv-digital-flop class="dv-dig-flop ml-1 mt-2 pl-3"
-                           :config="item.number" />
-        </div>
-      </div>
-    </div>
+
     <div class="down">
-      <div class="ranking bg-color-black">
-        <span>
-          <icon name="chart-pie"
-                class="text-icon"></icon>
-        </span>
-        <span class="fs-xl text mx-2 mb-1 pl-3">年度负责人组件达标榜</span>
-        <dv-scroll-ranking-board class="dv-scr-rank-board mt-1"
-                                 :config="ranking" />
+      <div class="ranking ">
+
+        <span class="fs-xl text mx-2 mb-1 pl-3">{{itemName}}管道实时监测</span>
+        <dv-scroll-board :config="config1"
+                         ref="pipe"
+                         style="width:100%;height:380px"
+                         @click="clickPipe" />
       </div>
       <div class="percent">
-        <div class="item bg-color-black">
-          <span>今日任务通过率</span>
 
+        <div class="bg-color-black item"
+             v-for="item in titleItem"
+             :key="item.title">
+          <p class="ml-3 colorBlue fw-b fs-xl">{{ item.title }}</p>
+          <div>
+            <span style="color:#0EDDAD;font-size:20px;margin-top:24px">{{item.name}}</span>
+          </div>
         </div>
-        <div class="item bg-color-black">
-          <span>今日任务达标率</span>
-
+        <div class="bg-color-black item">
+          <p class="ml-3 colorBlue fw-b fs-xl">{{ currentNbumer.title }}</p>
+          <div>
+            <dv-digital-flop class="dv-dig-flop ml-1 mt-2 pl-3"
+                             :config="currentNbumer.number" />
+          </div>
         </div>
         <div class="water">
           <dv-water-level-pond class="dv-wa-le-po"
@@ -49,82 +47,31 @@
 export default {
   data () {
     return {
+      itemName: '',
       titleItem: [
         {
-          title: '今年累计任务建次数',
-          number: {
-            number: [120],
-            toFixed: 1,
-            textAlign: 'left',
-            content: '{nt}',
-            style: {
-              fontSize: 26
-            }
-          }
+          title: '管道名称',
+          name: ''
         },
         {
-          title: '本月累计任务次数',
-          number: {
-            number: [18],
-            toFixed: 1,
-            textAlign: 'left',
-            content: '{nt}',
-            style: {
-              fontSize: 26
-            }
-          }
+          title: '设备名称',
+          name: ''
         },
         {
-          title: '今日累计任务次数',
-          number: {
-            number: [2],
-            toFixed: 1,
-            textAlign: 'left',
-            content: '{nt}',
-            style: {
-              fontSize: 26
-            }
-          }
+          title: '传感器名称',
+          name: ''
         },
-        {
-          title: '今年失败任务次数',
-          number: {
-            number: [14],
-            toFixed: 1,
-            textAlign: 'left',
-            content: '{nt}',
-            style: {
-              fontSize: 26
-            }
-          }
-        },
-        {
-          title: '今年成功任务次数',
-          number: {
-            number: [106],
-            toFixed: 1,
-            textAlign: 'left',
-            content: '{nt}',
-            style: {
-              fontSize: 26
-            }
-          }
-        },
-        {
-          title: '今年达标任务个数',
-          number: {
-            number: [100],
-            toFixed: 1,
-            textAlign: 'left',
-            content: '{nt}',
-            style: {
-              fontSize: 26
-            }
-          }
-        }
+
+
       ],
+      currentNbumer: {
+        title: '当前值',
+        number: {
+
+        }
+      },
       config: {
-        header: ['项目名称', '项目编码', '项目地址'],
+        header: ['项目编号', '项目名称', '项目地址'],
         data: [
         ],
         rowNum: 3, //表格行数
@@ -132,108 +79,143 @@ export default {
         headerBGC: '#0f1325', //表头
         oddRowBGC: '#0f1325', //奇数行
         evenRowBGC: '#171c33', //偶数行
-        index: true,
-        columnWidth: [70, 200, 200],
-        align: ['center'],
-        waitTime: 2000
+        columnWidth: [200, 200, 200],
+        align: ['center']
       },
-      ranking: {
+      config1: {
+        header: ['管道编号', '管道名称', '报警信息'],
         data: [
-          {
-            name: '周口',
-            value: 55
-          },
-          {
-            name: '南阳',
-            value: 120
-          },
-          {
-            name: '西峡',
-            value: 78
-          },
-          {
-            name: '驻马店',
-            value: 66
-          },
-          {
-            name: '新乡',
-            value: 80
-          },
-          {
-            name: '新乡2',
-            value: 80
-          },
-          {
-            name: '新乡3',
-            value: 80
-          },
-          {
-            name: '新乡4',
-            value: 80
-          },
-          {
-            name: '新乡5',
-            value: 80
-          },
-          {
-            name: '新乡6',
-            value: 80
-          }
         ],
-        carousel: 'single',
-        unit: '人'
+        rowNum: 4, //表格行数
+        headerHeight: 50,
+        headerBGC: '#0f1325', //表头
+        oddRowBGC: '#0f1325', //奇数行
+        evenRowBGC: '#171c33', //偶数行
+        columnWidth: [110, 120, 220],
+        align: ['center']
       },
       water: {
-        data: [24, 45],
-        shape: 'roundRect',
-        formatter: '{value}%',
-        waveNum: 3
+
       },
-      // 通过率和达标率的组件复用数据
-      rate: [
-        {
-          id: 'centerRate1',
-          tips: 60,
-          colorData: {
-            textStyle: '#3fc0fb',
-            series: {
-              color: ['#00bcd44a', 'transparent'],
-              dataColor: {
-                normal: '#03a9f4',
-                shadowColor: '#97e2f5'
-              }
-            }
-          }
-        },
-        {
-          id: 'centerRate2',
-          tips: 40,
-          colorData: {
-            textStyle: '#67e0e3',
-            series: {
-              color: ['#faf3a378', 'transparent'],
-              dataColor: {
-                normal: '#ff9800',
-                shadowColor: '#fcebad'
-              }
-            }
-          }
-        }
-      ]
+      pipeList: {},
+      pipeId: ''
     }
   },
   components: {
 
   },
+  watch: {
+    pipeList: {//深度监听，可监听到对象、数组的变化
+      handler (val, oldVal) {
+        if (this.pipeId) {
+          let id = this.pipeId
+
+          let number1 = parseInt(val[id][val[id].id].alarm.currentValue)
+          this.currentNbumer.number =
+          {
+            number: [number1],
+            toFixed: 1,
+            textAlign: 'center',
+            content: '{nt}',
+            style: {
+              fontSize: 26
+            }
+          }
+          this.water = {
+            data: [number1],
+            shape: 'roundRect',
+            formatter: '{value}',
+            waveNum: 3
+          }
+        }
+      },
+      deep: true //true 深度监听
+    }
+  },
+  mounted () {
+    this.initWebSocket();
+  },
+  unmounted () {
+    this.websock.close() //离开路由之后断开websocket连接
+  },
   methods: {
     lodaItem (data) {
       this.config.data = []
       data.forEach(element => {
-        this.config.data.push([element.name, element.number, element.addr])
+        this.config.data.push([element.id, element.name, element.addr])
       });
 
       this.$refs['scrollBoard'].updateRows(this.config.data)
-    }
+    },
+    itemRow: function (row) {
+      if (row.row) {
+        this.itemName = row.row[1]
+        this.websocketsend(1)
+      }
+    },
+    clickPipe (row) {
+      if (row.row) {
+        let data = this.pipeList
+        let id = row.row[0]
+        this.pipeId = id
+        this.titleItem[0].name = data[id].productName
+        this.titleItem[1].name = data[id][data[id].id].sensorModel.deviceName
+        this.titleItem[2].name = data[id][data[id].id].sensorName
+        let number1 = parseInt(data[id][data[id].id].alarm.currentValue)
+        this.currentNbumer.number =
+        {
+          number: [number1],
+          toFixed: 1,
+          textAlign: 'center',
+          content: '{nt}',
+          style: {
+            fontSize: 26
+          }
+        }
+        this.water = {
+          data: [number1],
+          shape: 'roundRect',
+          formatter: '{value}',
+          waveNum: 3
+        }
+
+      }
+    },
+    initWebSocket () { //初始化weosocket
+      const wsuri = "ws://localhost:8006/alarm/item";
+      this.websock = new WebSocket(wsuri);
+      this.websock.onmessage = this.websocketonmessage;
+      this.websock.onopen = this.websocketonopen;
+      this.websock.onerror = this.websocketonerror;
+      this.websock.onclose = this.websocketclose;
+
+    },
+    websocketonerror () {//连接建立失败重连
+      this.initWebSocket();
+    },
+    websocketonmessage (e) { //数据接收
+      let data = JSON.parse(e.data);
+
+      this.config1.data = [];
+      this.pipeList = data
+      let keyList = Object.keys(data)
+      for (let index = 0; index < keyList.length; index++) {
+        this.config1.data.push([
+          data[keyList[index]].id,
+          data[keyList[index]].productName,
+          data[keyList[index]][data[keyList[index]].sensorId].alarm.alarmMsg
+        ])
+      }
+      this.$refs['pipe'].updateRows(this.config1.data)
+
+      console.log(data);
+    },
+    websocketsend (Data) {//数据发送
+      this.websock.send(Data);
+    },
+    websocketclose (e) {  //关闭
+      console.log('断开连接', e);
+    },
   }
 }
 </script>
@@ -280,6 +262,7 @@ export default {
     justify-content: space-between;
     .bg-color-black {
       border-radius: 5px;
+      height: 420px;
     }
     .ranking {
       padding: 10px;
@@ -292,8 +275,12 @@ export default {
       width: 40%;
       display: flex;
       flex-wrap: wrap;
+
       .item {
-        width: 50%;
+        width: 45%;
+        height: 120px;
+        margin-left: 10px;
+        margin-top: 10px;
         height: 120px;
         span {
           margin-top: 8px;
@@ -304,6 +291,7 @@ export default {
       }
       .water {
         width: 100%;
+        margin-top: 10px;
         .dv-wa-le-po {
           height: 120px;
         }
