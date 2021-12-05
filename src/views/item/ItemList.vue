@@ -41,7 +41,7 @@
                 size="small"
                 :highlight-current-row="true"
                 :stripe="true"
-                :height="420"
+                :height="height"
                 border>
         <el-table-column label="序号"
                          type="index"
@@ -131,6 +131,7 @@ export default {
       selectForm: {
         key: ''
       },
+      height: '',
       dataList: [{
         id: '',
         name: '',
@@ -160,6 +161,9 @@ export default {
   // 页面加载时就加载用户信息
   created () {
     this.loadData()
+    //动态计算高度
+    let height = document.documentElement.clientHeight
+    this.height = height - 300
   },
 
   methods: {

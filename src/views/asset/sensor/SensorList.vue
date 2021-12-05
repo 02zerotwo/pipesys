@@ -38,7 +38,7 @@
                 size="small"
                 :highlight-current-row="true"
                 :stripe="true"
-                :height="420"
+                :height="height"
                 border
                 v-loading="loading">
         <el-table-column label="序号"
@@ -114,7 +114,8 @@
                     @pageFunc="pageFunc"></Pagination>
 
       </div>
-      <add-sensor ref="addSensor" @ok="handleFormOK"/>
+      <add-sensor ref="addSensor"
+                  @ok="handleFormOK" />
     </div>
   </el-card>
 
@@ -130,12 +131,13 @@ export default {
     Pagination,
     AddSensor
   },
-  data() {
+  data () {
     return {
       loading: false,
       selectForm: {
         sensorName: '',
       },
+      height: '',
       sensorList: [],
       // 分页
       paginations: {
@@ -148,12 +150,15 @@ export default {
   },
   computed: {},
   // 页面加载时就加载传感器信息
-  created() {
+  created () {
     this.getAllSensors()
+    //动态计算高度
+    let height = document.documentElement.clientHeight
+    this.height = height - 300
   },
 
   methods: {
-    getAllSensors() {
+    getAllSensors () {
       this.loading = true
       const params = {
         key: '',
@@ -167,7 +172,7 @@ export default {
         this.loading = false
       })
     },
-    query() {
+    query () {
       this.loading = true
       const params = {
         key: this.selectForm.sensorName,
@@ -180,20 +185,20 @@ export default {
         this.loading = false
       })
     },
-    reset() {
+    reset () {
       // 重置搜索关键词
       this.selectForm.sensorName = ''
       this.getAllSensors()
     },
-    handleAdd() {
+    handleAdd () {
       this.$refs.addSensor.add()
       this.$refs.addSensor.title = '新增传感器'
     },
-    handleModify(row) {
+    handleModify (row) {
       this.$refs.addSensor.edit(row)
       this.$refs.addSensor.title = '编辑传感器'
     },
-    handleDelete(row) {
+    handleDelete (row) {
       const params = {
         id: row.id,
       }
@@ -205,10 +210,10 @@ export default {
         this.getAllSensors()
       })
     },
-    handleFormOK() {
+    handleFormOK () {
       this.getAllSensors()
     },
-    pageFunc(data) {
+    pageFunc (data) {
       this.paginations.pageSize = data.pageSize
       this.paginations.pageNo = data.pageNum
       this.getAllSensors()

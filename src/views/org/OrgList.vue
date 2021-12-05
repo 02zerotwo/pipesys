@@ -40,7 +40,7 @@
                 size="small"
                 :highlight-current-row="true"
                 :stripe="true"
-                :height="420"
+                :height="height"
                 border
                 v-loading="loading">
         <el-table-column label="序号"
@@ -106,10 +106,12 @@
                     @pageFunc="pageFunc"></Pagination>
 
       </div>
-      <add-org ref="addOrg" @ok="modalFormOk" />
+      <add-org ref="addOrg"
+               @ok="modalFormOk" />
       <view-org-user ref="view" />
       <add-employee ref="addE" />
-      <edit-org ref="editO" @ok="modalFormOk" />
+      <edit-org ref="editO"
+                @ok="modalFormOk" />
     </div>
   </el-card>
 
@@ -131,7 +133,7 @@ export default {
     AddEmployee,
     EditOrg
   },
-  data() {
+  data () {
     return {
       loading: false,
       selectForm: {
@@ -148,6 +150,7 @@ export default {
           ext: '',
         },
       ],
+      height: '',
       // 分页
       paginations: {
         // 默认显示第几页
@@ -159,12 +162,14 @@ export default {
   },
   computed: {},
   // 页面加载时就加载组织信息
-  created() {
+  created () {
     this.getOrgList()
+    let height = document.documentElement.clientHeight
+    this.height = height - 300
   },
 
   methods: {
-    query() {
+    query () {
       this.loading = true
       const params = {
         orgName: this.selectForm.orgName,
@@ -183,13 +188,13 @@ export default {
         }
       })
     },
-    reset() {
+    reset () {
       // 重置搜索关键词
       this.selectForm.orgName = ''
       this.getOrgList()
     },
     // 获取组织列表数据
-    getOrgList() {
+    getOrgList () {
       this.loading = true
       const params = {
         orgName: '',
@@ -204,28 +209,28 @@ export default {
           this.loading = false
         }
       })
-      
+
     },
-    handleAdd() {
+    handleAdd () {
       this.$refs.addOrg.add()
       this.$refs.addOrg.title = '机构新增页面'
     },
-    handleAddE(row) {
+    handleAddE (row) {
       this.$refs.addE.add(row)
       this.$refs.addE.title = '新增员工页面'
     },
-    handleView(row) {
+    handleView (row) {
       this.$refs.view.show(row)
       this.$refs.view.title = '员工信息列表'
     },
-    handleEditO(row) {
+    handleEditO (row) {
       this.$refs.editO.edit(row)
     },
-    modalFormOk() {
+    modalFormOk () {
       // 添加完机构的回调函数
       this.getOrgList()
     },
-    pageFunc(data) {
+    pageFunc (data) {
       this.paginations.pageSize = data.pageSize
       this.paginations.pageNo = data.pageNum
       this.getOrgList() // 请求数据的函数

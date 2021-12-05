@@ -52,6 +52,12 @@ const routes = [
         meta: { title: '机构管理' },
         component: () => import('@/views/org/OrgList')
       },
+      {
+        path: 'daily',
+        name: 'daily',
+        meta: { title: '日志管理' },
+        component: () => import('@/views/logindaily/daily')
+      }
     ]
   },
   {
@@ -139,7 +145,7 @@ const routes = [
         path: 'monitorList',
         name: 'monitorList',
         meta: { title: '实时监测' },
-        component: () => import('@/views/monitor/monitorList')
+        component: () => import('@/views/monitor/bigScreen')
       },
       {
         path: 'bigScreen',

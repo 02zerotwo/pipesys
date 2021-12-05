@@ -98,7 +98,8 @@ export default {
 
       },
       pipeList: {},
-      pipeId: ''
+      pipeId: '',
+      itemId: ''
     }
   },
   components: {
@@ -108,25 +109,28 @@ export default {
     pipeList: {//深度监听，可监听到对象、数组的变化
       handler (val, oldVal) {
         if (this.pipeId) {
-          let id = this.pipeId
+          if (Object.keys(val).length != 0) {
 
-          let number1 = parseInt(val[id][val[id].id].alarm.currentValue)
-          this.currentNbumer.number =
-          {
-            number: [number1],
-            toFixed: 1,
-            textAlign: 'center',
-            content: '{nt}',
-            style: {
-              fontSize: 26
+            let id = this.pipeId
+            let number1 = parseInt(val[id][val[id].sensorId].alarm.currentValue)
+            this.currentNbumer.number =
+            {
+              number: [number1],
+              toFixed: 1,
+              textAlign: 'center',
+              content: '{nt}',
+              style: {
+                fontSize: 26
+              }
+            }
+            this.water = {
+              data: [number1],
+              shape: 'roundRect',
+              formatter: '{value}',
+              waveNum: 3
             }
           }
-          this.water = {
-            data: [number1],
-            shape: 'roundRect',
-            formatter: '{value}',
-            waveNum: 3
-          }
+
         }
       },
       deep: true //true 深度监听
@@ -140,6 +144,7 @@ export default {
   },
   methods: {
     lodaItem (data) {
+      this.reset()
       this.config.data = []
       data.forEach(element => {
         this.config.data.push([element.id, element.name, element.addr])
@@ -149,19 +154,35 @@ export default {
     },
     itemRow: function (row) {
       if (row.row) {
+        this.reset()
         this.itemName = row.row[1]
-        this.websocketsend(1)
+        this.itemId = row.row[0]
+        this.initWebSocket()
       }
     },
+    //重置页面数据
+    reset () {
+      this.websock.close()
+      this.config1.data = []
+      this.$refs['pipe'].updateRows(this.config1.data)
+      this.itemName = ''
+      this.pipeId = ''
+      this.titleItem[0].name = ''
+      this.currentNbumer.number = {}
+      this.water = {}
+      this.titleItem[1].name = ''
+      this.titleItem[2].name = ''
+    },
     clickPipe (row) {
+
       if (row.row) {
         let data = this.pipeList
         let id = row.row[0]
         this.pipeId = id
         this.titleItem[0].name = data[id].productName
-        this.titleItem[1].name = data[id][data[id].id].sensorModel.deviceName
-        this.titleItem[2].name = data[id][data[id].id].sensorName
-        let number1 = parseInt(data[id][data[id].id].alarm.currentValue)
+        this.titleItem[1].name = data[id][data[id].sensorId].sensorModel.deviceName
+        this.titleItem[2].name = data[id][data[id].sensorId].sensorName
+        let number1 = parseInt(data[id][data[id].sensorId].alarm.currentValue)
         this.currentNbumer.number =
         {
           number: [number1],
@@ -193,9 +214,12 @@ export default {
     websocketonerror () {//连接建立失败重连
       this.initWebSocket();
     },
+    websocketonopen () {
+      this.websocketsend()
+
+    },
     websocketonmessage (e) { //数据接收
       let data = JSON.parse(e.data);
-
       this.config1.data = [];
       this.pipeList = data
       let keyList = Object.keys(data)
@@ -206,15 +230,13 @@ export default {
           data[keyList[index]][data[keyList[index]].sensorId].alarm.alarmMsg
         ])
       }
-      this.$refs['pipe'].updateRows(this.config1.data)
 
-      console.log(data);
+      this.$refs['pipe'].updateRows(this.config1.data)
     },
-    websocketsend (Data) {//数据发送
-      this.websock.send(Data);
+    websocketsend () {//数据发送
+      this.websock.send(this.itemId);
     },
     websocketclose (e) {  //关闭
-      console.log('断开连接', e);
     },
   }
 }

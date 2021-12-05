@@ -41,7 +41,7 @@
                 size="small"
                 :highlight-current-row="true"
                 :stripe="true"
-                :height="420"
+                :height="height"
                 border>
         <el-table-column label="序号"
                          type="index"
@@ -97,7 +97,8 @@
                            @confirm="handleDel(scope.row)"
                            title="确定删除这条数据吗?">
               <template #reference>
-                <el-button type="danger" size="mini">删除</el-button>
+                <el-button type="danger"
+                           size="mini">删除</el-button>
               </template>
             </el-popconfirm>
           </template>
@@ -148,6 +149,7 @@ export default {
         }
       }
       ],
+      height: '',
       loading: false,
       // 分页
       paginations: {
@@ -163,9 +165,14 @@ export default {
   },
   // 页面加载时就加载用户信息
   created () {
+    let height = document.documentElement.clientHeight
+    this.height = height - 300
     this.getUserList()
   },
+  mounted () {
 
+
+  },
   methods: {
     query () {
       this.loading = true

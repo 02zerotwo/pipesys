@@ -10,6 +10,8 @@ const getAllOrga = (params) => getAction('/sys/orga', params)
 const modifyPwd = (params) => putAction('sys/user/password', params)
 const modifyInfo = (params) => putAction('sys/user/modify', params)
 const getAllUserByName = (params) => getAction('/sys/user/name', params)
+const getLog = (params) => getAction('/sys/log', params)
+
 // 角色模块api接口
 const getAllRole = (params) => getAction('/sys/role', params)
 const addRole = (params) => postAction('/sys/role', params)
@@ -119,5 +121,6 @@ export {
   addSensor,
   editSensor,
   deleteSensor,
-  getItemCount
+  getItemCount,
+  getLog
 }
