@@ -43,7 +43,7 @@ const getItemCount = (params) => getAction('/item/item/count', params)
 const getAllPipeModel = (params) => getAction('/model/pipeModel', params)
 const addPipeModel = (params) => postAction('/model/pipeModel', params)
 const deletePipeModel = (params) => deleteAction('/model/pipeModel', params)
-const eidtPipeModel = (params) => putAction('/model/pipeModel', params)
+const eidtPipeModel = (params) => putAction('/model/pipeModelSuper', params)
 
 
 //传感器模型

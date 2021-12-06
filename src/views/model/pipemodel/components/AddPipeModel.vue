@@ -255,7 +255,6 @@ export default {
               this.close()
             })
           } else {
-
             eidtPipeModel(params).then(res => {
               if (res.status === 200) {
                 this.$message.success('修改管道模型成功!')
