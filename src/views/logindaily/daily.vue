@@ -8,10 +8,13 @@
                    :model="dailyForm"
                    class="demo-form-inline">
             <el-form-item>
-              <el-input size="medium"
-                        style="width:220px"
-                        v-model="dailyForm.key"
-                        placeholder="请输入关键词"></el-input>
+              <el-date-picker v-model="dailyForm.date"
+                              type="datetimerange"
+                              range-separator="To"
+                              value-format="YYYY-MM-DD HH:mm:ss"
+                              start-placeholder="起始日期"
+                              end-placeholder="结束日期">
+              </el-date-picker>
             </el-form-item>
             <el-form-item>
               <el-button size="medium"
@@ -89,7 +92,7 @@
                          :width="160"
                          header-align="center">
           <template #default="scope">
-            <span style="margin-left: 10px">{{ scope.row.operConent}}</span>
+            <span style="margin-left: 10px">{{ scope.row.operContent}}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -116,7 +119,7 @@ export default {
   data () {
     return {
       dailyForm: {
-        key: ''
+        date: []
       },
       dataList: [{ // 表单的属性要对应数据的字段,目前没有进行驼峰转换处理
         id: '',
@@ -159,7 +162,8 @@ export default {
     loadData () {
       this.loading = true
       let params = {
-        key: this.dailyForm.key,
+        from: this.dailyForm.date.length == 0 ? '' : this.dailyForm.date[0],
+        end: this.dailyForm.date.length == 0 ? '' : this.dailyForm.date[1],
         pageNo: this.paginations.pageNo,
         pageSize: this.paginations.pageSize
       }
@@ -179,7 +183,7 @@ export default {
     },
     reset () {
       // 重置搜索关键词
-      this.dailyForm.key = ''
+      this.dailyForm.date = []
       this.loadData()
     },
   }
