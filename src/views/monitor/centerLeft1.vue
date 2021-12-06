@@ -42,14 +42,14 @@
 
 <script>
 import * as echarts from 'echarts'
+import { getItemCount, getItemByOrgaId } from '@/api/api.js'
 export default {
   data () {
     return {
       numberData: [
         {
           number: {
-            number: [15],
-            toFixed: 1,
+            number: [3],
             textAlign: 'left',
             content: '{nt}',
             style: {
@@ -60,8 +60,7 @@ export default {
         },
         {
           number: {
-            number: [1144],
-            toFixed: 1,
+            number: [20],
             textAlign: 'left',
             content: '{nt}',
             style: {
@@ -72,8 +71,7 @@ export default {
         },
         {
           number: {
-            number: [361],
-            toFixed: 1,
+            number: [3],
             textAlign: 'left',
             content: '{nt}',
             style: {
@@ -84,8 +82,7 @@ export default {
         },
         {
           number: {
-            number: [157],
-            toFixed: 1,
+            number: [2],
             textAlign: 'left',
             content: '{nt}',
             style: {
@@ -94,63 +91,37 @@ export default {
           },
           text: '未完成项目数'
         }
-      ]
-    }
-  },
-  components: {
-  },
-  mounted () {
-    this.changeTiming()
-    this.initEcharts()
-  },
-  methods: {
-    changeTiming () {
-      setInterval(() => {
-        this.changeNumber()
-      }, 3000)
-    },
-    changeNumber () {
-      this.numberData.forEach((item, index) => {
-        item.number.number[0] += ++index
-        item.number = { ...item.number }
-      })
-    },
-    initEcharts () {
-      let myChart = echarts.init(
-        document.getElementById("myChart")
-      );
-      // 绘制图表
-      myChart.setOption({
+      ],
+      option: {
         title: {
           text: '组织项目饼状图',
-
           subtext: '百分比显示',
           left: 'center',
           textStyle: {
             color: 'white'
           }
         },
-
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
         legend: {
           bottom: 10,
           left: 'center',
-          data: ['组织1', '组织2', '组织4', '组织3', '组织5'],
+          data: [],
           textStyle: {
             color: 'white'
           }
         },
         series: [
           {
+            name: '项目数',
             type: 'pie',
             radius: '65%',
             center: ['50%', '50%'],
             selectedMode: 'single',
             data: [
-              { value: 1548, name: '组织5' },
-              { value: 735, name: '组织3' },
-              { value: 510, name: '组织4' },
-              { value: 434, name: '组织2' },
-              { value: 335, name: '组织1' }
+
             ],
             emphasis: {
               itemStyle: {
@@ -158,11 +129,57 @@ export default {
                 shadowOffsetX: 0,
                 shadowColor: 'rgba(0, 0, 0, 0.5)'
               }
+            },
+            label: {
+              normal: {
+                textStyle: {
+                  color: "white"
+                }
+              }
             }
           },
 
         ]
-      });
+      }
+    }
+  },
+  components: {
+  },
+  mounted () {
+    this.getItemCount()
+  },
+  methods: {
+    getItemCount () {
+      let myChart = echarts.init(
+        document.getElementById("myChart")
+      );
+      getItemCount().then(res => {
+        let tatol = 0;
+        res.data.forEach(element => {
+          tatol += element.count
+          this.option.legend.data.push(element.name)
+          this.option.series[0].data.push({
+            name: element.name,
+            value: element.count,
+            id: element.id
+          })
+        });
+        this.numberData[1].number = {
+          number: [tatol],
+          textAlign: 'left',
+          content: '{nt}',
+          style: {
+            fontSize: 24
+          }
+        }
+        myChart.on('click', (param) => { //添加点击事件
+          getItemByOrgaId({ orgaId: param.data.id }).then(res => {
+            this.$emit('ok', res.data)
+          })
+        });
+        // 绘制图表
+        myChart.setOption(this.option);
+      })
     }
   }
 
@@ -177,7 +194,7 @@ export default {
   border-radius: 10px;
   .bg-color-black {
     height: 651px - 30px;
-    width: 470px;
+    width: 465px;
     border-radius: 10px;
   }
   .text {

@@ -12,7 +12,8 @@
       </div>
       <div class="d-flex jc-center body-box">
         <dv-scroll-board class="dv-scr-board"
-                         :config="config" />
+                         :config="config"
+                         ref="scrollBoard" />
       </div>
     </div>
   </div>
@@ -23,33 +24,59 @@ export default {
   data () {
     return {
       config: {
-        header: ['组件', '分支', '覆盖率'],
+        header: ['传感器名称', '报警信息'],
         data: [
-          ['组件1', 'dev-1', "<span  class='colorGrass'>↑75%</span>"],
-          ['组件2', 'dev-2', "<span  class='colorRed'>↓33%</span>"],
-          ['组件3', 'dev-3', "<span  class='colorGrass'>↑100%</span>"],
-          ['组件4', 'rea-1', "<span  class='colorGrass'>↑94%</span>"],
-          ['组件5', 'rea-2', "<span  class='colorGrass'>↑95%</span>"],
-          ['组件6', 'fix-2', "<span  class='colorGrass'>↑63%</span>"],
-          ['组件7', 'fix-4', "<span  class='colorGrass'>↑84%</span>"],
-          ['组件8', 'fix-7', "<span  class='colorRed'>↓46%</span>"],
-          ['组件9', 'dev-2', "<span  class='colorRed'>↓13%</span>"],
-          ['组件10', 'dev-9', "<span  class='colorGrass'>↑76%</span>"]
+
         ],
         rowNum: 7, //表格行数
-        headerHeight: 35,
+        headerHeight: 50,
         headerBGC: '#0f1325', //表头
         oddRowBGC: '#0f1325', //奇数行
         evenRowBGC: '#171c33', //偶数行
         index: true,
-        columnWidth: [50],
-        align: ['center']
+        columnWidth: [70, 200, 200],
+        align: ['center'],
+        waitTime: 3000
       }
     }
   },
   components: {},
-  mounted () { },
-  methods: {}
+  mounted () {
+    this.initWebSocket();
+  },
+  unmounted () {
+    this.websock.close() //离开路由之后断开websocket连接
+  },
+  methods: {
+    initWebSocket () { //初始化weosocket
+      const wsuri = "ws://localhost:8006/alarm/alarms";
+      this.websock = new WebSocket(wsuri);
+      this.websock.onmessage = this.websocketonmessage;
+      this.websock.onopen = this.websocketonopen;
+      this.websock.onerror = this.websocketonerror;
+      this.websock.onclose = this.websocketclose;
+
+    },
+    websocketonopen () { //连接建立之后执行send方法发送数据
+
+      this.websocketsend();
+
+    },
+    websocketonerror () {//连接建立失败重连
+      this.initWebSocket();
+    },
+    websocketonmessage (e) { //数据接收
+      let data = JSON.parse(e.data);
+      this.config.data.push([data.sensorName, "<span  class='colorRed'>" + data.alarm.alarmMsg + "</span>"])
+      this.$refs['scrollBoard'].updateRows(this.config.data)
+    },
+    websocketsend (Data) {//数据发送
+      this.websock.send(Data);
+    },
+    websocketclose (e) {  //关闭
+      console.log('断开连接', e);
+    },
+  }
 }
 </script>
 
@@ -58,7 +85,7 @@ export default {
   padding: 16px;
   padding-top: 20px;
   height: 410px;
-  width: 300px;
+
   border-radius: 5px;
   .bg-color-black {
     height: 410px - 30px;
@@ -71,7 +98,7 @@ export default {
     border-radius: 10px;
     overflow: hidden;
     .dv-scr-board {
-      width: 270px;
+      width: 400px;
       height: 580px;
     }
   }

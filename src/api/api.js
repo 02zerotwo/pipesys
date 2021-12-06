@@ -10,6 +10,8 @@ const getAllOrga = (params) => getAction('/sys/orga', params)
 const modifyPwd = (params) => putAction('sys/user/password', params)
 const modifyInfo = (params) => putAction('sys/user/modify', params)
 const getAllUserByName = (params) => getAction('/sys/user/name', params)
+const getLog = (params) => getAction('/sys/log', params)
+
 // 角色模块api接口
 const getAllRole = (params) => getAction('/sys/role', params)
 const addRole = (params) => postAction('/sys/role', params)
@@ -35,12 +37,13 @@ const addItem = (params) => postAction('/item/item', params)
 const eidtItem = (params) => putAction('/item/item', params)
 const deleteItem = (params) => deleteAction('/item/item', params)
 const getItemByOrgaId = (params) => getAction('/item/item/orgaId', params)
+const getItemCount = (params) => getAction('/item/item/count', params)
 
 //管道模型
 const getAllPipeModel = (params) => getAction('/model/pipeModel', params)
 const addPipeModel = (params) => postAction('/model/pipeModel', params)
 const deletePipeModel = (params) => deleteAction('/model/pipeModel', params)
-const eidtPipeModel = (params) => putAction('/model/pipeModel', params)
+const eidtPipeModel = (params) => putAction('/model/pipeModelSuper', params)
 
 //传感器模型
 const getAllSensorModel = (params) => getAction('/model/sensorModel', params)
@@ -115,4 +118,6 @@ export {
   editAlarm,
   getItemByOrgaId,
   getPipeModelByItemId,
+  getItemCount,
+  getLog
 }

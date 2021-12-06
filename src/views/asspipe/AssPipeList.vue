@@ -42,7 +42,7 @@
                 :highlight-current-row="true"
                 :stripe="true"
                 v-loading="loading"
-                :height="420"
+                :height="height"
                 border>
         <el-table-column label="管道序号"
                          type="index"
@@ -169,6 +169,7 @@ export default {
       selectForm: {
         key: ''
       },
+      height: '',
       dataList: [{ // 表单的属性要对应数据的字段,目前没有进行驼峰转换处理
         id: '',
         productName: "",
@@ -199,6 +200,9 @@ export default {
   // 页面加载时就加载用户信息
   created () {
     this.getpipeList()
+    //动态计算高度
+    let height = document.documentElement.clientHeight
+    this.height = height - 300
   },
 
   methods:

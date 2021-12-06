@@ -41,7 +41,7 @@
                 :highlight-current-row="true"
                 v-loading="loading"
                 :stripe="true"
-                :height="420"
+                :height="height"
                 border>
         <el-table-column label="序号"
                          type="index"
@@ -160,6 +160,7 @@ export default {
   data () {
     return {
       selectForm: { key: '' },
+      height: '',
       pipeModelList: [],//当前页要展示的数据
       formData: {},//表单数据
       loading: false,
@@ -175,6 +176,9 @@ export default {
   // VUE对象初始化完成后自动执行
   created () {
     this.getpipeModelList()
+    //动态计算高度
+    let height = document.documentElement.clientHeight
+    this.height = height - 300
   },
 
   methods: {

@@ -38,7 +38,7 @@
                 size="small"
                 :highlight-current-row="true"
                 :stripe="true"
-                :height="420"
+                :height="height"
                 border
                 v-loading="loading">
         <el-table-column label="序号"
@@ -117,12 +117,13 @@ export default {
     Pagination,
     AddSensorModel,
   },
-  data() {
+  data () {
     return {
       loading: false,
       selectForm: {
         modelName: '',
       },
+      height: '',
       modelList: [],
       // 分页
       paginations: {
@@ -135,12 +136,15 @@ export default {
   },
   computed: {},
   // 页面加载时就加载组织信息
-  created() {
+  created () {
     this.getSensorModels()
+    //动态计算高度
+    let height = document.documentElement.clientHeight
+    this.height = height - 300
   },
 
   methods: {
-    getSensorModels() {
+    getSensorModels () {
       this.loading = true
       const params = {
         pageNo: this.paginations.pageNo,
@@ -154,7 +158,7 @@ export default {
         this.loading = false
       })
     },
-    query() {
+    query () {
       this.loading = true
       const params = {
         pageNo: this.paginations.pageNo,
@@ -168,20 +172,20 @@ export default {
         this.loading = false
       })
     },
-    reset() {
+    reset () {
       // 重置搜索关键词
       this.selectForm.modelName = ''
       this.getSensorModels()
     },
-    handleAdd() {
+    handleAdd () {
       this.$refs.addSensor.add()
       this.$refs.addSensor.title = '新增设备模型'
     },
-    handleModify(row) {
+    handleModify (row) {
       this.$refs.addSensor.edit(row)
       this.$refs.addSensor.title = '编辑设备模型'
     },
-    handleDelete(row) {
+    handleDelete (row) {
       const params = {
         id: row.id,
       }
@@ -193,16 +197,16 @@ export default {
         this.getSensorModels()
       })
     },
-    handleFormOK() {
+    handleFormOK () {
       this.getSensorModels()
     },
-    pageFunc(data) {
+    pageFunc (data) {
       this.paginations.pageSize = data.pageSize
       this.paginations.pageNo = data.pageNum
       this.getSensorModels()
     },
     //时间格式化的方法
-    dateFormat(value) {
+    dateFormat (value) {
       let date = new Date(value)
       let y = date.getFullYear()
       let MM = date.getMonth() + 1
@@ -215,7 +219,7 @@ export default {
       m = m < 10 ? "0" + m : m
       let s = date.getSeconds()
       s = s < 10 ? "0" + s : s
-      return y + "-" + MM + "-" + d + " " + h + ":" + m + ":" +s;
+      return y + "-" + MM + "-" + d + " " + h + ":" + m + ":" + s;
     },
   },
 }

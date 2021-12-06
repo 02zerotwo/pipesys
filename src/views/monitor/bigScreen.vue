@@ -48,18 +48,15 @@
           <div class="content-box">
             <div>
               <dv-border-box-12>
-                <centerLeft1 />
+                <centerLeft1 @ok="queryItemByOrg" />
               </dv-border-box-12>
             </div>
 
             <!-- 中间 -->
             <div>
-              <center />
+              <center ref="center" />
             </div>
-            <!-- 中间 -->
-            <div>
-              <centerRight2 />
-            </div>
+
             <div>
               <dv-border-box-13>
                 <centerRight1 />
@@ -77,13 +74,11 @@
 import { formatTime } from '@/utils/index.js'
 import centerLeft1 from './centerLeft1'
 import centerRight1 from './centerRight1'
-import centerRight2 from './centerRight2'
 import center from './center'
 export default {
   components: {
     centerLeft1,
     centerRight1,
-    centerRight2,
     center
 
   },
@@ -120,6 +115,10 @@ export default {
       setTimeout(() => {
         this.loading = false
       }, 500)
+    },
+    queryItemByOrg (data) {
+      this.$refs.center.lodaItem(data)
+
     }
   }
 }
