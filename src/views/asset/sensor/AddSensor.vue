@@ -27,7 +27,7 @@
       <el-row>
         <el-form-item label="传感器模型:">
           <el-select v-model="model"
-                     placeholder="请选择模型">
+                     placeholder="请选择模型" @change="md">
             <el-option v-for="item in m_options"
                        :key="item.id"
                        :label="item.deviceName"
@@ -38,9 +38,9 @@
       </el-row>
       <el-row>
         <el-form-item label="所属项目:">
-            <el-select v-model="item"
-                      placeholder="请选择所属项目"
-                      @change="sel">
+          <el-select v-model="item"
+                     placeholder="请选择所属项目"
+                     @change="sel">
             <el-option v-for="item in i_options"
                        :key="item.id"
                        :label="item.name"
@@ -50,8 +50,9 @@
         </el-form-item>
       </el-row>
       <el-row>
-        <el-form-item label="所属厂家:">
-          <el-input v-model="orga.name" disabled ></el-input>
+        <el-form-item label="所属机构:">
+          <el-input v-model="orga.name"
+                    disabled></el-input>
         </el-form-item>
       </el-row>
     </el-form>
@@ -84,8 +85,8 @@ export default {
       ruleForm: {
         sensorCode: '',
         sensorName: '',
-        models: {},
-        items: {},
+        model: {},
+        item: {},
         orga: {},
       },
       model: {},
@@ -116,22 +117,24 @@ export default {
   computed: {},
 
   methods: {
-    sel(val) {
-      this.searchSensor(val)
+    md(val) {
+      return this.m_options.filter((item) => {
+        if(item.id === val){
+          this.model = item
+          return 
+        }
+      })
     },
-    searchSensor(keywords) {
+    sel(val) {
       return this.i_options.filter((item) => {
-        if (item.id === keywords) {
+        if (item.id === val) {
           this.orga = item.organize
-          console.log(this.orga)
+          this.item = item
           return
         }
       })
     },
     add() {
-      this.model = ''
-      this.item = ''
-      this.orga = ''
       this.edit({})
     },
     edit(row) {
@@ -139,12 +142,14 @@ export default {
       this.visible = true
       getAllSensorModel({ pageNo: 1, pageSize: 100, key: '' }).then((res) => {
         let l = res.data.list
+        this.m_options = []
         for (var i = 0; i < l.length; i++) {
           this.m_options.push(l[i])
         }
       })
       getAllItem({ pageNo: 1, pageSize: 100, key: '' }).then((res) => {
         let l = res.data.list
+        this.i_options = []
         for (var i = 0; i < l.length; i++) {
           this.i_options.push(l[i])
         }
@@ -152,8 +157,8 @@ export default {
       this.$nextTick(() => {
         this.$refs.sensorForm.resetFields()
         this.ruleForm = Object.assign({}, row)
-        this.model = row.sensorModel.id
-        this.item = row.item.id
+        this.model = row.sensorModel
+        this.item = row.item
         this.orga = row.item.organize
       })
     },
@@ -162,9 +167,9 @@ export default {
       console.log(this.model)
       console.log(this.orga)
       const params = this.ruleForm
-      params.sensorModelId = this.model
-      params.itemId = this.item
-      params.orgaId = this.orga.id
+      params.sensorModel = this.model
+      params.item = this.item
+      params.organize = this.orga
       console.log(params)
       if (!params.id) {
         addSensor(params).then((res) => {
@@ -188,8 +193,9 @@ export default {
     },
     close() {
       this.visible = false
-      this.$refs.sensorForm.resetFields()
-
+      this.item = {}
+      this.model = {}
+      this.orga = {}
     },
   },
 }

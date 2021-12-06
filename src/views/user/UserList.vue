@@ -70,18 +70,11 @@
             <span>{{scope.row.phone }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="所属部门"
+        <el-table-column label="所属机构"
                          align="center"
                          header-align="center">
           <template #default="scope">
             <span>{{ scope.row.o == null ? '' : scope.row.o.name}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="备注信息"
-                         align="center"
-                         header-align="center">
-          <template #default="scope">
-            <span>{{ scope.row.roleExt }}</span>
           </template>
         </el-table-column>
         <el-table-column label="操作"

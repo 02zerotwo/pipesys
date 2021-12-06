@@ -142,6 +142,7 @@ export default {
       this.loading = true
       const params = {
         orgaId: this.orgaId,
+        key: '',
         pageNo: this.paginations.pageNo,
         pageSize: this.paginations.pageSize
       }
