@@ -145,6 +145,7 @@ export default {
   },
   components: {
   },
+
   mounted () {
     this.getItemCount()
   },
@@ -190,11 +191,11 @@ export default {
 #centerLeft1 {
   padding: 16px;
   height: 651px;
-  width: 410px;
+  width: 100%;
   border-radius: 10px;
   .bg-color-black {
     height: 651px - 30px;
-    width: 465px;
+    width: 100%;
     border-radius: 10px;
   }
   .text {
