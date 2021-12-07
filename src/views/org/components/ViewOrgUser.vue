@@ -194,9 +194,9 @@ export default {
       checkArr.forEach(function (item) {
         ids.push(item.id) // 添加所有需要删除数据的id到一个数组
       })
-      let params = '?ids=' + ids[0]
+      let params = '?idArrays=' + ids[0]
       for (let i = 1; i <= ids.length - 1; i++) {
-        params += '&ids=' + ids[i]
+        params += '&idArrays=' + ids[i]
       }
       // 批量删除
       axios.delete('/sys/user/ids' + params).then((res) => {

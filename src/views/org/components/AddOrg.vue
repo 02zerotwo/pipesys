@@ -4,7 +4,7 @@
   <el-dialog v-model="visible"
              :title="title"
              @close="close">
-      <el-form ref="ruleForm"
+      <el-form ref="orgForm"
                :model="ruleForm"
                :rules="rules"
                label-width="120px">
@@ -38,10 +38,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="11">
-            <el-form-item label="地址:"
+            <el-form-item label="所属区域:"
                           prop="location">
               <el-input v-model="ruleForm.location"
-                        placeholder="请输入公司地址"></el-input>
+                        placeholder="请输入机构所在区域"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -120,14 +120,19 @@ export default {
   methods: {
     async add() {
       this.visible = true
-      console.log(this.ruleForm)
       await getAllType().then((res) => {
         console.log(res)
         this.types = res.data.list
       })
+      this.$nextTick(() => {
+        // 待dom生成以后再来获取dom对象
+        // 用来编辑给输入框赋予初始值
+        this.$refs.orgForm.resetFields() // 对整个表单进行重置，将所有字段值重置为初始值并移除校验结果
+      })
+      
     },
     handleOk() {
-      this.$refs.ruleForm.validate((valid) => {
+      this.$refs.orgForm.validate((valid) => {
         if (valid) {
           let params = this.ruleForm
           addOrg(params).then((res) => {
@@ -145,6 +150,8 @@ export default {
     },
     close() {
       this.visible = false
+      this.ruleForm.type = {}
+      this.ruleForm.ext = ''
     },
   },
 }

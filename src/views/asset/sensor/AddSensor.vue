@@ -26,8 +26,8 @@
       </el-row>
       <el-row>
         <el-form-item label="传感器模型:">
-          <el-select v-model="models"
-                     placeholder="请选择模型">
+          <el-select v-model="model"
+                     placeholder="请选择模型" @change="md">
             <el-option v-for="item in m_options"
                        :key="item.id"
                        :label="item.deviceName"
@@ -38,8 +38,9 @@
       </el-row>
       <el-row>
         <el-form-item label="所属项目:">
-          <el-select v-model="items"
-                     placeholder="请选择所属项目">
+          <el-select v-model="item"
+                     placeholder="请选择所属项目"
+                     @change="sel">
             <el-option v-for="item in i_options"
                        :key="item.id"
                        :label="item.name"
@@ -49,15 +50,9 @@
         </el-form-item>
       </el-row>
       <el-row>
-        <el-form-item label="所属厂家:">
-          <el-select v-model="orgas"
-                     placeholder="请选择所属厂家">
-            <el-option v-for="item in o_options"
-                       :key="item.id"
-                       :label="item.name"
-                       :value="item.id">
-            </el-option>
-          </el-select>
+        <el-form-item label="所属机构:">
+          <el-input v-model="orga.name"
+                    disabled></el-input>
         </el-form-item>
       </el-row>
     </el-form>
@@ -76,7 +71,6 @@
 import {
   getAllSensorModel,
   getAllItem,
-  getAllOrgs,
   addSensor,
   editSensor,
 } from '@/api/api.js'
@@ -91,13 +85,15 @@ export default {
       ruleForm: {
         sensorCode: '',
         sensorName: '',
+        model: {},
+        item: {},
+        orga: {},
       },
-      models: [],
-      items: [],
-      orgas: [],
+      model: {},
+      item: {},
+      orga: {},
       m_options: [],
       i_options: [],
-      o_options: [],
       // 表单验证
       rules: {
         sensorCode: [
@@ -121,6 +117,23 @@ export default {
   computed: {},
 
   methods: {
+    md(val) {
+      return this.m_options.filter((item) => {
+        if(item.id === val){
+          this.model = item
+          return 
+        }
+      })
+    },
+    sel(val) {
+      return this.i_options.filter((item) => {
+        if (item.id === val) {
+          this.orga = item.organize
+          this.item = item
+          return
+        }
+      })
+    },
     add() {
       this.edit({})
     },
@@ -129,35 +142,35 @@ export default {
       this.visible = true
       getAllSensorModel({ pageNo: 1, pageSize: 100, key: '' }).then((res) => {
         let l = res.data.list
+        this.m_options = []
         for (var i = 0; i < l.length; i++) {
           this.m_options.push(l[i])
         }
       })
       getAllItem({ pageNo: 1, pageSize: 100, key: '' }).then((res) => {
         let l = res.data.list
+        this.i_options = []
         for (var i = 0; i < l.length; i++) {
           this.i_options.push(l[i])
-        }
-      })
-      getAllOrgs({ pageNo: 1, pageSize: 100, orgName: '' }).then((res) => {
-        let l = res.data.list
-        for (var i = 0; i < l.length; i++) {
-          this.o_options.push(l[i])
         }
       })
       this.$nextTick(() => {
         this.$refs.sensorForm.resetFields()
         this.ruleForm = Object.assign({}, row)
-        this.models = row.sensorModel.id
-        this.items = row.item.id
-        this.orgas = row.item.organize.id
+        this.model = row.sensorModel
+        this.item = row.item
+        this.orga = row.item.organize
       })
     },
     handleOk() {
+      console.log(this.item)
+      console.log(this.model)
+      console.log(this.orga)
       const params = this.ruleForm
-      params.sensorModelId = this.models
-      params.itemId = this.items
-      params.orgaId = this.orgas
+      params.sensorModel = this.model
+      params.item = this.item
+      params.organize = this.orga
+      console.log(params)
       if (!params.id) {
         addSensor(params).then((res) => {
           ElMessage({
@@ -180,6 +193,9 @@ export default {
     },
     close() {
       this.visible = false
+      this.item = {}
+      this.model = {}
+      this.orga = {}
     },
   },
 }

@@ -80,7 +80,7 @@
             <span>{{ scope.row.sensorModel.protocol }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="所属厂家"
+        <el-table-column label="所属机构"
                          align="center"
                          header-align="center">
           <template #default="scope">
