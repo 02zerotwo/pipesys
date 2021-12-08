@@ -67,7 +67,14 @@ export default {
     },
     websocketonmessage (e) { //数据接收
       let data = JSON.parse(e.data);
-      this.config.data.push([data.sensorName, "<span  class='colorRed'>" + data.alarm.alarmMsg + "</span>"])
+      let msg = data.alarm.alarmMsg
+      let msgflag = msg.indexOf('正常')
+      if (msgflag > 0) {
+        msg = "<span  class='colorGrass'>" + data.alarm.alarmMsg + "</span>"
+      } else {
+        msg = "<span  class='colorRed'>" + data.alarm.alarmMsg + "</span>"
+      }
+      this.config.data.push([data.sensorName, msg])
       this.$refs['scrollBoard'].updateRows(this.config.data)
     },
     websocketsend (Data) {//数据发送
