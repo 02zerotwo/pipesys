@@ -26,8 +26,9 @@
       </el-row>
       <el-row>
         <el-form-item label="传感器模型:">
-          <el-select v-model="model"
-                     placeholder="请选择模型" @change="md">
+          <el-select v-model="modelId"
+                     placeholder="请选择模型"
+                     @change="md">
             <el-option v-for="item in m_options"
                        :key="item.id"
                        :label="item.deviceName"
@@ -38,7 +39,7 @@
       </el-row>
       <el-row>
         <el-form-item label="所属项目:">
-          <el-select v-model="item"
+          <el-select v-model="itemId"
                      placeholder="请选择所属项目"
                      @change="sel">
             <el-option v-for="item in i_options"
@@ -85,13 +86,12 @@ export default {
       ruleForm: {
         sensorCode: '',
         sensorName: '',
-        model: {},
-        item: {},
-        orga: {},
+        sensorModel: {},
+        item: '',
       },
-      model: {},
-      item: {},
-      orga: {},
+      orga: '',
+      modelId: '',
+      itemId: '',
       m_options: [],
       i_options: [],
       // 表单验证
@@ -119,9 +119,9 @@ export default {
   methods: {
     md(val) {
       return this.m_options.filter((item) => {
-        if(item.id === val){
-          this.model = item
-          return 
+        if (item.id === val) {
+          this.ruleForm.sensorModel = item
+          return
         }
       })
     },
@@ -129,7 +129,7 @@ export default {
       return this.i_options.filter((item) => {
         if (item.id === val) {
           this.orga = item.organize
-          this.item = item
+          this.ruleForm.item = item
           return
         }
       })
@@ -141,37 +141,39 @@ export default {
       console.log(row)
       this.visible = true
       getAllSensorModel({ pageNo: 1, pageSize: 100, key: '' }).then((res) => {
-        let l = res.data.list
-        this.m_options = []
-        for (var i = 0; i < l.length; i++) {
-          this.m_options.push(l[i])
-        }
+        this.m_options = res.data.list
       })
       getAllItem({ pageNo: 1, pageSize: 100, key: '' }).then((res) => {
-        let l = res.data.list
-        this.i_options = []
-        for (var i = 0; i < l.length; i++) {
-          this.i_options.push(l[i])
-        }
+        this.i_options = res.data.list
       })
+
       this.$nextTick(() => {
         this.$refs.sensorForm.resetFields()
         this.ruleForm = Object.assign({}, row)
-        this.model = row.sensorModel
-        this.item = row.item
-        this.orga = row.item.organize
+        if (row) {
+          this.modelId = row.sensorModel
+        }
+        if (row.item) {
+          this.itemId = row.item.id
+          this.orga = row.item.organize
+        }
       })
     },
     handleOk() {
-      console.log(this.item)
-      console.log(this.model)
-      console.log(this.orga)
-      const params = this.ruleForm
-      params.sensorModel = this.model
-      params.item = this.item
+      let params = this.ruleForm
       params.organize = this.orga
-      console.log(params)
       if (!params.id) {
+        if (
+          Object.keys(params).forEach((item) => {
+            if (item != null && item !== '') {    
+              ElMessage({
+                message: '添加失败，含有非法参数',
+                type: 'error',
+              })
+              return true
+            }
+          })
+        )
         addSensor(params).then((res) => {
           ElMessage({
             message: '添加成功',
@@ -181,7 +183,7 @@ export default {
           this.close()
         })
       } else {
-        editSensor(this.ruleForm).then((res) => {
+        editSensor(params).then(() => {
           ElMessage({
             message: '修改成功',
             type: 'success',
@@ -193,9 +195,9 @@ export default {
     },
     close() {
       this.visible = false
-      this.item = {}
-      this.model = {}
-      this.orga = {}
+      this.$refs.sensorForm.resetFields()
+      this.itemId = ''
+      this.orga = ''
     },
   },
 }

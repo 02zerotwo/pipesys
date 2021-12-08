@@ -103,13 +103,11 @@ export default {
 
   methods: {
     async edit(record) {
-      console.log(record)
       this.visible = true
       await getAllType().then((res) => {
         this.types = res.data.list
       })
       this.ruleForm = Object.assign({}, record)
-      console.log(this.ruleForm)
     },
     handleOk() {
       const params = this.ruleForm
