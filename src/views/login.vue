@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container">
+  <div class="login-container background">
     <el-form :model="ruleForm2"
              :rules="rules2"
              status-icon
@@ -86,13 +86,21 @@ export default {
 .login-container {
   width: 100%;
 }
+.background {
+  background-image: url("../assets/img/niit.jpeg");
+  width: 100%;
+  height: 100%;
+  margin: -8px;
+  position: fixed;
+  background-size: cover;
+}
 .login-page {
+  background-color: rgba(240, 255, 255, 0.6);
   -webkit-border-radius: 5px;
   border-radius: 5px;
   margin: 180px auto;
   width: 400px;
   padding: 35px 35px 15px;
-  background: #fff;
   border: 1px solid #eaeaea;
   box-shadow: 0 0 25px #cac6c6;
 }
