@@ -166,7 +166,6 @@ export default {
         pageSize: this.paginations.pageSize
       }
       getSensors(params).then((res) => {
-        console.log(res)
         this.sensorList = res.data.list
         this.paginations.total = res.data.total
         this.loading = false
