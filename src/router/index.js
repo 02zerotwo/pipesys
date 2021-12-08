@@ -148,10 +148,10 @@ const routes = [
         component: () => import('@/views/monitor/bigScreen')
       },
       {
-        path: 'bigScreen',
-        name: 'bigScreen',
-        meta: { title: '大屏展示' },
-        component: () => import('@/views/monitor/bigScreen')
+        path: 'monitorHistory',
+        name: 'monitorHistory',
+        meta: { title: '历史监测' },
+        component: () => import('@/views/monitor/monitorHistory')
       }
 
     ]

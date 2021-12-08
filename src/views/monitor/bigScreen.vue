@@ -94,6 +94,8 @@ export default {
     }
   },
   mounted () {
+    let width = document.documentElement.clientWidth
+    console.log(width);
     this.timeFn()
     this.cancelLoading()
   },

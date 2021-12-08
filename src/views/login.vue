@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container">
+  <div class="login-container background">
     <el-form :model="ruleForm2"
              :rules="rules2"
              status-icon
@@ -13,7 +13,9 @@
         <el-input type="text"
                   v-model="ruleForm2.username"
                   auto-complete="off"
-                  placeholder="用户名"></el-input>
+                  placeholder="用户名">
+
+        </el-input>
       </el-form-item>
       <el-form-item prop="password">
         <el-input type="password"
@@ -83,15 +85,22 @@ export default {
 <style scoped>
 .login-container {
   width: 100%;
+}
+.background {
+  background-image: url("../assets/img/niit.jpeg");
+  width: 100%;
   height: 100%;
+  margin: -8px;
+  position: fixed;
+  background-size: cover;
 }
 .login-page {
+  background-color: rgba(240, 255, 255, 0.6);
   -webkit-border-radius: 5px;
   border-radius: 5px;
   margin: 180px auto;
   width: 400px;
   padding: 35px 35px 15px;
-  background: #fff;
   border: 1px solid #eaeaea;
   box-shadow: 0 0 25px #cac6c6;
 }

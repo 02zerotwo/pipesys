@@ -66,6 +66,8 @@ const getNoUsSensor = (params) => getAction('/asset/sensorId', params)
 //报警管理
 const getAlarm = (params) => getAction('/alarm/alarm', params)
 const editAlarm = (params) => putAction('/alarm/alarm', params)
+const getAlarmHistory = (params) => getAction('/alarm/history', params)
+
 
 export {
   getAllUsers,
@@ -119,5 +121,6 @@ export {
   getItemByOrgaId,
   getPipeModelByItemId,
   getItemCount,
-  getLog
+  getLog,
+  getAlarmHistory
 }
