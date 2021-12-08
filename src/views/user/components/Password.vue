@@ -4,55 +4,53 @@
              :title="title"
              @close="close"
              :center="true">
-    <el-card class="box-card">
-      <el-form ref="ruleForm"
-               :model="ruleForm"
-               :rules="rules"
-               label-width="120px">
-        <el-row>
-          <el-col :span="6"></el-col>
-          <el-col :span="12">
-            <el-form-item label="请输入旧密码:"
-                          prop="old_pwd">
-              <el-input v-model="ruleForm.old_pwd"
-                        placeholder="请输入旧密码"
-                        type="password"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6"></el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="6"></el-col>
-          <el-col :span="12">
-            <el-form-item label="请输入新密码:"
-                          prop="new_pwd">
-              <el-input v-model="ruleForm.new_pwd"
-                        placeholder="请输入新密码"
-                        type="password"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6"></el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="6"></el-col>
-          <el-col :span="12">
-            <el-form-item label="请确认密码:"
-                          prop="confirm_pwd">
-              <el-input v-model="ruleForm.confirm_pwd"
-                        placeholder="再次输入新密码"
-                        type="password">
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6"></el-col>
-        </el-row>
-        <!-- 占位空白符 后续可以直接 在里面添加元素 -->
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
-        <el-row>&nbsp; </el-row>
-      </el-form>
+    <el-form ref="ruleForm"
+             :model="ruleForm"
+             :rules="rules"
+             label-width="120px">
+      <el-row>
+        <el-col :span="6"></el-col>
+        <el-col :span="12">
+          <el-form-item label="请输入旧密码:"
+                        prop="old_pwd">
+            <el-input v-model="ruleForm.old_pwd"
+                      placeholder="请输入旧密码"
+                      type="password"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6"></el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="6"></el-col>
+        <el-col :span="12">
+          <el-form-item label="请输入新密码:"
+                        prop="new_pwd">
+            <el-input v-model="ruleForm.new_pwd"
+                      placeholder="请输入新密码"
+                      type="password"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6"></el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="6"></el-col>
+        <el-col :span="12">
+          <el-form-item label="请确认密码:"
+                        prop="confirm_pwd">
+            <el-input v-model="ruleForm.confirm_pwd"
+                      placeholder="再次输入新密码"
+                      type="password">
+            </el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6"></el-col>
+      </el-row>
+      <!-- 占位空白符 后续可以直接 在里面添加元素 -->
+      <el-row>&nbsp; </el-row>
+      <el-row>&nbsp; </el-row>
+      <el-row>&nbsp; </el-row>
+    </el-form>
 
-    </el-card>
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="close">取消</el-button>
@@ -67,7 +65,7 @@
 import { modifyPwd } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 export default {
-  data() {
+  data () {
     return {
       visible: false,
       userInfo: { id: '', Pwd: '' },
@@ -119,30 +117,30 @@ export default {
   },
   methods: {
     // 验证旧密码
-    verifyOldPwd(rule,value,callback) {
+    verifyOldPwd (rule, value, callback) {
       if (this.ruleForm.old_pwd !== this.userInfo.oPwd) {
         callback(new Error('旧密码不正确'))
-      }else{
+      } else {
         callback()
       }
     },
     // 验证新密码
-    verifyNewPwd(rule,value,callback) {
+    verifyNewPwd (rule, value, callback) {
       if (this.ruleForm.new_pwd === this.ruleForm.old_pwd) {
         callback(new Error('新旧密码不能重复'))
-      }else{
+      } else {
         callback()
       }
     },
     // 验证两次密码是否一致
-    verifyConfirmPwd(rule,value,callback) {
+    verifyConfirmPwd (rule, value, callback) {
       if (this.ruleForm.confirm_pwd !== this.ruleForm.new_pwd) {
         callback(new Error('两次密码不一致'))
-      }else{
+      } else {
         callback()
       }
     },
-    async showPwd(record) {
+    async showPwd (record) {
       console.log(record)
       this.visible = true
       this.$nextTick(() => {
@@ -153,8 +151,8 @@ export default {
         }
       })
     },
-    
-    handleOk() {
+
+    handleOk () {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           const params = {
@@ -167,14 +165,14 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.$router.push({path: '/login'})
+            this.$router.push({ path: '/login' })
           })
         } else {
           return false
         }
       })
     },
-    close() {
+    close () {
       this.visible = false
       this.ruleForm = []
     },

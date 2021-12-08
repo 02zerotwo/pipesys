@@ -8,7 +8,8 @@
       <el-form ref="userForm"
                :model="userForm"
                :rules="rules"
-               label-width="120px" :key="userForm">
+               label-width="120px"
+               :key="userForm">
         <el-row>
           <el-col :span="10">
             <el-form-item label="用户编号:"
@@ -70,23 +71,23 @@
         <el-row>&nbsp; </el-row>
         <el-row>&nbsp; </el-row>
       </el-form>
-      <div class="demo-drawer__footer">
+      <span class="drawe-footer">
         <el-button type="primary"
-                   @click="handleOk">确认</el-button>
+                   @click="handleOk">提交</el-button>
         <el-button @click="close">取消</el-button>
-      </div>
+      </span>
     </div>
 
   </el-drawer>
 
 </template>
 <script>
-import { getAllRole, getAllOrgs,modifyInfo } from '@/api/api.js'
+import { getAllRole, getAllOrgs, modifyInfo } from '@/api/api.js'
 import { ElMessage } from 'element-plus'
 export default {
   components: {},
 
-  data() {
+  data () {
     return {
       timer: '',
       visible: false,
@@ -124,7 +125,7 @@ export default {
     }
   },
   methods: {
-    async showInfo(record) {
+    async showInfo (record) {
       this.visible = true
       this.timer = new Date().getTime();
       await getAllRole({ roleName: '', pageNo: 1, pageSize: 100 }).then(
@@ -151,7 +152,7 @@ export default {
         }
       })
     },
-    handleOk() {
+    handleOk () {
       this.$refs.userForm.validate((valid) => {
         if (valid) {
           // 发送请求修改个人信息
@@ -164,14 +165,14 @@ export default {
               type: 'success',
               duration: 1600
             })
-              this.$router.push({path: '/login'})
+            this.$router.push({ path: '/login' })
           })
         } else {
           return false
         }
       })
     },
-    close() {
+    close () {
       this.visible = false
       this.roles = []
     },
@@ -182,5 +183,22 @@ export default {
 .el-button {
   float: right;
   margin-right: 20px;
+}
+.drawe-footer {
+  width: 100%;
+
+  position: absolute;
+
+  bottom: 0;
+
+  left: 0;
+
+  border-top: 1px solid #e8e8e8;
+
+  padding: 10px 16px;
+
+  text-align: right;
+
+  background-color: white;
 }
 </style>

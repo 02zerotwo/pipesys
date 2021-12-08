@@ -13,7 +13,9 @@
         <el-input type="text"
                   v-model="ruleForm2.username"
                   auto-complete="off"
-                  placeholder="用户名"></el-input>
+                  placeholder="用户名">
+
+        </el-input>
       </el-form-item>
       <el-form-item prop="password">
         <el-input type="password"
@@ -83,7 +85,6 @@ export default {
 <style scoped>
 .login-container {
   width: 100%;
-  height: 100%;
 }
 .login-page {
   -webkit-border-radius: 5px;
