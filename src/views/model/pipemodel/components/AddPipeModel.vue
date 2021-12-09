@@ -211,7 +211,7 @@ export default {
         this.formData = Object.assign({}, record)
         if (!Object.keys(record).length == 0) {
           this.radio = record.pipeType
-          this.picList = [{ name: record.fileName[1], url: 'http://localhost:8003/' + record.fileRelativePath[1] }]
+          this.picList = [{ name: record.fileName[1], url: '/img/' + record.fileRelativePath[1] }]
           this.fileList = [{ name: record.fileName[0] }]
           this.fileList1 = [{ name: record.fileName[2] }]
         }

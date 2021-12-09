@@ -88,8 +88,9 @@
           <template #default="scope">
             <el-image style="height: 100px"
                       fit="contain"
-                      :src="'http://localhost:8003/'+scope.row.fileRelativePath[1]">
+                      :src="'/img/'+scope.row.fileRelativePath[1]">
             </el-image>
+
           </template>
         </el-table-column>
         <el-table-column label="管道手册"
