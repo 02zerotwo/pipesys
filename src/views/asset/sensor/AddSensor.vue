@@ -89,6 +89,7 @@ export default {
         sensorModel: {},
         item: '',
       },
+      protocal: '',
       orga: '',
       modelId: '',
       itemId: '',
@@ -121,6 +122,7 @@ export default {
       return this.m_options.filter((item) => {
         if (item.id === val) {
           this.ruleForm.sensorModel = item
+          this.protocal = item.protocol
           return
         }
       })
@@ -152,6 +154,7 @@ export default {
         this.ruleForm = Object.assign({}, row)
         if (row) {
           this.modelId = row.sensorModel
+          this.protocal = row.sensorModel.protocol
         }
         if (row.item) {
           this.itemId = row.item.id
@@ -161,27 +164,24 @@ export default {
     },
     handleOk() {
       let params = this.ruleForm
+      params.protocal = this.protocal
       params.organize = this.orga
       if (!params.id) {
-        if (
-          Object.keys(params).forEach((item) => {
-            if (item != null && item !== '') {    
-              ElMessage({
-                message: '添加失败，含有非法参数',
-                type: 'error',
-              })
-              return true
-            }
-          })
-        )
-        addSensor(params).then((res) => {
+        if(params.sensorName && params.sensorCode){
+          addSensor(params).then((res) => {
           ElMessage({
             message: '添加成功',
             type: 'success',
           })
           this.$emit('ok')
           this.close()
-        })
+          })   
+        }else {
+          ElMessage({
+            message: '添加失败，含有非法参数',
+            type: 'error',
+          })
+        }
       } else {
         editSensor(params).then(() => {
           ElMessage({
