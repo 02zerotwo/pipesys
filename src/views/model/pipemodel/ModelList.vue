@@ -88,7 +88,7 @@
           <template #default="scope">
             <el-image style="height: 100px"
                       fit="contain"
-                      :src="'/img/'+scope.row.fileRelativePath[1]">
+                      :src="'/tp/'+scope.row.fileRelativePath[1]">
             </el-image>
 
           </template>

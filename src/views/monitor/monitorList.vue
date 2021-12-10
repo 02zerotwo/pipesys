@@ -142,7 +142,7 @@ export default {
       })
     },
     initWebSocket () { //初始化weosocket
-      const wsuri = "ws://localhost:8006/alarm";
+      const wsuri = "ws://8.142.74.249:8006/alarm";
       this.websock = new WebSocket(wsuri);
       this.websock.onmessage = this.websocketonmessage;
       this.websock.onopen = this.websocketonopen;

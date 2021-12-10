@@ -211,7 +211,7 @@ export default {
         this.formData = Object.assign({}, record)
         if (!Object.keys(record).length == 0) {
           this.radio = record.pipeType
-          this.picList = [{ name: record.fileName[1], url: '/img/' + record.fileRelativePath[1] }]
+          this.picList = [{ name: record.fileName[1], url: '/tp/' + record.fileRelativePath[1] }]
           this.fileList = [{ name: record.fileName[0] }]
           this.fileList1 = [{ name: record.fileName[2] }]
         }
@@ -305,7 +305,10 @@ export default {
       uploadAction('/model/upload', fromData).then(res => {
         if (res.status === 200) {
           this.formData.pipePic = res.data[0]
-          params.onSuccess('文件上传成功')
+          params.onSuccess('图片上传成功')
+        } else {
+          this.$message.error('图片上传失败!')
+          params.onError()
         }
       })
     },
@@ -316,16 +319,23 @@ export default {
         if (res.status === 200) {
           this.formData.pipeIntroduce = res.data[0]
           params.onSuccess('文件上传成功')
+        } else {
+          this.$message.error('文件上传失败!')
+          params.onError()
         }
       })
     },
     uploadManual (params) {
+
       let fromData = new FormData()
       fromData.append("file", params.file)
       uploadAction('/model/upload', fromData).then(res => {
         if (res.status === 200) {
           this.formData.pipeManual = res.data[0]
           params.onSuccess('文件上传成功')
+        } else {
+          this.$message.error('文件上传失败!')
+          params.onError()
         }
       })
 
