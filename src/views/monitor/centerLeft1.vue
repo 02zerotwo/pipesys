@@ -150,11 +150,11 @@ export default {
     this.getItemCount()
   },
   methods: {
-    getItemCount () {
+    async getItemCount () {
       let myChart = echarts.init(
         document.getElementById("myChart")
       );
-      getItemCount().then(res => {
+      await getItemCount().then(res => {
         let tatol = 0;
         res.data.forEach(element => {
           tatol += element.count
