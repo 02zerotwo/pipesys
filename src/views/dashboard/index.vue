@@ -96,6 +96,7 @@ export default {
 
   mounted () {
     //this.$root => app
+    document.getElementById("myChart").removeAttribute('_echarts_instance_');
     let myChart = echarts.init(
       document.getElementById("myChart")
     );

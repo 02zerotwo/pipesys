@@ -148,12 +148,11 @@ export default {
 
   mounted () {
     this.getItemCount()
+
   },
   methods: {
     async getItemCount () {
-      let myChart = echarts.init(
-        document.getElementById("myChart")
-      );
+
       await getItemCount().then(res => {
         let tatol = 0;
         res.data.forEach(element => {
@@ -173,13 +172,19 @@ export default {
             fontSize: 24
           }
         }
-        myChart.on('click', (param) => { //添加点击事件
-          getItemByOrgaId({ orgaId: param.data.id }).then(res => {
-            this.$emit('ok', res.data)
-          })
-        });
-        // 绘制图表
-        myChart.setOption(this.option);
+        this.$nextTick(() => {
+          document.getElementById("myChart").removeAttribute('_echarts_instance_');
+          let myChart = echarts.init(
+            document.getElementById("myChart")
+          );
+          myChart.on('click', (param) => { //添加点击事件
+            getItemByOrgaId({ orgaId: param.data.id }).then(res => {
+              this.$emit('ok', res.data)
+            })
+          });
+          // 绘制图表
+          myChart.setOption(this.option);
+        })
       })
     }
   }
