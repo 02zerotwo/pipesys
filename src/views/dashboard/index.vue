@@ -1,80 +1,28 @@
 <template>
   <div class="dashboard">
     <el-row>
-      <el-col :span="6">
-        <el-card class="box-card"
-                 style="width: 250px">
-          <template #header>
-            <div class="card-header">
-              <span>Card name</span>
-              <el-button class="button"
-                         type="text">Operation button</el-button>
-            </div>
-          </template>
-          <div v-for="o in 4"
-               :key="o"
-               class="text item">
-            {{ 'List item ' + o }}
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card class="box-card"
-                 style="width: 250px">
-          <template #header>
-            <div class="card-header">
-              <span>Card name</span>
-              <el-button class="button"
-                         type="text">Operation button</el-button>
-            </div>
-          </template>
-          <div v-for="o in 4"
-               :key="o"
-               class="text item">
-            {{ 'List item ' + o }}
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card class="box-card"
-                 style="width: 250px">
-          <template #header>
-            <div class="card-header">
-              <span>Card name</span>
-              <el-button class="button"
-                         type="text">Operation button</el-button>
-            </div>
-          </template>
-          <div v-for="o in 4"
-               :key="o"
-               class="text item">
-            {{ 'List item ' + o }}
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card class="box-card"
-                 style="width: 250px">
-          <template #header>
-            <div class="card-header">
-              <span>Card name</span>
-              <el-button class="button"
-                         type="text">Operation button</el-button>
-            </div>
-          </template>
-          <div v-for="o in 4"
-               :key="o"
-               class="text item">
-            {{ 'List item ' + o }}
-          </div>
-        </el-card>
-      </el-col>
+      <el-carousel :interval="4000"
+                   type="card"
+                   :style="{width: '100%'}"
+                   height="380px">
+        <el-carousel-item v-for="item in imgList"
+                          :key="item">
+          <img :src="item"
+               class="imgbg" />
+        </el-carousel-item>
+      </el-carousel>
     </el-row>
     <el-row>
       <el-col :span="24">
         <el-card>
-          <div id="myChart"
-               :style="{width: '100%', height: '300px'}"></div>
+          <el-calendar>
+            <template #dateCell="{ data }">
+              <p :class="data.isSelected ? 'is-selected' : ''">
+                {{ data.day.split('-').slice(1).join('-') }}
+                {{ data.isSelected ? '✔️' : '' }}
+              </p>
+            </template>
+          </el-calendar>
         </el-card>
       </el-col>
     </el-row>
@@ -89,41 +37,24 @@ export default {
 
   data () {
     return {
-      size: 63
+      size: 63,
+      imgList: [require("../../assets/img/gd1.jpg"), require("../../assets/img/gd2.jpg"), require("../../assets/img/gd3.jpg"), require("../../assets/img/gd4.jpg")]
 
     }
   },
 
-  mounted () {
-    //this.$root => app
-    document.getElementById("myChart").removeAttribute('_echarts_instance_');
-    let myChart = echarts.init(
-      document.getElementById("myChart")
-    );
-    // 绘制图表
-    myChart.setOption({
-      title: { text: "总用户量" },
-      tooltip: {},
-      xAxis: {
-        data: ["12-3", "12-4", "12-5", "12-6", "12-7", "12-8"],
-      },
-      yAxis: {},
-      series: [
-        {
-          name: "用户量",
-          type: "line",
-          data: [5, 20, 36, 10, 10, 20],
-        },
-      ],
-    });
-  },
   computed: {},
 
-  methods: {}
+  methods: {
+
+  }
 }
 </script>
 <style lang='less'>
-.dashboard .el-row {
-  margin-bottom: 20px;
+.imgbg {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  text-align: center;
 }
 </style>
