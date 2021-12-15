@@ -124,3 +124,4 @@ export {
   getLog,
   getAlarmHistory
 }
+

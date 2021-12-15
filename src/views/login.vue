@@ -87,7 +87,7 @@ export default {
   width: 100%;
 }
 .background {
-  background-image: url("../assets/img/niit.jpeg");
+  background-color: #2d3a4b;
   width: 100%;
   height: 100%;
   margin: -8px;
