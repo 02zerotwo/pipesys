@@ -26,7 +26,7 @@
       </el-row>
       <el-row>
         <el-col :span="11">
-          <el-form-item label="设备模型型号:">
+          <el-form-item label="设备模型类型:">
             <el-select v-model="value"
                        @change="selected">
               <el-option v-for="item in deviceTypes"
@@ -53,9 +53,11 @@
       </el-row>
       <el-row>
         <el-col :span="11">
-          <el-form-item label="上报间隔(秒):"
-                        prop="upInterval">
-            <el-input v-model="modelList.upInterval"></el-input>
+          <el-form-item label="上报间隔(秒):">
+            <el-input-number v-model="modelList.upInterval"
+                             :min="1"
+                             :max="100"
+                             @change="handleChange" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -91,7 +93,7 @@
                                width='100px'
                                prop="lowThreshold">
                 <template #default="scope">
-                  <span>{{scope.row.lowThreshold }}</span>
+                  <el-input v-model="scope.row.lowThreshold"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="阈值B"
@@ -100,7 +102,7 @@
                                width='100px'
                                prop="highThreshold">
                 <template #default="scope">
-                  <span>{{scope.row.highThreshold }}</span>
+                  <el-input v-model="scope.row.highThreshold"></el-input>
                 </template>
               </el-table-column>
             </el-table>
@@ -126,35 +128,37 @@ export default {
   data() {
     return {
       visible: false,
-      modelList: {},
+      modelList: {
+        upInterval: 1,
+      },
       dataNewList: [],
       dataList: [
         {
-          value: '温度传感器',
+          value: '温度',
           dataPointName: '温度',
           dataPointExtra: '腐蚀',
-          lowThreshold: 10,
-          highThreshold: 50,
+          lowThreshold: '',
+          highThreshold: '',
         },
         {
-          value: '压力传感器',
+          value: '压力',
           dataPointName: '压力',
           dataPointExtra: '泄露',
-          lowThreshold: 5,
-          highThreshold: 20,
+          lowThreshold: '',
+          highThreshold: '',
         },
         {
-          value: '位移传感器',
+          value: '位移',
           dataPointName: '位移',
           dataPointExtra: '位移',
-          lowThreshold: 10,
-          highThreshold: 40,
+          lowThreshold: '',
+          highThreshold: '',
         },
       ],
       deviceTypes: [
-        { label: '温度传感器', value: 0 },
-        { label: '压力传感器', value: 1 },
-        { label: '位移传感器', value: 2 },
+        { label: '温度', value: 0 },
+        { label: '压力', value: 1 },
+        { label: '位移', value: 2 },
       ],
       value: '',
       // 表单验证
@@ -163,13 +167,6 @@ export default {
           {
             required: true,
             message: '设备名不能为空',
-            trigger: 'blur',
-          },
-        ],
-        upInterval: [
-          {
-            required: true,
-            message: '上报间隔不能为空',
             trigger: 'blur',
           },
         ],
@@ -184,6 +181,9 @@ export default {
     }
   },
   methods: {
+    handleChange(value) {
+      console.log(value)
+    },
     searchSensor(keywords) {
       console.log(keywords)
       return this.dataList.filter((item) => {
