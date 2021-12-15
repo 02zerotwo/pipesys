@@ -56,8 +56,7 @@
           <el-form-item label="上报间隔(秒):">
             <el-input-number v-model="modelList.upInterval"
                              :min="1"
-                             :max="100"
-                             @change="handleChange" />
+                             :max="100" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -129,6 +128,14 @@ export default {
     return {
       visible: false,
       modelList: {
+        deviceName: '',
+        deviceNumber: '',
+        protocol: '',
+        deviceType: '',
+        dataPointName: '',
+        dataPointExtra: '',
+        lowThreshold: '',
+        highThreshold: '',
         upInterval: 1,
       },
       dataNewList: [],
@@ -181,11 +188,7 @@ export default {
     }
   },
   methods: {
-    handleChange(value) {
-      console.log(value)
-    },
     searchSensor(keywords) {
-      console.log(keywords)
       return this.dataList.filter((item) => {
         if (item.value === keywords) {
           return item
@@ -199,51 +202,60 @@ export default {
       this.visible = true
       this.$nextTick(() => {
         this.$refs.dataAddForm.resetFields()
-        this.modelList = Object.assign({}, record)
-        this.value = record.deviceType
-        this.searchSensor(record.deviceType)
+        if (record) {
+          this.value = record.deviceType
+          this.modelList = Object.assign({}, record)
+        }
+        if (record.deviceType) {
+          this.dataNewList = this.searchSensor(record.deviceType)
+          this.dataNewList[0].lowThreshold = record.lowThreshold
+          this.dataNewList[0].highThreshold = record.highThreshold
+        }
       })
     },
     selected(val) {
-      this.modelList.deviceType = val
+      this.value = val
+      this.dataNewList = this.searchSensor(val)
     },
     handleOk() {
-      this.modelList.dataPointName = this.dataNewList[0].dataPointName
-      this.modelList.dataPointExtra = this.dataNewList[0].dataPointExtra
-      this.modelList.lowThreshold = this.dataNewList[0].lowThreshold
-      this.modelList.highThreshold = this.dataNewList[0].highThreshold
-      const params = this.modelList
-      console.log(params)
-      if (!params.id) {
-        addSensorModel(params).then((res) => {
-          console.log(res)
-          ElMessage({
-            message: '添加成功',
-            type: 'success',
-          })
-          this.$emit('ok')
-          this.close()
-        })
-      } else {
-        editSensorModel(params).then((res) => {
-          console.log(res)
-          ElMessage({
-            message: '修改成功',
-            type: 'success',
-          })
-          this.$emit('ok')
-          this.close()
-        })
-      }
+      this.$refs.dataAddForm.validate((valid) => {
+        if (valid) {
+          this.modelList.deviceType = this.value
+          this.modelList.dataPointName = this.dataNewList[0].dataPointName
+          this.modelList.dataPointExtra = this.dataNewList[0].dataPointExtra
+          this.modelList.lowThreshold = this.dataNewList[0].lowThreshold
+          this.modelList.highThreshold = this.dataNewList[0].highThreshold
+          const params = this.modelList
+          if (!params.id) {
+            addSensorModel(params).then((res) => {
+              console.log(res)
+              ElMessage({
+                message: '添加成功',
+                type: 'success',
+              })
+              this.$emit('ok')
+              this.close()
+            })
+          } else {
+            editSensorModel(params).then((res) => {
+              ElMessage({
+                message: '修改成功',
+                type: 'success',
+              })
+              this.$emit('ok')
+              this.close()
+            })
+          }
+        }
+      })
     },
     close() {
       this.visible = false
-    },
-  },
-  watch: {
-    // 根据下拉框所选值显示table里的内容
-    value: function (val) {
-      this.dataNewList = this.searchSensor(val)
+      this.modelList.deviceName = ''
+      this.modelList.deviceNumber = ''
+      this.modelList.upInterval = 1
+      this.value = ''
+      this.dataNewList = []
     },
   },
 }
