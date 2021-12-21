@@ -157,6 +157,7 @@ export default {
         this.reset()
         this.itemName = row.row[1]
         this.itemId = row.row[0]
+
         this.initWebSocket()
       }
     },
@@ -203,7 +204,7 @@ export default {
       }
     },
     initWebSocket () { //初始化weosocket
-      const wsuri = "ws://8.142.74.249:8006/alarm/item";
+      const wsuri = "ws://114.217.20.82:8006/alarm/item";
       this.websock = new WebSocket(wsuri);
       this.websock.onmessage = this.websocketonmessage;
       this.websock.onopen = this.websocketonopen;
@@ -235,6 +236,7 @@ export default {
     },
     websocketsend () {//数据发送
       this.websock.send(this.itemId);
+
     },
     websocketclose (e) {  //关闭
     },

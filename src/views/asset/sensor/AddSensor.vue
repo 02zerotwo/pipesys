@@ -79,7 +79,7 @@ import { ElMessage } from 'element-plus'
 export default {
   components: {},
 
-  data() {
+  data () {
     return {
       visible: false,
       title: '',
@@ -118,7 +118,7 @@ export default {
   computed: {},
 
   methods: {
-    md(val) {
+    md (val) {
       return this.m_options.filter((item) => {
         if (item.id === val) {
           this.ruleForm.sensorModel = item
@@ -127,7 +127,7 @@ export default {
         }
       })
     },
-    sel(val) {
+    sel (val) {
       return this.i_options.filter((item) => {
         if (item.id === val) {
           this.orga = item.organize
@@ -136,10 +136,10 @@ export default {
         }
       })
     },
-    add() {
+    add () {
       this.edit({})
     },
-    edit(row) {
+    edit (row) {
       console.log(row)
       this.visible = true
       getAllSensorModel({ pageNo: 1, pageSize: 100, key: '' }).then((res) => {
@@ -153,7 +153,7 @@ export default {
         this.$refs.sensorForm.resetFields()
         this.ruleForm = Object.assign({}, row)
         if (row) {
-          this.modelId = row.sensorModel
+          this.modelId = row.sensorModel.id
           this.protocal = row.sensorModel.protocol
         }
         if (row.item) {
@@ -162,21 +162,21 @@ export default {
         }
       })
     },
-    handleOk() {
+    handleOk () {
       let params = this.ruleForm
       params.protocal = this.protocal
       params.organize = this.orga
       if (!params.id) {
-        if(params.sensorName && params.sensorCode){
+        if (params.sensorName && params.sensorCode) {
           addSensor(params).then((res) => {
-          ElMessage({
-            message: '添加成功',
-            type: 'success',
+            ElMessage({
+              message: '添加成功',
+              type: 'success',
+            })
+            this.$emit('ok')
+            this.close()
           })
-          this.$emit('ok')
-          this.close()
-          })   
-        }else {
+        } else {
           ElMessage({
             message: '添加失败，含有非法参数',
             type: 'error',
@@ -193,7 +193,7 @@ export default {
         })
       }
     },
-    close() {
+    close () {
       this.visible = false
       this.$refs.sensorForm.resetFields()
       this.itemId = ''
