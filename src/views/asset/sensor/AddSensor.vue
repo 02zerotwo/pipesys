@@ -153,12 +153,12 @@ export default {
         this.$refs.sensorForm.resetFields()
         this.ruleForm = Object.assign({}, row)
         if (row.sensorModel) {
-          this.modelId = row.sensorModel
+          this.modelId = row.sensorModel.id
           this.protocal = row.sensorModel.protocol
         }
         if (row.item) {
           this.itemId = row.item.id
-          this.orga = row.item.organize
+          this.orga = row.item.organize.id
         }
       })
     },
@@ -167,7 +167,16 @@ export default {
         if (valid) {
           let params = this.ruleForm
           params.protocal = this.protocal
-          params.organize = this.orga
+          params.sensorModel = {
+            id: this.modelId
+          }
+          params.item = {
+            id: this.itemId
+          }
+          params.organize = {
+            id: this.orga.id
+          }
+          debugger
           if (!params.id) {
             addSensor(params).then((res) => {
               ElMessage({
@@ -193,6 +202,7 @@ export default {
     close() {
       this.visible = false
       this.$refs.sensorForm.resetFields()
+      this.modelId = ''
       this.itemId = ''
       this.orga = ''
     },
