@@ -152,7 +152,7 @@ export default {
       this.$nextTick(() => {
         this.$refs.sensorForm.resetFields()
         this.ruleForm = Object.assign({}, row)
-        if (row) {
+        if (Object.keys(row).length != 0) {
           this.modelId = row.sensorModel.id
           this.protocal = row.sensorModel.protocol
         }

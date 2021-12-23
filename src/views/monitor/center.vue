@@ -110,7 +110,7 @@ export default {
       handler (val, oldVal) {
         if (this.pipeId) {
           if (Object.keys(val).length != 0) {
-
+            console.log(val);
             let id = this.pipeId
             let number1 = parseInt(val[id][val[id].sensorId].alarm.currentValue)
             this.currentNbumer.number =
