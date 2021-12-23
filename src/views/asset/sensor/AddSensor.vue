@@ -153,15 +153,17 @@ export default {
         this.$refs.sensorForm.resetFields()
         this.ruleForm = Object.assign({}, row)
         if (Object.keys(row).length != 0) {
+
           this.modelId = row.sensorModel.id
           this.protocal = row.sensorModel.protocol
         }
         if (row.item) {
           this.itemId = row.item.id
-          this.orga = row.item.organize
+          this.orga = row.item.organize.id
         }
       })
     },
+
     handleOk () {
       let params = this.ruleForm
       params.protocal = this.protocal
@@ -172,6 +174,7 @@ export default {
             ElMessage({
               message: '添加成功',
               type: 'success',
+
             })
             this.$emit('ok')
             this.close()
@@ -196,6 +199,7 @@ export default {
     close () {
       this.visible = false
       this.$refs.sensorForm.resetFields()
+      this.modelId = ''
       this.itemId = ''
       this.orga = ''
     },
