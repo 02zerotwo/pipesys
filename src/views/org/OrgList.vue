@@ -139,17 +139,7 @@ export default {
       selectForm: {
         orgName: '',
       },
-      orgList: [
-        {
-          id: '',
-          name: '',
-          parentId: '',
-          type: {},
-          location: '',
-          orgaNumber: '',
-          ext: '',
-        },
-      ],
+      orgList: [],
       height: '',
       // 分页
       paginations: {

@@ -131,17 +131,7 @@ export default {
       selectForm: {
         key: ''
       },
-      userList: [{
-        id: '',
-        username: '',
-        phone: '',
-        roleName: '',
-        roleExt: '',
-        o: {
-          name: ''
-        }
-      }
-      ],
+      userList: [],
       height: '',
       loading: false,
       // 分页
