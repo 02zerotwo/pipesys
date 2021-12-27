@@ -79,7 +79,7 @@ import { ElMessage } from 'element-plus'
 export default {
   components: {},
 
-  data() {
+  data () {
     return {
       visible: false,
       title: '',
@@ -118,7 +118,7 @@ export default {
   computed: {},
 
   methods: {
-    md(val) {
+    md (val) {
       return this.m_options.filter((item) => {
         if (item.id === val) {
           this.ruleForm.sensorModel = item
@@ -127,7 +127,7 @@ export default {
         }
       })
     },
-    sel(val) {
+    sel (val) {
       return this.i_options.filter((item) => {
         if (item.id === val) {
           this.orga = item.organize
@@ -136,10 +136,10 @@ export default {
         }
       })
     },
-    add() {
+    add () {
       this.edit({})
     },
-    edit(row) {
+    edit (row) {
       console.log(row)
       this.visible = true
       getAllSensorModel({ pageNo: 1, pageSize: 100, key: '' }).then((res) => {
@@ -152,7 +152,8 @@ export default {
       this.$nextTick(() => {
         this.$refs.sensorForm.resetFields()
         this.ruleForm = Object.assign({}, row)
-        if (row.sensorModel) {
+        if (Object.keys(row).length != 0) {
+
           this.modelId = row.sensorModel.id
           this.protocal = row.sensorModel.protocol
         }
@@ -162,44 +163,40 @@ export default {
         }
       })
     },
-    handleOk() {
-      this.$refs.sensorForm.validate((valid) => {
-        if (valid) {
-          let params = this.ruleForm
-          params.protocal = this.protocal
-          params.sensorModel = {
-            id: this.modelId
-          }
-          params.item = {
-            id: this.itemId
-          }
-          params.organize = {
-            id: this.orga.id
-          }
-          debugger
-          if (!params.id) {
-            addSensor(params).then((res) => {
-              ElMessage({
-                message: '添加成功',
-                type: 'success',
-              })
-              this.$emit('ok')
-              this.close()
+
+    handleOk () {
+      let params = this.ruleForm
+      params.protocal = this.protocal
+      params.organize = this.orga
+      if (!params.id) {
+        if (params.sensorName && params.sensorCode) {
+          addSensor(params).then((res) => {
+            ElMessage({
+              message: '添加成功',
+              type: 'success',
+
             })
-          } else {
-            editSensor(params).then(() => {
-              ElMessage({
-                message: '修改成功',
-                type: 'success',
-              })
-              this.$emit('ok')
-              this.close()
-            })
-          }
+            this.$emit('ok')
+            this.close()
+          })
+        } else {
+          ElMessage({
+            message: '添加失败，含有非法参数',
+            type: 'error',
+          })
         }
-      })
+      } else {
+        editSensor(params).then(() => {
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+          this.$emit('ok')
+          this.close()
+        })
+      }
     },
-    close() {
+    close () {
       this.visible = false
       this.$refs.sensorForm.resetFields()
       this.modelId = ''

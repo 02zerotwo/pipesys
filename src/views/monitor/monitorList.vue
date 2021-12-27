@@ -142,7 +142,7 @@ export default {
       })
     },
     initWebSocket () { //初始化weosocket
-      const wsuri = "ws://8.142.74.249:8006/alarm";
+      const wsuri = "ws://114.217.20.82:8006/alarm";
       this.websock = new WebSocket(wsuri);
       this.websock.onmessage = this.websocketonmessage;
       this.websock.onopen = this.websocketonopen;
@@ -159,7 +159,6 @@ export default {
     websocketonmessage (e) { //数据接收
       let data = JSON.parse(e.data);
       this.dataList.push(data)
-      debugger
 
     },
     websocketsend (Data) {//数据发送
@@ -173,7 +172,6 @@ export default {
         itemId: itemId
       }
       getPipeModelByItemId(params).then(res => {
-        debugger
         this.dataList = res.data
       })
     },

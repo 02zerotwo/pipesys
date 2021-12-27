@@ -114,7 +114,7 @@
 </template>
 
 <script>
-import { addPipe, editPipe, getAllOrgs, getAllPipeModel, getAllItem, getNoUsSensor } from '@/api/api.js'
+import { addPipe, editPipe, getAllOrgs, getAllPipeModel, getAllItem, getSensors } from '@/api/api.js'
 export default {
   components: {
   },
@@ -179,13 +179,15 @@ export default {
       await getAllItem({ key: '', pageNo: 1, pageSize: 1000 }).then(res => {
         this.itemList = res.data.list
       })
-      await getNoUsSensor({ key: '', pageNo: 1, pageSize: 1000 }).then(res => {
+      await getSensors({ key: '', pageNo: 1, pageSize: 1000 }).then(res => {
+
         this.sensorList = res.data.list
       })
 
       this.$nextTick(() => {
         this.$refs.ruleForm.resetFields() // 对整个表单进行重置，将所有字段值重置为初始值并移除校验结果
         this.ruleForm = Object.assign({}, record)
+
         if (record.item) {
           this.item = record.item.id
         }

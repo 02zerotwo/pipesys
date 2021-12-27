@@ -26,7 +26,7 @@
       </el-row>
       <el-row>
         <el-col :span="11">
-          <el-form-item label="设备模型类型:">
+          <el-form-item label="设备模型型号:">
             <el-select v-model="value"
                        @change="selected">
               <el-option v-for="item in deviceTypes"
@@ -53,10 +53,9 @@
       </el-row>
       <el-row>
         <el-col :span="11">
-          <el-form-item label="上报间隔(秒):">
-            <el-input-number v-model="modelList.upInterval"
-                             :min="1"
-                             :max="100" />
+          <el-form-item label="上报间隔(秒):"
+                        prop="upInterval">
+            <el-input v-model="modelList.upInterval"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -92,7 +91,7 @@
                                width='100px'
                                prop="lowThreshold">
                 <template #default="scope">
-                  <el-input v-model="scope.row.lowThreshold"></el-input>
+                  <span>{{scope.row.lowThreshold }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="阈值B"
@@ -101,7 +100,7 @@
                                width='100px'
                                prop="highThreshold">
                 <template #default="scope">
-                  <el-input v-model="scope.row.highThreshold"></el-input>
+                  <span>{{scope.row.highThreshold }}</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -127,45 +126,35 @@ export default {
   data() {
     return {
       visible: false,
-      modelList: {
-        deviceName: '',
-        deviceNumber: '',
-        protocol: '',
-        deviceType: '',
-        dataPointName: '',
-        dataPointExtra: '',
-        lowThreshold: '',
-        highThreshold: '',
-        upInterval: 1,
-      },
+      modelList: {},
       dataNewList: [],
       dataList: [
         {
-          value: '温度',
+          value: '温度传感器',
           dataPointName: '温度',
           dataPointExtra: '腐蚀',
-          lowThreshold: '',
-          highThreshold: '',
+          lowThreshold: 10,
+          highThreshold: 50,
         },
         {
-          value: '压力',
+          value: '压力传感器',
           dataPointName: '压力',
           dataPointExtra: '泄露',
-          lowThreshold: '',
-          highThreshold: '',
+          lowThreshold: 5,
+          highThreshold: 20,
         },
         {
-          value: '位移',
+          value: '位移传感器',
           dataPointName: '位移',
           dataPointExtra: '位移',
-          lowThreshold: '',
-          highThreshold: '',
+          lowThreshold: 10,
+          highThreshold: 40,
         },
       ],
       deviceTypes: [
-        { label: '温度', value: 0 },
-        { label: '压力', value: 1 },
-        { label: '位移', value: 2 },
+        { label: '温度传感器', value: 0 },
+        { label: '压力传感器', value: 1 },
+        { label: '位移传感器', value: 2 },
       ],
       value: '',
       // 表单验证
@@ -174,6 +163,13 @@ export default {
           {
             required: true,
             message: '设备名不能为空',
+            trigger: 'blur',
+          },
+        ],
+        upInterval: [
+          {
+            required: true,
+            message: '上报间隔不能为空',
             trigger: 'blur',
           },
         ],
@@ -189,6 +185,7 @@ export default {
   },
   methods: {
     searchSensor(keywords) {
+      console.log(keywords)
       return this.dataList.filter((item) => {
         if (item.value === keywords) {
           return item
@@ -202,60 +199,51 @@ export default {
       this.visible = true
       this.$nextTick(() => {
         this.$refs.dataAddForm.resetFields()
-        if (record) {
-          this.value = record.deviceType
-          this.modelList = Object.assign({}, record)
-        }
-        if (record.deviceType) {
-          this.dataNewList = this.searchSensor(record.deviceType)
-          this.dataNewList[0].lowThreshold = record.lowThreshold
-          this.dataNewList[0].highThreshold = record.highThreshold
-        }
+        this.modelList = Object.assign({}, record)
+        this.value = record.deviceType
+        this.searchSensor(record.deviceType)
       })
     },
     selected(val) {
-      this.value = val
-      this.dataNewList = this.searchSensor(val)
+      this.modelList.deviceType = val
     },
     handleOk() {
-      this.$refs.dataAddForm.validate((valid) => {
-        if (valid) {
-          this.modelList.deviceType = this.value
-          this.modelList.dataPointName = this.dataNewList[0].dataPointName
-          this.modelList.dataPointExtra = this.dataNewList[0].dataPointExtra
-          this.modelList.lowThreshold = this.dataNewList[0].lowThreshold
-          this.modelList.highThreshold = this.dataNewList[0].highThreshold
-          const params = this.modelList
-          if (!params.id) {
-            addSensorModel(params).then((res) => {
-              console.log(res)
-              ElMessage({
-                message: '添加成功',
-                type: 'success',
-              })
-              this.$emit('ok')
-              this.close()
-            })
-          } else {
-            editSensorModel(params).then((res) => {
-              ElMessage({
-                message: '修改成功',
-                type: 'success',
-              })
-              this.$emit('ok')
-              this.close()
-            })
-          }
-        }
-      })
+      this.modelList.dataPointName = this.dataNewList[0].dataPointName
+      this.modelList.dataPointExtra = this.dataNewList[0].dataPointExtra
+      this.modelList.lowThreshold = this.dataNewList[0].lowThreshold
+      this.modelList.highThreshold = this.dataNewList[0].highThreshold
+      const params = this.modelList
+      console.log(params)
+      if (!params.id) {
+        addSensorModel(params).then((res) => {
+          console.log(res)
+          ElMessage({
+            message: '添加成功',
+            type: 'success',
+          })
+          this.$emit('ok')
+          this.close()
+        })
+      } else {
+        editSensorModel(params).then((res) => {
+          console.log(res)
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+          })
+          this.$emit('ok')
+          this.close()
+        })
+      }
     },
     close() {
       this.visible = false
-      this.modelList.deviceName = ''
-      this.modelList.deviceNumber = ''
-      this.modelList.upInterval = 1
-      this.value = ''
-      this.dataNewList = []
+    },
+  },
+  watch: {
+    // 根据下拉框所选值显示table里的内容
+    value: function (val) {
+      this.dataNewList = this.searchSensor(val)
     },
   },
 }
